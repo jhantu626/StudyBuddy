@@ -1,6 +1,5 @@
 import {Text, View} from 'react-native';
 import React from 'react';
-import {fonts} from './utils/fonts';
 
 const App = () => {
   return (
