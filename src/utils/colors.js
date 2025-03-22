@@ -1,9 +1,9 @@
-const color = {
+const colors = {
   primary: '#16AEC3',
   secondary: '#6AE7ED', // Accent color
   accent: '#D5FAFA',
   background: '#ffffff', // App background
-  text: '#000000', // Primary text color
+  text: '#1A1A1A', // Primary text color
   textSecondary: '#565656', // Secondary text color
   border: '#dcdcdc', // Borders
   error: '#e74c3c', // Error messages
@@ -14,4 +14,4 @@ const color = {
   shadow: 'rgba(0, 0, 0, 0.1)', // Shadow color
 };
 
-export {color};
+export {colors};
