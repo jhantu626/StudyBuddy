@@ -5,87 +5,145 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Dimensions,
+  FlatList,
+  Easing,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 
-const Onboarding = () => {
-  const widthAnimation = useRef(new Animated.Value(0)).current;
+const {width: screenWidth} = Dimensions.get('window');
 
+const onboardingData = [
+  {
+    id: '1',
+    image: require('./../../../../assets/Images/onboarding1.webp'),
+    title: 'Practice Anything, Anywhere',
+    description:
+      'Lorem ipsum dolor sit amet, consectetur adipiscing elit semper nulla nunc bibendum.',
+  },
+  {
+    id: '2',
+    image: require('./../../../../assets/Images/onboarding2.webp'),
+    title: 'Learn at Your Own Pace',
+    description:
+      'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+  },
+  {
+    id: '3',
+    image: require('./../../../../assets/Images/onboarding3.webp'),
+    title: 'Master Your Skills',
+    description: 'Ut enim ad minim veniam, quis nostrud exercitation ullamco.',
+  },
+];
+
+const DOT_WIDTH = 5;
+const ACTIVE_DOT_WIDTH = 15;
+const DOT_SPACING = 5;
+
+const Onboarding = () => {
+  const dotAnimations = useRef(
+    onboardingData.map(() => new Animated.Value(DOT_WIDTH)),
+  ).current;
+  const flatListRef = useRef(null);
   const [pageNumber, setPageNumber] = useState(0);
 
+  // Animate dots when page changes
   useEffect(() => {
-    Animated.timing(widthAnimation, {
-      toValue: 1,
-      duration: 0,
-      useNativeDriver: false,
-    }).start(() => {
-      Animated.timing(widthAnimation, {
-        toValue: 3,
-        duration: 1000,
+    dotAnimations.forEach((dot, index) => {
+      Animated.timing(dot, {
+        toValue: index === pageNumber ? ACTIVE_DOT_WIDTH : DOT_WIDTH,
+        duration: 300,
+        easing: Easing.inOut(Easing.ease),
         useNativeDriver: false,
       }).start();
     });
   }, [pageNumber]);
 
+  const handlePageNumber = () => {
+    if(pageNumber===2){
+
+    }
+    if (pageNumber < onboardingData.length - 1) {
+      const nextPage = pageNumber + 1;
+      setPageNumber(nextPage);
+      flatListRef.current?.scrollToIndex({index: nextPage, animated: true});
+    } else {
+      console.info('Next Page');
+    }
+  };
+
+  const handleScrollEnd = event => {
+    const contentOffsetX = event.nativeEvent.contentOffset.x;
+    const newPage = Math.round(contentOffsetX / screenWidth);
+    if (newPage !== pageNumber) {
+      setPageNumber(newPage);
+    }
+  };
+
+  const renderItem = ({item}) => (
+    <View style={styles.slide}>
+      <View style={styles.headerContainer}>
+        <Image
+          style={styles.bannerImage}
+          source={item.image}
+          resizeMode="contain"
+        />
+        <View style={styles.headerTextContainer}>
+          <Text style={styles.titleText} numberOfLines={2} ellipsizeMode='tail'>
+            {item.title}
+          </Text>
+          <Text style={styles.descText}>{item.description}</Text>
+        </View>
+      </View>
+    </View>
+  );
+
   return (
     <View style={styles.container}>
       <View style={styles.subContainer}>
-        <View style={styles.headerContainer}>
-          <Image
-            style={styles.bannerImage}
-            source={require('./../../../../assets/Images/onboarding1.webp')}
-            resizeMode="contain"
-          />
-          <View style={styles.headerTextContainer}>
-            <Text style={styles.titleText}>Practice Anything, Anywhere</Text>
-            <Text style={styles.descText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit semper
-              nulla nunc bibendum.
-            </Text>
-          </View>
-        </View>
+        <FlatList
+          ref={flatListRef}
+          data={onboardingData}
+          renderItem={renderItem}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onMomentumScrollEnd={handleScrollEnd}
+          scrollEventThrottle={16}
+          keyExtractor={item => item.id}
+          getItemLayout={(data, index) => ({
+            length: screenWidth,
+            offset: screenWidth * index,
+            index,
+          })}
+        />
+
         <View style={styles.footerContainer}>
           <View style={styles.subFooterContaier}>
             <View style={styles.dotContainer}>
-              <Animated.View
-                style={[
-                  styles.dot,
-                  pageNumber === 0 && {
-                    transform: [{scaleX: widthAnimation}],
-                    backgroundColor: colors.primary,
-                    borderRadius: 1,
-                  },
-                ]}
-              />
-              <Animated.View
-                style={[
-                  styles.dot,
-                  pageNumber === 1 && {
-                    transform: [{scaleX: widthAnimation}],
-                    backgroundColor: colors.primary,
-                    borderRadius: 1,
-                  },
-                ]}
-              />
-              <Animated.View
-                style={[
-                  styles.dot,
-                  pageNumber === 2 && {
-                    transform: [{scaleX: widthAnimation}],
-                    backgroundColor: colors.primary,
-                    borderRadius: 1,
-                  },
-                ]}
-              />
+              {onboardingData.map((_, index) => (
+                <Animated.View
+                  key={index}
+                  style={[
+                    styles.dot,
+                    {
+                      width: dotAnimations[index],
+                      backgroundColor:
+                        index === pageNumber
+                          ? colors.primary
+                          : colors.secondary,
+                    },
+                  ]}
+                />
+              ))}
             </View>
-            <TouchableOpacity
-              style={styles.nextBtn}
-              onPress={() => setPageNumber(prev => prev + 1)}>
+            <TouchableOpacity style={styles.nextBtn} onPress={handlePageNumber}>
               <Text style={styles.btnText}>
-                {pageNumber === 2 ? 'Get Started' : 'Next'}
+                {pageNumber === onboardingData.length - 1
+                  ? 'Get Started'
+                  : 'Next'}
               </Text>
             </TouchableOpacity>
           </View>
@@ -107,12 +165,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  slide: {
+    width: screenWidth,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   headerContainer: {
     alignItems: 'center',
   },
   bannerImage: {
-    width: 315,
-    height: 315,
+    width: 300,
+    height: 300,
   },
   headerTextContainer: {
     alignItems: 'center',
@@ -120,7 +183,7 @@ const styles = StyleSheet.create({
   titleText: {
     fontSize: 22,
     fontFamily: fonts.semiBold,
-    width: 300,
+    // width: 250,
     textAlign: 'center',
     marginVertical: 10,
     color: colors.text,
@@ -151,6 +214,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    gap: 5
   },
   dot: {
     width: 5,
