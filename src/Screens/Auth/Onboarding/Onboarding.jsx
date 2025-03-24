@@ -12,6 +12,7 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {StackActions, useNavigation} from '@react-navigation/native';
 
 const {width: screenWidth} = Dimensions.get('window');
 
@@ -43,6 +44,7 @@ const ACTIVE_DOT_WIDTH = 15;
 const DOT_SPACING = 5;
 
 const Onboarding = () => {
+  const navigation = useNavigation();
   const dotAnimations = useRef(
     onboardingData.map(() => new Animated.Value(DOT_WIDTH)),
   ).current;
@@ -62,15 +64,12 @@ const Onboarding = () => {
   }, [pageNumber]);
 
   const handlePageNumber = () => {
-    if(pageNumber===2){
-
-    }
     if (pageNumber < onboardingData.length - 1) {
       const nextPage = pageNumber + 1;
       setPageNumber(nextPage);
       flatListRef.current?.scrollToIndex({index: nextPage, animated: true});
     } else {
-      console.info('Next Page');
+      navigation.dispatch(StackActions.replace('Login'));
     }
   };
 
@@ -91,7 +90,7 @@ const Onboarding = () => {
           resizeMode="contain"
         />
         <View style={styles.headerTextContainer}>
-          <Text style={styles.titleText} numberOfLines={2} ellipsizeMode='tail'>
+          <Text style={styles.titleText} numberOfLines={2} ellipsizeMode="tail">
             {item.title}
           </Text>
           <Text style={styles.descText}>{item.description}</Text>
@@ -214,7 +213,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: 5
+    gap: 5,
   },
   dot: {
     width: 5,

@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {Onboarding, SplashScreen} from './Screens';
+import {Login, Onboarding, SplashScreen} from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const App = () => {
@@ -11,38 +11,17 @@ const App = () => {
   const AuthStack = () => {
     return (
       <Stack.Navigator
-        initialRouteName="Onboarding"
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
+          animation: 'slide_from_right',
         }}>
         <Stack.Screen
           name="Splash"
           component={SplashScreen}
-          options={{
-            animation: 'slide_from_bottom',
-          }}
         />
-        <Stack.Screen
-          name="Onboarding"
-          component={Onboarding}
-          options={{
-            animation: 'slide_from_right',
-            transitionSpec: {
-              open: {
-                animation: 'timing',
-                config: {
-                  duration: 500,
-                },
-              },
-              close: {
-                animation: 'timing',
-                config: {
-                  duration: 500,
-                },
-              },
-            },
-          }}
-        />
+        <Stack.Screen name="Onboarding" component={Onboarding} />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     );
   };
