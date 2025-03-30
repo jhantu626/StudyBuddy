@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import PrimaryHeader from '../../components/AuthComponents/PrimaryHeader';
+import PrimaryHeader from '../../components/Headers/PrimaryHeader';
 import AuthLayout from './AuthLayout';
 import {colors} from '../../utils/colors';
 import {TextInput} from 'react-native-gesture-handler';

@@ -2,16 +2,23 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {fonts} from '../../utils/fonts';
-import { colors } from '../../utils/colors';
+import {colors} from '../../utils/colors';
+import {StackActions, useNavigation} from '@react-navigation/native';
 
 const PrimaryHeader = ({
   title = 'Create Account',
   isBtn = false,
   btnText = 'Skip',
 }) => {
+  const navigation = useNavigation();
   return (
     <View style={styles.headerContainer}>
-      <TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          if(navigation.canGoBack()){
+            navigation.goBack();
+          }
+        }}>
         <Ionicons name="arrow-back" color="#fff" size={20} />
       </TouchableOpacity>
       <Text style={styles.title}>{title}</Text>
@@ -31,7 +38,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontFamily: fonts.semiBold,
-    color: colors.background
+    color: colors.background,
   },
 });
 

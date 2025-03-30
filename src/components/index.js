@@ -1,5 +1,5 @@
 // Headers
-import PrimaryHeader from './AuthComponents/PrimaryHeader';
+import PrimaryHeader from './Headers/PrimaryHeader';
 
 // Carousel
 import AuthCarousel from './Carousels/AuthCarousel';
