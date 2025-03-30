@@ -14,6 +14,7 @@ import {colors} from '../../utils/colors';
 import {TextInput} from 'react-native-gesture-handler';
 import {fonts} from '../../utils/fonts';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import {AuthCarousel} from '../../components';
 
 const Login = () => {
   return (
@@ -64,6 +65,9 @@ const Login = () => {
             </View>
           </View>
         </View>
+        <View style={styles.carouselContainer}>
+          <AuthCarousel />
+        </View>
       </ScrollView>
     </AuthLayout>
   );
@@ -71,7 +75,7 @@ const Login = () => {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    // flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -164,6 +168,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
+  carouselContainer: {
+    marginTop: 80
+  }
 });
 
 export default Login;
