@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   ScrollView,
   StyleSheet,
@@ -6,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PrimaryHeader from '../../components/AuthComponents/PrimaryHeader';
 import AuthLayout from './AuthLayout';
@@ -15,8 +16,18 @@ import {TextInput} from 'react-native-gesture-handler';
 import {fonts} from '../../utils/fonts';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {AuthCarousel} from '../../components';
+import {useNavigation} from '@react-navigation/native';
 
 const Login = () => {
+  const navigation = useNavigation();
+  const [mobile, setMobile] = useState('');
+
+  const handleChangePage = () => {
+    if (mobile.length > 0 && mobile.length <= 10) {
+      navigation.navigate('Otp', {mobile});
+    }
+  };
+
   return (
     <AuthLayout>
       <ScrollView
@@ -46,6 +57,8 @@ const Login = () => {
                   keyboardType="phone-pad"
                   selectionColor={colors.primary}
                   maxLength={10}
+                  value={mobile}
+                  onChangeText={text => setMobile(text)}
                 />
               </View>
               <Text style={styles.lastText}>
@@ -53,7 +66,9 @@ const Login = () => {
               </Text>
               <View style={{marginBottom: 50}} />
               <View style={styles.bottomBtn}>
-                <TouchableOpacity style={styles.nextBtn}>
+                <TouchableOpacity
+                  onPress={handleChangePage}
+                  style={styles.nextBtn}>
                   <AntDesign
                     name="arrowright"
                     color="#fff"
@@ -169,8 +184,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   carouselContainer: {
-    marginTop: 80
-  }
+    marginTop: 80,
+  },
 });
 
 export default Login;

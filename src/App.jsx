@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {Login, Onboarding, SplashScreen} from './Screens';
+import {Login, Onboarding, Otp, SplashScreen} from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const App = () => {
@@ -16,12 +16,10 @@ const App = () => {
           headerShown: false,
           animation: 'slide_from_right',
         }}>
-        <Stack.Screen
-          name="Splash"
-          component={SplashScreen}
-        />
+        <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Onboarding" component={Onboarding} />
         <Stack.Screen name="Login" component={Login} />
+        <Stack.Screen name="Otp" component={Otp} />
       </Stack.Navigator>
     );
   };

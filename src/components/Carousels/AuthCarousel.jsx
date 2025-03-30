@@ -29,7 +29,6 @@ const AuthCarousel = () => {
         data={carouserData}
         keyExtractor={(item, index) => index.toString()}
         renderItem={(item, index) => {
-          console.log(item);
           return (
             <View key={index} style={{width: screenWidth}}>
               <AuthCarouselCard
@@ -52,6 +51,7 @@ const AuthCarousel = () => {
       <View style={styles.dotContainer}>
         {[0, 1, 2].map((item, index) => (
           <View
+          key={index}
             style={[
               styles.dot,
               index === pageNumber && {
