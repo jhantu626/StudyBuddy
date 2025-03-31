@@ -5,5 +5,6 @@ import SplashScreen from './Common/SplashScreen';
 import Onboarding from './Auth/Onboarding/Onboarding';
 import Login from './Auth/Login';
 import Otp from './Auth/Otp';
+import AuthHome from './Auth/AuthHome';
 
-export {SplashScreen, Onboarding, Login, Otp};
+export {SplashScreen, Onboarding, Login, Otp, AuthHome};
