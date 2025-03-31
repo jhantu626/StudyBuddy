@@ -10,8 +10,10 @@ import React from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
+import {StackActions, useNavigation} from '@react-navigation/native';
 
 const AuthHome = () => {
+  const navigation = useNavigation();
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>
@@ -32,7 +34,8 @@ const AuthHome = () => {
               {
                 backgroundColor: colors.authPrimary,
               },
-            ]}>
+            ]}
+            onPress={() => navigation.navigate('Login')}>
             <Text style={[styles.btnText, {color: '#fff'}]}>Login</Text>
           </TouchableOpacity>
           <View style={styles.deviderContainer}>
