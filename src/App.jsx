@@ -1,6 +1,13 @@
 import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {AuthHome, Login, Onboarding, Otp, SplashScreen} from './Screens';
+import {
+  AuthHome,
+  Login,
+  Onboarding,
+  Otp,
+  Register,
+  SplashScreen,
+} from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
 
 const App = () => {
@@ -11,7 +18,7 @@ const App = () => {
   const AuthStack = () => {
     return (
       <Stack.Navigator
-        initialRouteName="AuthHome"
+        initialRouteName="Register"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -19,6 +26,7 @@ const App = () => {
         <Stack.Screen name="Splash" component={SplashScreen} />
         <Stack.Screen name="Onboarding" component={Onboarding} />
         <Stack.Screen name="AuthHome" component={AuthHome} />
+        <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="Login" component={Login} />
         <Stack.Screen name="Otp" component={Otp} />
       </Stack.Navigator>

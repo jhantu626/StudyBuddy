@@ -54,7 +54,8 @@ const AuthHome = () => {
             style={[
               styles.btn,
               {borderWidth: 1, borderColor: colors.authPrimary},
-            ]}>
+            ]}
+            onPress={() => navigation.navigate('Register')}>
             <Text style={[styles.btnText, {color: colors.authPrimary}]}>
               Register
             </Text>

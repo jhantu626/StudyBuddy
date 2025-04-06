@@ -69,7 +69,7 @@ const Onboarding = () => {
       setPageNumber(nextPage);
       flatListRef.current?.scrollToIndex({index: nextPage, animated: true});
     } else {
-      navigation.dispatch(StackActions.replace('Login'));
+      navigation.dispatch(StackActions.replace('AuthHome'));
     }
   };
 

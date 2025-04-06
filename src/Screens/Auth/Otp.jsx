@@ -111,12 +111,12 @@ const Otp = () => {
               <Text style={styles.lastText}>
                 <Text
                   style={{
-                    color: colors.authPrimary
+                    color: colors.authPrimary,
                   }}
-                  onPress={()=>console.info("Resending")}>
+                  onPress={() => console.info('Resending')}>
                   Resend
                 </Text>{' '}
-                code in {timing>0?formatTime(timing):"Send"}
+                code in {timing > 0 ? formatTime(timing) : 'Send'}
               </Text>
               <View style={{marginBottom: 50}} />
               <View style={styles.bottomBtn}>
@@ -218,7 +218,7 @@ const styles = StyleSheet.create({
   },
   otpInput: {
     width: 55,
-    height: 50,
+    height: 55,
     borderWidth: 1,
     borderColor: colors.primary,
     borderRadius: 10,
