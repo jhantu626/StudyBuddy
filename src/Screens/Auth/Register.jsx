@@ -18,13 +18,14 @@ import AuthLayout from './AuthLayout';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {AuthCarousel, DefaultInput} from '../../components';
+import {AuthCarousel, DefaultInput, DropdownInput} from '../../components';
 import {useNavigation} from '@react-navigation/native';
 
 const Register = () => {
   // State Values
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('+91 ');
+  const [gender, setGender] = useState('');
 
   return (
     <AuthLayout>
@@ -55,6 +56,12 @@ const Register = () => {
                   minLength={4}
                   maxLength={14}
                   keyboardType="number-pad"
+                />
+                <DropdownInput
+                  labelText="Gender"
+                  value={gender}
+                  setValue={setGender}
+                  options={['Male', 'Female', 'Others']}
                 />
                 {/* Form End */}
                 <View style={{marginBottom: 50}} />

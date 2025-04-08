@@ -6,5 +6,6 @@ import AuthCarousel from './Carousels/AuthCarousel';
 
 // Inputs
 import DefaultInput from './Inputs/DefaultInput';
+import DropdownInput from './Inputs/DropdownInput';
 
-export {PrimaryHeader, AuthCarousel, DefaultInput};
+export {PrimaryHeader, AuthCarousel, DefaultInput, DropdownInput};
