@@ -143,7 +143,6 @@ const DropdownInput = ({
 const styles = StyleSheet.create({
   dropdownContainer: {
     position: 'relative',
-    marginBottom: 10,
     width: '100%',
   },
   container: {

@@ -392,7 +392,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     // justifyContent: 'center',
     alignItems: 'center',
-    gap: 20,
+    gap: 15,
   },
   title: {
     width: 260,
