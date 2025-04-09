@@ -5,7 +5,10 @@ import {colors} from '../../utils/colors';
 
 const AuthLayout = ({children}) => {
   return (
-    <KeyboardAvoidingView style={{flex: 1}}>
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
       <SafeAreaView style={{flex: 1, backgroundColor: '#e7e9f3'}}>
         <View style={styles.absoluteView} />
         {children}

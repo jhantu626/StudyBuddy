@@ -1,4 +1,4 @@
-import {Animated, Easing, Image, StyleSheet, View} from 'react-native';
+import {Animated, StyleSheet, View} from 'react-native';
 import React, {useEffect, useRef} from 'react';
 import {StackActions, useNavigation} from '@react-navigation/native';
 

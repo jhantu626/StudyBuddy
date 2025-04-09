@@ -12,28 +12,75 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import PrimaryHeader from '../../components/Headers/PrimaryHeader';
 import AuthLayout from './AuthLayout';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import {AuthCarousel, DefaultInput, DropdownInput} from '../../components';
+import {
+  AuthCarousel,
+  BottomSheetInput,
+  ClassSelection,
+  DefaultInput,
+  DropdownInput,
+} from '../../components';
 import {useNavigation} from '@react-navigation/native';
+import {GestureHandlerRootView} from 'react-native-gesture-handler';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 
 const Register = () => {
   // State Values
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('+91 ');
   const [gender, setGender] = useState('');
+  const [selectedClass, setSelectedClass] = useState([]);
+
+  // BottomSheet
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState({
+    status: true,
+    target: 'Classes',
+  });
+  const bottomSheetRef = useRef(null);
+
+  useEffect(() => {
+    console.log(isBottomSheetOpen);
+    if (isBottomSheetOpen?.status) {
+      bottomSheetRef.current.snapToIndex(0);
+    }
+  }, [isBottomSheetOpen]);
+
+  const renderBackdrop = props => (
+    <BottomSheetBackdrop
+      {...props}
+      disappearsOnIndex={-1}
+      appearsOnIndex={0}
+      opacity={0.5}
+    />
+  );
+
+  const renderBottomSheetItem = () => {
+    switch (isBottomSheetOpen.target) {
+      case 'Classes':
+        return (
+          <ClassSelection
+            selectedItems={selectedClass}
+            setSelectedItems={setSelectedClass}
+          />
+        );
+
+      default:
+        return null;
+    }
+  };
 
   return (
     <AuthLayout>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <KeyboardAvoidingView
-          style={{flex: 1}}
-          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-          keyboardVerticalOffset={Platform.OS === 'ios' ? 40 : 0}>
+      <GestureHandlerRootView style={{flex: 1}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView
             contentContainerStyle={{flexGrow: 1}}
             showsVerticalScrollIndicator={false}
@@ -63,6 +110,13 @@ const Register = () => {
                   setValue={setGender}
                   options={['Male', 'Female', 'Others']}
                 />
+                <BottomSheetInput
+                  target="Classes"
+                  bottomSheetOpen={isBottomSheetOpen}
+                  setBottomSheetOpen={setIsBottomSheetOpen}
+                  selctedItems={selectedClass}
+                  setSelectedItems={setSelectedClass}
+                />
                 {/* Form End */}
                 <View style={{marginBottom: 50}} />
                 <View style={styles.bottomBtn}>
@@ -81,8 +135,27 @@ const Register = () => {
               <AuthCarousel />
             </View>
           </ScrollView>
-        </KeyboardAvoidingView>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+        <BottomSheet
+          snapPoints={['80%']}
+          index={-1}
+          ref={bottomSheetRef}
+          backdropComponent={renderBackdrop}
+          enablePanDownToClose
+          enableOverDrag={false}
+          animationConfigs={{
+            duration: 400,
+          }}
+          onChange={index => {
+            if (index === -1) {
+              setIsBottomSheetOpen({status: false, target: null});
+            }
+          }}>
+          <BottomSheetScrollView>
+            {renderBottomSheetItem()}
+          </BottomSheetScrollView>
+        </BottomSheet>
+      </GestureHandlerRootView>
     </AuthLayout>
   );
 };
