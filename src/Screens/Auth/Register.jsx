@@ -32,6 +32,7 @@ import BottomSheet, {
   BottomSheetBackdrop,
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const classOptions = [
   {id: 1, name: 'Nursery'},
@@ -119,6 +120,7 @@ const Register = () => {
   const [selectedLanguage, setSelectedLanguage] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState([]);
+  const [isAccept, setIsAccept] = useState(false);
 
   // BottomSheet
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState({
@@ -256,6 +258,80 @@ const Register = () => {
                   placeHolder={'Select your language*'}
                 />
 
+                <View style={styles.imageUploadSection}>
+                  <TouchableOpacity style={[styles.imageContainer, {gap: 15}]}>
+                    <Image
+                      style={styles.uploadImage}
+                      source={require('./../../../assets/Images/Upload.png')}
+                    />
+                    <View
+                      style={{
+                        justifyContent: 'center',
+                        alignItems: 'center',
+                        gap: 5,
+                      }}>
+                      <Text style={styles.uploadText}>
+                        Upload your image here
+                      </Text>
+                      <Text style={styles.browseText}>Browse</Text>
+                    </View>
+                  </TouchableOpacity>
+                  <View style={styles.imageContainer}>
+                    <Image
+                      style={styles.userImage}
+                      source={require('./../../../assets/Images/User.png')}
+                      resizeMode="contain"
+                    />
+                  </View>
+                </View>
+
+                <TouchableOpacity
+                  style={{
+                    flexDirection: 'row',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    gap: 10,
+                  }}
+                  onPress={() => setIsAccept(prev => !prev)}>
+                  {isAccept ? (
+                    <MaterialCommunityIcons
+                      name="checkbox-blank-outline"
+                      color={colors.primary}
+                      size={14}
+                    />
+                  ) : (
+                    <MaterialCommunityIcons
+                      name="checkbox-marked"
+                      color={colors.primary}
+                      size={14}
+                    />
+                  )}
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      gap: 5,
+                    }}>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontFamily: fonts.regular,
+                      }}>
+                      I agree to the
+                    </Text>
+                    <Text
+                      style={{
+                        fontSize: 12,
+                        fontFamily: fonts.regular,
+                        color: colors.primary,
+                        textDecorationLine: 'underline',
+                      }}>
+                      Terms & Condition
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
                 {/* Form End */}
                 <View style={{marginBottom: 50}} />
                 <View style={styles.bottomBtn}>
@@ -353,6 +429,40 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     marginTop: 80,
+  },
+  imageUploadSection: {
+    width: '100%',
+    flexDirection: 'row',
+    // gap: 10,
+    justifyContent: 'space-between',
+  },
+  imageContainer: {
+    width: 140,
+    height: 135,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  uploadImage: {
+    width: 26,
+    height: 26,
+  },
+  uploadText: {
+    fontSize: 8,
+    fontFamily: fonts.regular,
+    color: '#9895AD',
+  },
+  browseText: {
+    fontSize: 13,
+    fontFamily: fonts.regular,
+    color: '#16AEC3',
+    textDecorationLine: 'underline',
+  },
+  userImage: {
+    width: 100,
+    height: 100,
   },
 });
 
