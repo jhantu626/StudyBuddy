@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     zIndex: -1,
     width: '100%',
     height: '65%',
-    backgroundColor: colors.authPrimary,
+    // backgroundColor: colors.authPrimary,
+    backgroundColor: colors.primary,
   },
 });
 

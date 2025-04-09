@@ -11,6 +11,7 @@ import BottomSheetInput from './Inputs/BottomSheetInput';
 
 // Cards
 import AuthSelection from './Cards/AuthSelection';
+import SubjectSelection from './Cards/SubjectSelection';
 
 export {
   PrimaryHeader,
@@ -18,5 +19,6 @@ export {
   DefaultInput,
   DropdownInput,
   BottomSheetInput,
-  AuthSelection
+  AuthSelection,
+  SubjectSelection,
 };

@@ -24,6 +24,7 @@ import {
   AuthSelection,
   DefaultInput,
   DropdownInput,
+  SubjectSelection,
 } from '../../components';
 import {useNavigation} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
@@ -86,6 +87,29 @@ const boardOptions = [
   {id: 15, name: 'WBCHSE (West Bengal)'},
 ];
 
+const subjectOptions = [
+  {id: 1, name: 'Mathematics'},
+  {id: 2, name: 'Science'},
+  {id: 3, name: 'Physics'},
+  {id: 4, name: 'Chemistry'},
+  {id: 5, name: 'Biology'},
+  {id: 6, name: 'English'},
+  {id: 7, name: 'Hindi'},
+  {id: 8, name: 'Sanskrit'},
+  {id: 9, name: 'Social Studies'},
+  {id: 10, name: 'History'},
+  {id: 11, name: 'Geography'},
+  {id: 12, name: 'Civics'},
+  {id: 13, name: 'Economics'},
+  {id: 14, name: 'Computer Science'},
+  {id: 15, name: 'Environmental Science'},
+  {id: 16, name: 'General Knowledge'},
+  {id: 17, name: 'Physical Education'},
+  {id: 18, name: 'Business Studies'},
+  {id: 19, name: 'Accountancy'},
+  {id: 20, name: 'Political Science'},
+];
+
 const Register = () => {
   // State Values
   const [name, setName] = useState('');
@@ -94,6 +118,7 @@ const Register = () => {
   const [selectedClass, setSelectedClass] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState([]);
 
   // BottomSheet
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState({
@@ -150,6 +175,15 @@ const Register = () => {
             placeholder="Search boards..."
           />
         );
+      case 'Subject':
+        return (
+          <SubjectSelection
+            selectedItems={selectedSubject}
+            setSelectedItems={setSelectedSubject}
+            options={subjectOptions}
+            placeholder="Search boards..."
+          />
+        );
       default:
         return null;
     }
@@ -195,6 +229,14 @@ const Register = () => {
                   selctedItems={selectedClass}
                   setSelectedItems={setSelectedClass}
                   placeHolder={'Select your class*'}
+                />
+                <BottomSheetInput
+                  target="Subject"
+                  bottomSheetOpen={isBottomSheetOpen}
+                  setBottomSheetOpen={setIsBottomSheetOpen}
+                  selctedItems={selectedSubject}
+                  setSelectedItems={setSelectedSubject}
+                  placeHolder={'Select your subjects*'}
                 />
                 <BottomSheetInput
                   target="Board"
