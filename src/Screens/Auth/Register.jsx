@@ -21,7 +21,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {
   AuthCarousel,
   BottomSheetInput,
-  ClassSelection,
+  AuthSelection,
   DefaultInput,
   DropdownInput,
 } from '../../components';
@@ -32,12 +32,68 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 
+const classOptions = [
+  {id: 1, name: 'Nursery'},
+  {id: 2, name: 'LKG'},
+  {id: 3, name: 'UKG'},
+  {id: 4, name: 'Class 1'},
+  {id: 5, name: 'Class 2'},
+  {id: 6, name: 'Class 3'},
+  {id: 7, name: 'Class 4'},
+  {id: 8, name: 'Class 5'},
+  {id: 9, name: 'Class 6'},
+  {id: 10, name: 'Class 7'},
+  {id: 11, name: 'Class 8'},
+  {id: 12, name: 'Class 9'},
+  {id: 13, name: 'Class 10'},
+  {id: 14, name: 'Class 11'},
+  {id: 15, name: 'Class 12'},
+];
+
+const languageOptions = [
+  {id: 1, name: 'English'},
+  {id: 2, name: 'Hindi'},
+  {id: 3, name: 'Tamil'},
+  {id: 4, name: 'Telugu'},
+  {id: 5, name: 'Kannada'},
+  {id: 6, name: 'Malayalam'},
+  {id: 7, name: 'Gujarati'},
+  {id: 8, name: 'Marathi'},
+  {id: 9, name: 'Bengali'},
+  {id: 10, name: 'Punjabi'},
+  {id: 11, name: 'Urdu'},
+  {id: 12, name: 'Sanskrit'},
+  {id: 13, name: 'French'},
+  {id: 14, name: 'German'},
+  {id: 15, name: 'Spanish'},
+];
+
+const boardOptions = [
+  {id: 1, name: 'CBSE'},
+  {id: 2, name: 'ICSE'},
+  {id: 3, name: 'State Board'},
+  {id: 4, name: 'IB (International Baccalaureate)'},
+  {id: 5, name: 'IGCSE (Cambridge)'},
+  {id: 6, name: 'CISCE'},
+  {id: 7, name: 'NIOS'},
+  {id: 8, name: 'Matriculation'},
+  {id: 9, name: 'Anglo-Indian'},
+  {id: 10, name: 'SSC (Secondary School Certificate)'},
+  {id: 11, name: 'HSC (Higher Secondary Certificate)'},
+  {id: 12, name: 'KSSEB (Karnataka)'},
+  {id: 13, name: 'MSBSHSE (Maharashtra)'},
+  {id: 14, name: 'TNBSE (Tamil Nadu)'},
+  {id: 15, name: 'WBCHSE (West Bengal)'},
+];
+
 const Register = () => {
   // State Values
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('+91 ');
   const [gender, setGender] = useState('');
   const [selectedClass, setSelectedClass] = useState([]);
+  const [selectedLanguage, setSelectedLanguage] = useState([]);
+  const [selectedBoard, setSelectedBoard] = useState([]);
 
   // BottomSheet
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState({
@@ -66,12 +122,34 @@ const Register = () => {
     switch (isBottomSheetOpen.target) {
       case 'Classes':
         return (
-          <ClassSelection
+          <AuthSelection
             selectedItems={selectedClass}
             setSelectedItems={setSelectedClass}
+            options={classOptions}
+            iconName={'class'}
+            placeholder="Search classes..."
           />
         );
-
+      case 'Language':
+        return (
+          <AuthSelection
+            selectedItems={selectedLanguage}
+            setSelectedItems={setSelectedLanguage}
+            options={languageOptions}
+            iconName={'language'}
+            placeholder="Search languages..."
+          />
+        );
+      case 'Board':
+        return (
+          <AuthSelection
+            selectedItems={selectedBoard}
+            setSelectedItems={setSelectedBoard}
+            options={boardOptions}
+            iconName={'board'}
+            placeholder="Search boards..."
+          />
+        );
       default:
         return null;
     }
@@ -116,7 +194,26 @@ const Register = () => {
                   setBottomSheetOpen={setIsBottomSheetOpen}
                   selctedItems={selectedClass}
                   setSelectedItems={setSelectedClass}
+                  placeHolder={'Select your class*'}
                 />
+                <BottomSheetInput
+                  target="Board"
+                  bottomSheetOpen={isBottomSheetOpen}
+                  setBottomSheetOpen={setIsBottomSheetOpen}
+                  selctedItems={selectedBoard}
+                  setSelectedItems={setSelectedBoard}
+                  placeHolder={'Select education board*'}
+                />
+
+                <BottomSheetInput
+                  target="Language"
+                  bottomSheetOpen={isBottomSheetOpen}
+                  setBottomSheetOpen={setIsBottomSheetOpen}
+                  selctedItems={selectedLanguage}
+                  setSelectedItems={setSelectedLanguage}
+                  placeHolder={'Select your language*'}
+                />
+
                 {/* Form End */}
                 <View style={{marginBottom: 50}} />
                 <View style={styles.bottomBtn}>
@@ -144,7 +241,7 @@ const Register = () => {
           enablePanDownToClose
           enableOverDrag={false}
           animationConfigs={{
-            duration: 400,
+            duration: 300,
           }}
           onChange={index => {
             if (index === -1) {

@@ -11,6 +11,7 @@ const BottomSheetInput = ({
   setSelectedItems,
   bottomSheetOpen,
   setBottomSheetOpen,
+  placeHolder
 }) => {
   const handleRemove = id => {
     setSelectedItems(prevItems => prevItems.filter(item => item.id !== id));
@@ -46,7 +47,7 @@ const BottomSheetInput = ({
           ))}
         </View>
       ) : (
-        <Text style={styles.placeHolder}>Select your class*</Text>
+        <Text style={styles.placeHolder}>{placeHolder}</Text>
       )}
       <Icon
         name={bottomSheetOpen?.status ? 'arrow-drop-up' : 'arrow-drop-down'}

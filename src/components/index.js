@@ -10,7 +10,7 @@ import DropdownInput from './Inputs/DropdownInput';
 import BottomSheetInput from './Inputs/BottomSheetInput';
 
 // Cards
-import ClassSelection from './Cards/ClassSelection';
+import AuthSelection from './Cards/AuthSelection';
 
 export {
   PrimaryHeader,
@@ -18,5 +18,5 @@ export {
   DefaultInput,
   DropdownInput,
   BottomSheetInput,
-  ClassSelection
+  AuthSelection
 };
