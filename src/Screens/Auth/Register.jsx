@@ -39,6 +39,8 @@ import {
   languageApi,
   subjectsApi,
 } from '../../utils/CommonApiCall';
+import Toast from 'react-native-toast-message';
+import {pickImageAndCrop} from '../../utils/ImagePicker';
 
 const Register = () => {
   // State Values
@@ -50,6 +52,7 @@ const Register = () => {
   const [selectedBoard, setSelectedBoard] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState([]);
   const [isAccept, setIsAccept] = useState(false);
+  const [profileImage, setProfileImage] = useState(null);
 
   // Options
   const [classOptions, setClassOptions] = useState([]);
@@ -214,7 +217,11 @@ const Register = () => {
                 />
 
                 <View style={styles.imageUploadSection}>
-                  <TouchableOpacity style={[styles.imageContainer, {gap: 15}]}>
+                  <TouchableOpacity
+                    style={[styles.imageContainer, {gap: 15}]}
+                    onPress={async () => {
+                      await pickImageAndCrop({setImage: setProfileImage});
+                    }}>
                     <Image
                       style={styles.uploadImage}
                       source={require('./../../../assets/Images/Upload.png')}
@@ -226,17 +233,28 @@ const Register = () => {
                         gap: 5,
                       }}>
                       <Text style={styles.uploadText}>
-                        Upload your image here{`\n`}(optional)
+                        Upload your image here
                       </Text>
                       <Text style={styles.browseText}>Browse</Text>
                     </View>
                   </TouchableOpacity>
                   <View style={styles.imageContainer}>
-                    <Image
-                      style={styles.userImage}
-                      source={require('./../../../assets/Images/User.webp')}
-                      resizeMode="contain"
-                    />
+                    {profileImage ? (
+                      <Image
+                        style={[
+                          styles.userImage,
+                          {width: '100%', height: '100%',overflow: 'hidden'},
+                        ]}
+                        source={profileImage}
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <Image
+                        style={styles.userImage}
+                        source={require('./../../../assets/Images/User.webp')}
+                        resizeMode="contain"
+                      />
+                    )}
                   </View>
                 </View>
 
@@ -401,6 +419,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
+    overflow: 'hidden'
   },
   uploadImage: {
     width: 26,

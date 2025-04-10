@@ -2,6 +2,8 @@ import {KeyboardAvoidingView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {colors} from '../../utils/colors';
+import Toast from 'react-native-toast-message';
+import {toastConfig} from '../../utils/ToastConfig';
 
 const AuthLayout = ({children}) => {
   return (
@@ -12,6 +14,7 @@ const AuthLayout = ({children}) => {
       <SafeAreaView style={{flex: 1, backgroundColor: '#e7e9f3'}}>
         <View style={styles.absoluteView} />
         {children}
+        <Toast config={toastConfig} />
       </SafeAreaView>
     </KeyboardAvoidingView>
   );
