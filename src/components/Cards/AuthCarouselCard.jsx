@@ -3,8 +3,7 @@ import React from 'react';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 
-const AuthCarouselCard = ({image,title}) => {
-    console.log(image,title)
+const AuthCarouselCard = ({image, title}) => {
   return (
     <View style={styles.container}>
       <Image source={image} style={styles.bannerImage} resizeMode="cover" />
