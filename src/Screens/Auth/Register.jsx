@@ -335,9 +335,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 20,
   },
   cardView: {
-    width: 340,
+    // width: 340,
+    width: '100%',
     height: 'auto',
     backgroundColor: colors.background,
     paddingVertical: 20,
