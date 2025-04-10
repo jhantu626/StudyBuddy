@@ -6,14 +6,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView} from 'react-native-gesture-handler';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
 import {StackActions, useNavigation} from '@react-navigation/native';
+import {authService} from '../../Services/AuthService';
 
 const AuthHome = () => {
   const navigation = useNavigation();
+
   return (
     <SafeAreaView style={{flex: 1}}>
       <View style={styles.container}>

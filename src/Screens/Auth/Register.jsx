@@ -33,60 +33,7 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-const classOptions = [
-  {id: 1, name: 'Nursery'},
-  {id: 2, name: 'LKG'},
-  {id: 3, name: 'UKG'},
-  {id: 4, name: 'Class 1'},
-  {id: 5, name: 'Class 2'},
-  {id: 6, name: 'Class 3'},
-  {id: 7, name: 'Class 4'},
-  {id: 8, name: 'Class 5'},
-  {id: 9, name: 'Class 6'},
-  {id: 10, name: 'Class 7'},
-  {id: 11, name: 'Class 8'},
-  {id: 12, name: 'Class 9'},
-  {id: 13, name: 'Class 10'},
-  {id: 14, name: 'Class 11'},
-  {id: 15, name: 'Class 12'},
-];
-
-const languageOptions = [
-  {id: 1, name: 'English'},
-  {id: 2, name: 'Hindi'},
-  {id: 3, name: 'Tamil'},
-  {id: 4, name: 'Telugu'},
-  {id: 5, name: 'Kannada'},
-  {id: 6, name: 'Malayalam'},
-  {id: 7, name: 'Gujarati'},
-  {id: 8, name: 'Marathi'},
-  {id: 9, name: 'Bengali'},
-  {id: 10, name: 'Punjabi'},
-  {id: 11, name: 'Urdu'},
-  {id: 12, name: 'Sanskrit'},
-  {id: 13, name: 'French'},
-  {id: 14, name: 'German'},
-  {id: 15, name: 'Spanish'},
-];
-
-const boardOptions = [
-  {id: 1, name: 'CBSE'},
-  {id: 2, name: 'ICSE'},
-  {id: 3, name: 'State Board'},
-  {id: 4, name: 'IB (International Baccalaureate)'},
-  {id: 5, name: 'IGCSE (Cambridge)'},
-  {id: 6, name: 'CISCE'},
-  {id: 7, name: 'NIOS'},
-  {id: 8, name: 'Matriculation'},
-  {id: 9, name: 'Anglo-Indian'},
-  {id: 10, name: 'SSC (Secondary School Certificate)'},
-  {id: 11, name: 'HSC (Higher Secondary Certificate)'},
-  {id: 12, name: 'KSSEB (Karnataka)'},
-  {id: 13, name: 'MSBSHSE (Maharashtra)'},
-  {id: 14, name: 'TNBSE (Tamil Nadu)'},
-  {id: 15, name: 'WBCHSE (West Bengal)'},
-];
+import {boardApi, classApi, languageApi} from '../../utils/CommonApiCall';
 
 const subjectOptions = [
   {id: 1, name: 'Mathematics'},
@@ -122,15 +69,25 @@ const Register = () => {
   const [selectedSubject, setSelectedSubject] = useState([]);
   const [isAccept, setIsAccept] = useState(false);
 
+  // Options
+  const [classOptions, setClassOptions] = useState([]);
+  const [boardOptions, setBoardOptions] = useState([]);
+  const [languageOptions, setLanguageOptions] = useState([]);
+
+  useEffect(() => {
+    classApi({setClassOption: setClassOptions});
+    boardApi({setOption: setBoardOptions});
+    languageApi({setOption: setLanguageOptions});
+  }, []);
+
   // BottomSheet
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState({
-    status: true,
-    target: 'Classes',
+    status: false,
+    target: null,
   });
   const bottomSheetRef = useRef(null);
 
   useEffect(() => {
-    console.log(isBottomSheetOpen);
     if (isBottomSheetOpen?.status) {
       bottomSheetRef.current.snapToIndex(0);
     }
