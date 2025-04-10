@@ -390,7 +390,7 @@ const styles = StyleSheet.create({
   imageUploadSection: {
     width: '100%',
     flexDirection: 'row',
-    // gap: 10,
+    gap: 10,
     justifyContent: 'space-between',
   },
   imageContainer: {

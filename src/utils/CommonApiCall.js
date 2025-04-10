@@ -27,11 +27,11 @@ const languageApi = async ({setOption}) => {
 };
 const subjectsApi = async ({setOption}) => {
   try {
-    const data = await commonService.language();
+    const data = await commonService.subjects();
     setOption(data);
   } catch (error) {
     console.error(error);
   }
 };
 
-export {classApi, boardApi, languageApi,subjectsApi};
+export {classApi, boardApi, languageApi, subjectsApi};
