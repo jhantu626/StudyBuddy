@@ -13,12 +13,10 @@ import {createStackNavigator} from '@react-navigation/stack';
 const App = () => {
   const Stack = createStackNavigator();
 
-  const [isLogin, setIsLogin] = useState(true);
-
   const AuthStack = () => {
     return (
       <Stack.Navigator
-        initialRouteName="Register"
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
