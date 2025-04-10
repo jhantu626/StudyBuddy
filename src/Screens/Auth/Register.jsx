@@ -234,7 +234,7 @@ const Register = () => {
                   <View style={styles.imageContainer}>
                     <Image
                       style={styles.userImage}
-                      source={require('./../../../assets/Images/User.png')}
+                      source={require('./../../../assets/Images/User.webp')}
                       resizeMode="contain"
                     />
                   </View>
