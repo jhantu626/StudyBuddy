@@ -34,7 +34,8 @@ const AuthHome = () => {
             style={[
               styles.btn,
               {
-                backgroundColor: colors.authPrimary,
+                // backgroundColor: colors.authPrimary,
+                backgroundColor: colors.primary,
               },
             ]}
             onPress={() => navigation.navigate('Login')}>
@@ -55,10 +56,21 @@ const AuthHome = () => {
           <TouchableOpacity
             style={[
               styles.btn,
-              {borderWidth: 1, borderColor: colors.authPrimary},
+              {
+                borderWidth: 1,
+                // borderColor: colors.authPrimary,
+                borderColor: colors.primary,
+              },
             ]}
             onPress={() => navigation.navigate('Register')}>
-            <Text style={[styles.btnText, {color: colors.authPrimary}]}>
+            <Text
+              style={[
+                styles.btnText,
+                {
+                  // color: colors.authPrimary
+                  color: colors.primary,
+                },
+              ]}>
               Register
             </Text>
           </TouchableOpacity>
@@ -86,7 +98,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 36,
     fontFamily: fonts.semiBold,
-    color: colors.authPrimary,
+    // color: colors.authPrimary,
+    color: colors.primary,
   },
   desc: {
     width: 230,

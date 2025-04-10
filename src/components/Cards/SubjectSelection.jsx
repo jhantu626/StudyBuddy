@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   subjectText: {
-    fontSize: 13,
+    fontSize: 12,
     fontFamily: fonts.medium,
     color: '#282356',
     width: 70,

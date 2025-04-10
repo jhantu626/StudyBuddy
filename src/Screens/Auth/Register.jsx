@@ -226,7 +226,7 @@ const Register = () => {
                         gap: 5,
                       }}>
                       <Text style={styles.uploadText}>
-                        Upload your image here
+                        Upload your image here{`\n`}(optional)
                       </Text>
                       <Text style={styles.browseText}>Browse</Text>
                     </View>
@@ -410,6 +410,7 @@ const styles = StyleSheet.create({
     fontSize: 8,
     fontFamily: fonts.regular,
     color: '#9895AD',
+    textAlign: 'center',
   },
   browseText: {
     fontSize: 13,
