@@ -25,5 +25,13 @@ const languageApi = async ({setOption}) => {
     console.error(error);
   }
 };
+const subjectsApi = async ({setOption}) => {
+  try {
+    const data = await commonService.language();
+    setOption(data);
+  } catch (error) {
+    console.error(error);
+  }
+};
 
-export {classApi, boardApi, languageApi};
+export {classApi, boardApi, languageApi,subjectsApi};

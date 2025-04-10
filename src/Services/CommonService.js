@@ -38,6 +38,17 @@ class CommonService {
       return data;
     }
   }
+  async subjects() {
+    const uri = `${this.baseUrl}api/v1/subjects`;
+    try {
+      const response = await axios.get(uri);
+      const data = response.data;
+      return data;
+    } catch (error) {
+      const data = error.response.data;
+      return data;
+    }
+  }
 }
 
 const commonService = new CommonService();

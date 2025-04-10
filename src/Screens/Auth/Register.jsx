@@ -12,7 +12,7 @@ import {
   TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import PrimaryHeader from '../../components/Headers/PrimaryHeader';
 import AuthLayout from './AuthLayout';
 import {colors} from '../../utils/colors';
@@ -33,30 +33,12 @@ import BottomSheet, {
   BottomSheetScrollView,
 } from '@gorhom/bottom-sheet';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {boardApi, classApi, languageApi} from '../../utils/CommonApiCall';
-
-const subjectOptions = [
-  {id: 1, name: 'Mathematics'},
-  {id: 2, name: 'Science'},
-  {id: 3, name: 'Physics'},
-  {id: 4, name: 'Chemistry'},
-  {id: 5, name: 'Biology'},
-  {id: 6, name: 'English'},
-  {id: 7, name: 'Hindi'},
-  {id: 8, name: 'Sanskrit'},
-  {id: 9, name: 'Social Studies'},
-  {id: 10, name: 'History'},
-  {id: 11, name: 'Geography'},
-  {id: 12, name: 'Civics'},
-  {id: 13, name: 'Economics'},
-  {id: 14, name: 'Computer Science'},
-  {id: 15, name: 'Environmental Science'},
-  {id: 16, name: 'General Knowledge'},
-  {id: 17, name: 'Physical Education'},
-  {id: 18, name: 'Business Studies'},
-  {id: 19, name: 'Accountancy'},
-  {id: 20, name: 'Political Science'},
-];
+import {
+  boardApi,
+  classApi,
+  languageApi,
+  subjectsApi,
+} from '../../utils/CommonApiCall';
 
 const Register = () => {
   // State Values
@@ -73,11 +55,13 @@ const Register = () => {
   const [classOptions, setClassOptions] = useState([]);
   const [boardOptions, setBoardOptions] = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
+  const [subjectOptions, setSubjectOptions] = useState([]);
 
   useEffect(() => {
     classApi({setClassOption: setClassOptions});
     boardApi({setOption: setBoardOptions});
     languageApi({setOption: setLanguageOptions});
+    subjectsApi({setOption: setSubjectOptions});
   }, []);
 
   // BottomSheet
@@ -93,16 +77,19 @@ const Register = () => {
     }
   }, [isBottomSheetOpen]);
 
-  const renderBackdrop = props => (
-    <BottomSheetBackdrop
-      {...props}
-      disappearsOnIndex={-1}
-      appearsOnIndex={0}
-      opacity={0.5}
-    />
+  const renderBackdrop = useCallback(
+    props => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.5}
+      />
+    ),
+    [],
   );
 
-  const renderBottomSheetItem = () => {
+  const renderBottomSheetItem = useCallback(() => {
     switch (isBottomSheetOpen.target) {
       case 'Classes':
         return (
@@ -140,13 +127,23 @@ const Register = () => {
             selectedItems={selectedSubject}
             setSelectedItems={setSelectedSubject}
             options={subjectOptions}
-            placeholder="Search boards..."
+            placeholder="Search subjects..."
           />
         );
       default:
         return null;
     }
-  };
+  }, [
+    isBottomSheetOpen.target,
+    selectedClass,
+    selectedLanguage,
+    selectedBoard,
+    selectedSubject,
+    classOptions,
+    languageOptions,
+    boardOptions,
+    subjectOptions,
+  ]);
 
   return (
     <AuthLayout>
@@ -310,7 +307,7 @@ const Register = () => {
           </ScrollView>
         </TouchableWithoutFeedback>
         <BottomSheet
-          snapPoints={['80%']}
+          snapPoints={useMemo(() => ['80%'], [])}
           index={-1}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
