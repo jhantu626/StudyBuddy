@@ -11,7 +11,8 @@ const BottomSheetInput = ({
   setSelectedItems,
   bottomSheetOpen,
   setBottomSheetOpen,
-  placeHolder
+  placeHolder,
+  showProperty = 'name',
 }) => {
   const handleRemove = id => {
     setSelectedItems(prevItems => prevItems.filter(item => item.id !== id));
@@ -34,7 +35,7 @@ const BottomSheetInput = ({
           {selctedItems.map((item, index) => (
             <View key={index} style={styles.item}>
               <Text style={styles.itemText} onPress={e => e.stopPropagation()}>
-                {item.name}
+                {item[showProperty]}
               </Text>
               <TouchableOpacity
                 onPress={e => {

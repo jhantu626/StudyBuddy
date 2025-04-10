@@ -204,6 +204,7 @@ const Register = () => {
                   selctedItems={selectedBoard}
                   setSelectedItems={setSelectedBoard}
                   placeHolder={'Select education board*'}
+                  showProperty="code"
                 />
 
                 <BottomSheetInput
