@@ -15,7 +15,6 @@ const requestPermission = async () => {
   return true;
 };
 
-
 const pickImageAndCrop = async ({setImage}) => {
   const hasPermission = await requestPermission();
   if (!hasPermission) {
@@ -31,8 +30,8 @@ const pickImageAndCrop = async ({setImage}) => {
     .catch(err => {
       console.log(err);
       Toast.show({
-        text1: 'Something went wrong',
-        type: 'error',
+        text1: 'No image selected',
+        type: 'info',
       });
     });
 };

@@ -42,7 +42,7 @@ import {
 } from '../../utils/CommonApiCall';
 import Toast from 'react-native-toast-message';
 import {pickImageAndCrop} from '../../utils/ImagePicker';
-import {isValidIndianMobile} from '../../utils/helper';
+import {isValidIndianMobile, validateName} from '../../utils/helper';
 
 const Register = () => {
   // State Values
@@ -64,6 +64,11 @@ const Register = () => {
 
   //Errors
   const [mobileError, setMobileError] = useState({status: false});
+  const [appError, setAppError] = useState({
+    status: false,
+    target: null,
+    msg: null,
+  });
 
   useEffect(() => {
     classApi({setClassOption: setClassOptions});
@@ -177,6 +182,91 @@ const Register = () => {
     checkMobile();
   }, [mobile]);
 
+  const handleSubmit = () => {
+    const validName = validateName(name);
+    // Name Validation
+    if (validName.status) {
+      setAppError(validName);
+      Toast.show({
+        text1: 'Enter a valid mobile number',
+        type: 'info',
+      });
+      return;
+    } else {
+      setAppError({status: true});
+    }
+
+    // Class Validation
+    if (selectedClass.length === 0) {
+      Toast.show({
+        text1: 'Classes is required',
+        type: 'info',
+        swipeable: true,
+      });
+      setAppError({
+        target: 'class',
+        status: true,
+        msg: 'Class selection cannot be empty. Please choose one or more classes.',
+      });
+      return;
+    }
+
+    if (selectedSubject.length === 0) {
+      Toast.show({
+        text1: 'Subjects is required',
+        type: 'info',
+        swipeable: true,
+      });
+      setAppError({
+        target: 'subject',
+        status: true,
+        msg: 'Subject selection cannot be empty. Please choose one or more classes.',
+      });
+      return;
+    }
+
+    if (selectedBoard.length === 0) {
+      Toast.show({
+        text1: 'Boards are required',
+        type: 'info',
+        swipeable: true,
+      });
+      setAppError({
+        target: 'board',
+        status: true,
+        msg: 'Boards selection cannot be empty. Please choose one or more classes.',
+      });
+      return;
+    }
+
+    if (selectedLanguage.length === 0) {
+      Toast.show({
+        text1: 'Languages are required',
+        type: 'info',
+        swipeable: true,
+      });
+      setAppError({
+        target: 'language',
+        status: true,
+        msg: 'Language selection cannot be empty. Please choose one or more classes.',
+      });
+      return;
+    }
+    if (!profileImage) {
+      Toast.show({
+        text1: 'Profile image is required',
+        type: 'info',
+        swipeable: true,
+      });
+      setAppError({
+        target: 'profile',
+        status: true,
+        msg: 'Profile photo is missing. Please upload one.',
+      });
+      return;
+    }
+  };
+
   return (
     <AuthLayout>
       <GestureHandlerRootView style={{flex: 1}}>
@@ -190,11 +280,23 @@ const Register = () => {
             <View style={styles.container}>
               <View style={styles.cardView}>
                 {/* Form Start */}
-                <DefaultInput
-                  labelText={'Name'}
-                  value={name}
-                  setValue={setName}
-                />
+                <View style={{width: '100%'}}>
+                  <DefaultInput
+                    labelText={'Name'}
+                    value={name}
+                    setValue={setName}
+                    bgColor={
+                      appError.status && appError.target === 'name'
+                        ? '#FF0000'
+                        : null
+                    }
+                  />
+                  {appError.status && appError.target === 'name' && (
+                    <Text style={styles.error} accessibilityRole="alert">
+                      {appError.msg}
+                    </Text>
+                  )}
+                </View>
                 <View style={{width: '100%'}}>
                   <DefaultInput
                     labelText={'Number'}
@@ -212,87 +314,158 @@ const Register = () => {
                     </Text>
                   )}
                 </View>
-                <DropdownInput
-                  labelText="Gender"
-                  value={gender}
-                  setValue={setGender}
-                  options={['Male', 'Female', 'Others']}
-                />
-                <BottomSheetInput
-                  target="Classes"
-                  bottomSheetOpen={isBottomSheetOpen}
-                  setBottomSheetOpen={setIsBottomSheetOpen}
-                  selctedItems={selectedClass}
-                  setSelectedItems={setSelectedClass}
-                  placeHolder={'Select your class*'}
-                />
-                <BottomSheetInput
-                  target="Subject"
-                  bottomSheetOpen={isBottomSheetOpen}
-                  setBottomSheetOpen={setIsBottomSheetOpen}
-                  selctedItems={selectedSubject}
-                  setSelectedItems={setSelectedSubject}
-                  placeHolder={'Select your subjects*'}
-                />
-                <BottomSheetInput
-                  target="Board"
-                  bottomSheetOpen={isBottomSheetOpen}
-                  setBottomSheetOpen={setIsBottomSheetOpen}
-                  selctedItems={selectedBoard}
-                  setSelectedItems={setSelectedBoard}
-                  placeHolder={'Select education board*'}
-                  showProperty="code"
-                />
+                <View style={{width: '100%'}}>
+                  <DropdownInput
+                    labelText="Gender"
+                    value={gender}
+                    setValue={setGender}
+                    options={['Male', 'Female', 'Others']}
+                  />
+                </View>
+                <View style={{width: '100%'}}>
+                  <BottomSheetInput
+                    target="Classes"
+                    bottomSheetOpen={isBottomSheetOpen}
+                    setBottomSheetOpen={setIsBottomSheetOpen}
+                    selctedItems={selectedClass}
+                    setSelectedItems={setSelectedClass}
+                    placeHolder={'Select your class*'}
+                    borderColor={
+                      appError.status && appError.target === 'class'
+                        ? 'red'
+                        : null
+                    }
+                  />
+                  {appError.status && appError.target === 'class' && (
+                    <Text style={styles.error} accessibilityRole="alert">
+                      {appError.msg}
+                    </Text>
+                  )}
+                </View>
+                <View style={{width: '100%'}}>
+                  <BottomSheetInput
+                    target="Subject"
+                    bottomSheetOpen={isBottomSheetOpen}
+                    setBottomSheetOpen={setIsBottomSheetOpen}
+                    selctedItems={selectedSubject}
+                    setSelectedItems={setSelectedSubject}
+                    placeHolder={'Select your subjects*'}
+                    borderColor={
+                      appError.status && appError.target === 'subject'
+                        ? 'red'
+                        : null
+                    }
+                  />
+                  {appError.status && appError.target === 'subject' && (
+                    <Text style={styles.error} accessibilityRole="alert">
+                      {appError.msg}
+                    </Text>
+                  )}
+                </View>
+                <View style={{width: '100%'}}>
+                  <BottomSheetInput
+                    target="Board"
+                    bottomSheetOpen={isBottomSheetOpen}
+                    setBottomSheetOpen={setIsBottomSheetOpen}
+                    selctedItems={selectedBoard}
+                    setSelectedItems={setSelectedBoard}
+                    placeHolder={'Select education board*'}
+                    showProperty="code"
+                    borderColor={
+                      appError.status && appError.target === 'board'
+                        ? 'red'
+                        : null
+                    }
+                  />
+                  {appError.status && appError.target === 'board' && (
+                    <Text style={styles.error} accessibilityRole="alert">
+                      {appError.msg}
+                    </Text>
+                  )}
+                </View>
 
-                <BottomSheetInput
-                  target="Language"
-                  bottomSheetOpen={isBottomSheetOpen}
-                  setBottomSheetOpen={setIsBottomSheetOpen}
-                  selctedItems={selectedLanguage}
-                  setSelectedItems={setSelectedLanguage}
-                  placeHolder={'Select your language*'}
-                />
+                <View style={{width: '100%'}}>
+                  <BottomSheetInput
+                    target="Language"
+                    bottomSheetOpen={isBottomSheetOpen}
+                    setBottomSheetOpen={setIsBottomSheetOpen}
+                    selctedItems={selectedLanguage}
+                    setSelectedItems={setSelectedLanguage}
+                    placeHolder={'Select your language*'}
+                    borderColor={
+                      appError.status && appError.target === 'language'
+                        ? 'red'
+                        : null
+                    }
+                  />
+                  {appError.status && appError.target === 'language' && (
+                    <Text style={styles.error} accessibilityRole="alert">
+                      {appError.msg}
+                    </Text>
+                  )}
+                </View>
 
-                <View style={styles.imageUploadSection}>
-                  <TouchableOpacity
-                    style={[styles.imageContainer, {gap: 15}]}
-                    onPress={async () => {
-                      await pickImageAndCrop({setImage: setProfileImage});
-                    }}>
-                    <Image
-                      style={styles.uploadImage}
-                      source={require('./../../../assets/Images/Upload.png')}
-                    />
-                    <View
-                      style={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: 5,
+                <View style={{width: '100%'}}>
+                  <View style={[styles.imageUploadSection]}>
+                    <TouchableOpacity
+                      style={[
+                        styles.imageContainer,
+                        {gap: 15},
+                        appError.status &&
+                          appError.target === 'profile' && {borderColor: 'red'},
+                      ]}
+                      onPress={async () => {
+                        await pickImageAndCrop({setImage: setProfileImage});
                       }}>
-                      <Text style={styles.uploadText}>
-                        Upload your image here
-                      </Text>
-                      <Text style={styles.browseText}>Browse</Text>
+                      <Image
+                        style={styles.uploadImage}
+                        source={require('./../../../assets/Images/Upload.png')}
+                      />
+                      <View
+                        style={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          gap: 5,
+                        }}>
+                        <Text style={styles.uploadText}>
+                          Upload your image here
+                        </Text>
+                        <Text
+                          style={[
+                            styles.browseText,
+                            appError.status &&
+                              appError.target === 'profile' && {
+                                color: 'red',
+                              },
+                          ]}>
+                          Browse
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                    <View style={styles.imageContainer}>
+                      {profileImage ? (
+                        <Image
+                          style={[
+                            styles.userImage,
+                            {width: '100%', height: '100%', overflow: 'hidden'},
+                          ]}
+                          source={profileImage}
+                          resizeMode="cover"
+                        />
+                      ) : (
+                        <Image
+                          style={styles.userImage}
+                          source={require('./../../../assets/Images/User.webp')}
+                          resizeMode="contain"
+                        />
+                      )}
                     </View>
-                  </TouchableOpacity>
-                  <View style={styles.imageContainer}>
-                    {profileImage ? (
-                      <Image
-                        style={[
-                          styles.userImage,
-                          {width: '100%', height: '100%', overflow: 'hidden'},
-                        ]}
-                        source={profileImage}
-                        resizeMode="cover"
-                      />
-                    ) : (
-                      <Image
-                        style={styles.userImage}
-                        source={require('./../../../assets/Images/User.webp')}
-                        resizeMode="contain"
-                      />
-                    )}
                   </View>
+                  {appError.status && appError.target === 'profile' && (
+                    <Text style={styles.error} accessibilityRole="alert">
+                      {appError.msg}
+                    </Text>
+                  )}
                 </View>
 
                 <TouchableOpacity
@@ -345,7 +518,9 @@ const Register = () => {
                 {/* Form End */}
                 <View style={{marginBottom: 50}} />
                 <View style={styles.bottomBtn}>
-                  <TouchableOpacity style={styles.nextBtn}>
+                  <TouchableOpacity
+                    style={styles.nextBtn}
+                    onPressOut={handleSubmit}>
                     <AntDesign
                       name="arrowright"
                       color="#fff"

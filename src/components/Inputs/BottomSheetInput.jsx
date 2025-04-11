@@ -13,6 +13,7 @@ const BottomSheetInput = ({
   setBottomSheetOpen,
   placeHolder,
   showProperty = 'name',
+  borderColor = null,
 }) => {
   const handleRemove = id => {
     setSelectedItems(prevItems => prevItems.filter(item => item.id !== id));
@@ -23,6 +24,9 @@ const BottomSheetInput = ({
       style={[
         styles.container,
         selctedItems.length > 0 && {paddingVertical: 10},
+        borderColor && {
+          borderColor: borderColor,
+        },
       ]}
       onPress={() => {
         setBottomSheetOpen({
@@ -53,7 +57,7 @@ const BottomSheetInput = ({
       <Icon
         name={bottomSheetOpen?.status ? 'arrow-drop-up' : 'arrow-drop-down'}
         size={24}
-        color={colors.primary}
+        color={borderColor ? borderColor : colors.primary}
       />
     </TouchableOpacity>
   );
