@@ -26,7 +26,7 @@ import {
   DropdownInput,
   SubjectSelection,
 } from '../../components';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -35,18 +35,20 @@ import BottomSheet, {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {
   boardApi,
+  checkTeacherByMobile,
   classApi,
   languageApi,
   subjectsApi,
 } from '../../utils/CommonApiCall';
 import Toast from 'react-native-toast-message';
 import {pickImageAndCrop} from '../../utils/ImagePicker';
+import {isValidIndianMobile} from '../../utils/helper';
 
 const Register = () => {
   // State Values
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('+91 ');
-  const [gender, setGender] = useState('');
+  const [gender, setGender] = useState('Male');
   const [selectedClass, setSelectedClass] = useState([]);
   const [selectedLanguage, setSelectedLanguage] = useState([]);
   const [selectedBoard, setSelectedBoard] = useState([]);
@@ -59,6 +61,9 @@ const Register = () => {
   const [boardOptions, setBoardOptions] = useState([]);
   const [languageOptions, setLanguageOptions] = useState([]);
   const [subjectOptions, setSubjectOptions] = useState([]);
+
+  //Errors
+  const [mobileError, setMobileError] = useState({status: false});
 
   useEffect(() => {
     classApi({setClassOption: setClassOptions});
@@ -148,6 +153,30 @@ const Register = () => {
     subjectOptions,
   ]);
 
+  // Check MobileNumber
+  useEffect(() => {
+    const checkMobile = async () => {
+      if (mobile.length === 14) {
+        if (isValidIndianMobile(mobile)) {
+          const isUserExist = await checkTeacherByMobile({
+            mobileNumber: mobile.substring(4),
+          });
+          if (isUserExist === true) {
+            setMobileError({status: true, msg: 'User Already Exist.'});
+          } else {
+            setMobileError({status: false, msg: ''});
+          }
+        } else {
+          setMobileError({status: true, msg: 'Enter a valid mobile number'});
+        }
+      } else {
+        setMobileError({status: false, msg: ''});
+      }
+    };
+
+    checkMobile();
+  }, [mobile]);
+
   return (
     <AuthLayout>
       <GestureHandlerRootView style={{flex: 1}}>
@@ -166,15 +195,23 @@ const Register = () => {
                   value={name}
                   setValue={setName}
                 />
-                <DefaultInput
-                  labelText={'Number'}
-                  value={mobile}
-                  setValue={setMobile}
-                  isBg={true}
-                  minLength={4}
-                  maxLength={14}
-                  keyboardType="number-pad"
-                />
+                <View style={{width: '100%'}}>
+                  <DefaultInput
+                    labelText={'Number'}
+                    value={mobile}
+                    setValue={setMobile}
+                    isBg={true}
+                    minLength={4}
+                    maxLength={14}
+                    keyboardType="number-pad"
+                    bgColor={mobileError.status ? '#FF0000' : null}
+                  />
+                  {mobileError.status && (
+                    <Text style={styles.error} accessibilityRole="alert">
+                      {mobileError.msg}
+                    </Text>
+                  )}
+                </View>
                 <DropdownInput
                   labelText="Gender"
                   value={gender}
@@ -243,7 +280,7 @@ const Register = () => {
                       <Image
                         style={[
                           styles.userImage,
-                          {width: '100%', height: '100%',overflow: 'hidden'},
+                          {width: '100%', height: '100%', overflow: 'hidden'},
                         ]}
                         source={profileImage}
                         resizeMode="cover"
@@ -419,7 +456,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden'
+    overflow: 'hidden',
   },
   uploadImage: {
     width: 26,
@@ -440,6 +477,13 @@ const styles = StyleSheet.create({
   userImage: {
     width: 100,
     height: 100,
+  },
+  error: {
+    color: colors.error,
+    fontSize: 11,
+    fontFamily: fonts.semiBold,
+    paddingHorizontal: 10,
+    marginTop: 3,
   },
 });
 

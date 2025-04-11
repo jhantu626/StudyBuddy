@@ -1,4 +1,5 @@
 import {commonService} from '../Services/CommonService';
+import {teacherService} from '../Services/TeacherService';
 
 const classApi = async ({setClassOption}) => {
   try {
@@ -34,4 +35,19 @@ const subjectsApi = async ({setOption}) => {
   }
 };
 
-export {classApi, boardApi, languageApi, subjectsApi};
+// Check Teacher By Mobile
+const checkTeacherByMobile = async ({mobileNumber}) => {
+  try {
+    console.log(mobileNumber)
+    const data = await teacherService.teacherExistence({
+      mobileNumber: mobileNumber,
+    });
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export {classApi, boardApi, languageApi, subjectsApi, checkTeacherByMobile};

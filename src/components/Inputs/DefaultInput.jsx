@@ -11,6 +11,7 @@ const DefaultInput = ({
   minLength = 0,
   maxLength = 35,
   keyboardType = 'ascii-capable',
+  bgColor = null,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const labelAnim = useRef(new Animated.Value(value ? 1 : 0)).current;
@@ -44,7 +45,12 @@ const DefaultInput = ({
   };
 
   return (
-    <View style={[styles.container, isBg && {backgroundColor: '#D6F6FA'}]}>
+    <View
+      style={[
+        styles.container,
+        isBg && {backgroundColor: bgColor !== null ? bgColor + 20 : '#D6F6FA'},
+        bgColor !== null && {borderColor: bgColor + 50},
+      ]}>
       <Animated.Text style={labelStyle}>{labelText}</Animated.Text>
       <TextInput
         value={value}
