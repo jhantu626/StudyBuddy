@@ -14,7 +14,7 @@ const AuthCarouselCard = ({image, title}) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: 340,
+    width: '100%',
     height: 80,
     padding: 5,
     flexDirection: 'row',

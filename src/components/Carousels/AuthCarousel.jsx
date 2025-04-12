@@ -30,7 +30,7 @@ const AuthCarousel = () => {
         keyExtractor={(item, index) => index.toString()}
         renderItem={(item, index) => {
           return (
-            <View key={index} style={{width: screenWidth}}>
+            <View key={index} style={{width: screenWidth,paddingHorizontal: 20,alignItems: 'center',justifyContent: 'center'}}>
               <AuthCarouselCard
                 title={item.item.title}
                 image={item.item.image}
