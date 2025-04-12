@@ -59,6 +59,7 @@ const Login = () => {
                   maxLength={10}
                   value={mobile}
                   onChangeText={text => setMobile(text)}
+                  placeholderTextColor={'#CCCCCC'}
                 />
               </View>
               <Text style={styles.lastText}>
