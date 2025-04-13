@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import PrimaryHeader from '../../components/Headers/PrimaryHeader';
 import AuthLayout from './AuthLayout';
@@ -17,16 +17,52 @@ import {fonts} from '../../utils/fonts';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {AuthCarousel} from '../../components';
 import {useNavigation} from '@react-navigation/native';
+import {isValidIndianMobile} from '../../utils/helper';
+import {authService} from '../../Services/AuthService';
+import {teacherService} from '../../Services/TeacherService';
 
 const Login = () => {
   const navigation = useNavigation();
   const [mobile, setMobile] = useState('');
+
+  // Errors
+  const [appError, setAppError] = useState({status: true, msg: null});
 
   const handleChangePage = () => {
     if (mobile.length > 0 && mobile.length <= 10) {
       navigation.navigate('Otp', {mobile});
     }
   };
+
+  const checkUserExist = async () => {
+    try {
+      const data = await teacherService.teacherExistence({
+        mobileNumber: mobile,
+      });
+      if (!data) {
+        setAppError({
+          status: true,
+          msg: 'User does not exist, please register.',
+        });
+      } else {
+        setAppError({status: false});
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    if (mobile.length === 10) {
+      if (!isValidIndianMobile(mobile)) {
+        setAppError({status: true, msg: 'Enter a valid mobile number'});
+        return;
+      } else {
+        checkUserExist();
+        console.info('yes');
+      }
+    }
+  }, [mobile]);
 
   return (
     <AuthLayout>
@@ -47,21 +83,32 @@ const Login = () => {
               <Text style={styles.title}>
                 We need to register your phone number before getting started!
               </Text>
-              <View style={styles.inputContainer}>
-                <View style={styles.codeContainer}>
-                  <Text style={styles.codeText}>+91</Text>
+              <View
+                style={{
+                  width: '100%',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <View style={styles.inputContainer}>
+                  <View style={styles.codeContainer}>
+                    <Text style={styles.codeText}>+91</Text>
+                  </View>
+                  <TextInput
+                    style={styles.inputBox}
+                    placeholder="Enter Mobile Number"
+                    keyboardType="phone-pad"
+                    selectionColor={colors.primary}
+                    maxLength={10}
+                    value={mobile}
+                    onChangeText={text => setMobile(text)}
+                    placeholderTextColor={'#CCCCCC'}
+                  />
                 </View>
-                <TextInput
-                  style={styles.inputBox}
-                  placeholder="Enter Mobile Number"
-                  keyboardType="phone-pad"
-                  selectionColor={colors.primary}
-                  maxLength={10}
-                  value={mobile}
-                  onChangeText={text => setMobile(text)}
-                  placeholderTextColor={'#CCCCCC'}
-                />
+                {appError.status && (
+                  <Text style={styles.errorText}>{appError.msg}</Text>
+                )}
               </View>
+
               <Text style={styles.lastText}>
                 We will send you one time password (OTP)
               </Text>
@@ -186,6 +233,14 @@ const styles = StyleSheet.create({
   },
   carouselContainer: {
     marginTop: 80,
+  },
+  errorText: {
+    width: 260,
+    color: 'red',
+    fontSize: 11,
+    marginTop: 3,
+    fontFamily: fonts.regular,
+    paddingHorizontal: 5,
   },
 });
 
