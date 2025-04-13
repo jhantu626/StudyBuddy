@@ -76,12 +76,13 @@ class AuthService {
 
   async validateOtp({mobileNumber, otp}) {
     const uri = `${this.baseUrl}/auth/validate-otp?mobile=${mobileNumber}&otp=${otp}`;
+    console.log(uri);
     try {
-      const response=await axios.get(uri);
-      const data=await response.data;
+      const response = await axios.get(uri);
+      const data = await response.data;
       return data;
     } catch (error) {
-      const data=await error.response.data;
+      const data = await error.response.data;
       return data;
     }
   }

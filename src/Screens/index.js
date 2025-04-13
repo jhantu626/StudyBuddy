@@ -8,4 +8,7 @@ import Otp from './Auth/Otp';
 import AuthHome from './Auth/AuthHome';
 import Register from './Auth/Register';
 
-export {SplashScreen, Onboarding, Login, Otp, AuthHome, Register};
+// App Stack
+import Home from './App/Home';
+
+export {SplashScreen, Onboarding, Login, Otp, AuthHome, Register, Home};

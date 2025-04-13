@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   AuthHome,
+  Home,
   Login,
   Onboarding,
   Otp,
@@ -9,6 +10,7 @@ import {
   SplashScreen,
 } from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
+import AuthProvider, {useAuth} from './Contexts/AuthContext';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -16,7 +18,7 @@ const App = () => {
   const AuthStack = () => {
     return (
       <Stack.Navigator
-        initialRouteName="Login"
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',
@@ -31,14 +33,27 @@ const App = () => {
     );
   };
 
+  const AppStack = () => {
+    return (
+      <Stack.Navigator initialRouteName="Home">
+        <Stack.Screen name="Home" component={Home} />
+      </Stack.Navigator>
+    );
+  };
+
   const AppNav = () => {
-    return <AuthStack />;
+    const {authToken} = useAuth();
+    return (
+      <NavigationContainer>
+        {authToken ? <AppStack /> : <AuthStack />}
+      </NavigationContainer>
+    );
   };
 
   return (
-    <NavigationContainer>
+    <AuthProvider>
       <AppNav />
-    </NavigationContainer>
+    </AuthProvider>
   );
 };
 

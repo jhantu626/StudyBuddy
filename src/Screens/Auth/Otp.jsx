@@ -17,24 +17,39 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import {AuthCarousel} from '../../components';
 import {useRoute} from '@react-navigation/native';
 import {authService} from '../../Services/AuthService';
+import Toast from 'react-native-toast-message';
+import {useAuth} from '../../Contexts/AuthContext';
 
 const Otp = () => {
   const route = useRoute();
   const {mobile} = route.params;
   const [timing, setTiming] = useState(300);
 
+  // COntexts
+  const {login} = useAuth();
+
   const [otp, setOtp] = useState(['', '', '', '', '']);
   const otpRef = useRef([]);
 
   const handleOtpVerification = async ({otp}) => {
-    try {
-      const data = await authService.validateOtp({
-        mobileNumber: mobile,
-        otp: otp,
-      });
-      console.log(data);
-    } catch (error) {
-      console.error(error);
+    if (otp.length === 5) {
+      try {
+        const data = await authService.validateOtp({
+          mobileNumber: mobile,
+          otp: otp,
+        });
+        if (data.status) {
+          login(data.token);
+        } else {
+          console.log(data);
+          Toast.show({
+            text1: 'Invalid Otp',
+            type: 'error',
+          });
+        }
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
