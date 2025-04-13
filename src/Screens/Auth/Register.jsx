@@ -26,7 +26,11 @@ import {
   DropdownInput,
   SubjectSelection,
 } from '../../components';
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {
+  CommonActions,
+  StackActions,
+  useNavigation,
+} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -43,8 +47,10 @@ import {
 import Toast from 'react-native-toast-message';
 import {pickImageAndCrop} from '../../utils/ImagePicker';
 import {isValidIndianMobile, validateName} from '../../utils/helper';
+import {authService} from '../../Services/AuthService';
 
 const Register = () => {
+  const navigation = useNavigation();
   // State Values
   const [name, setName] = useState('');
   const [mobile, setMobile] = useState('+91 ');
@@ -69,6 +75,7 @@ const Register = () => {
     target: null,
     msg: null,
   });
+  const [userAlreasyExist, setUserAlreadyExist] = useState(false);
 
   useEffect(() => {
     classApi({setClassOption: setClassOptions});
@@ -166,6 +173,7 @@ const Register = () => {
           const isUserExist = await checkTeacherByMobile({
             mobileNumber: mobile.substring(4),
           });
+          setUserAlreadyExist(isUserExist);
           if (isUserExist === true) {
             setMobileError({status: true, msg: 'User Already Exist.'});
           } else {
@@ -182,18 +190,29 @@ const Register = () => {
     checkMobile();
   }, [mobile]);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     const validName = validateName(name);
     // Name Validation
     if (validName.status) {
       setAppError(validName);
+      Toast.show({
+        text1: 'Enter a valid name',
+        type: 'info',
+      });
+      return;
+    } else {
+      setAppError({status: true});
+    }
+
+    if (!isValidIndianMobile(mobile.substring(4))) {
+      setMobileError({status: true, msg: 'Enter a valid mobile number'});
       Toast.show({
         text1: 'Enter a valid mobile number',
         type: 'info',
       });
       return;
     } else {
-      setAppError({status: true});
+      setMobileError({status: false});
     }
 
     // Class Validation
@@ -264,6 +283,29 @@ const Register = () => {
         msg: 'Profile photo is missing. Please upload one.',
       });
       return;
+    }
+
+    try {
+      const data = await authService.registerTeacher({
+        name: name,
+        phone: mobile,
+        gender: gender,
+        boards: selectedBoard,
+        classes: selectedClass,
+        languages: selectedLanguage,
+        subjects: selectedSubject,
+        profilePicture: profileImage,
+      });
+      if (data.status) {
+        Toast.show({
+          text1: data.message,
+          type: 'success',
+        });
+        navigation.navigate('Login');
+      }
+      console.log(data);
+    } catch (error) {
+      console.error(error);
     }
   };
 

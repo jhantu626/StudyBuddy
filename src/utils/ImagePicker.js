@@ -26,7 +26,9 @@ const pickImageAndCrop = async ({setImage}) => {
     cropping: true,
     mediaType: 'photo',
   })
-    .then(image => setImage({uri: image.path}))
+    .then(image =>
+      setImage({uri: image.path, mime: image.mime, name: image.filename}),
+    )
     .catch(err => {
       console.log(err);
       Toast.show({
