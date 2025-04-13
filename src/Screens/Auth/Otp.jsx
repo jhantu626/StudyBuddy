@@ -20,7 +20,7 @@ import {useRoute} from '@react-navigation/native';
 const Otp = () => {
   const route = useRoute();
   const {mobile} = route.params;
-  const [timing, setTiming] = useState(30);
+  const [timing, setTiming] = useState(300);
 
   const [otp, setOtp] = useState(['', '', '', '', '']);
   const otpRef = useRef([]);

@@ -38,13 +38,13 @@ class AuthService {
       boards: boards,
       languages: languages,
     };
-    console.log(uri)
+    console.log(uri);
     try {
       const formData = new FormData();
       formData.append('teacher', JSON.stringify(payload));
       formData.append('profile-pic', {
         uri: profilePicture.uri,
-        type: profilePicture.type || 'image/jpeg', 
+        type: profilePicture.type || 'image/jpeg',
         name: profilePicture.name || 'profile.jpg',
       });
       const response = await axios.post(uri, formData, {
@@ -55,7 +55,20 @@ class AuthService {
       const data = await response.data;
       return data;
     } catch (error) {
-      console.log(error)
+      console.log(error);
+      const data = await error.response.data;
+      return data;
+    }
+  }
+
+  async login({mobileNumber}) {
+    const uri = `${this.baseUrl}/auth/login?mobile=${mobileNumber}`;
+    console.log(uri);
+    try {
+      const response = await axios.post(uri);
+      const data = await response.data;
+      return data;
+    } catch (error) {
       const data = await error.response.data;
       return data;
     }

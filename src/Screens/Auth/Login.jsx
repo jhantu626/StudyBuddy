@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Image,
   ScrollView,
@@ -20,6 +21,7 @@ import {useNavigation} from '@react-navigation/native';
 import {isValidIndianMobile} from '../../utils/helper';
 import {authService} from '../../Services/AuthService';
 import {teacherService} from '../../Services/TeacherService';
+import Toast from 'react-native-toast-message';
 
 const Login = () => {
   const navigation = useNavigation();
@@ -28,11 +30,8 @@ const Login = () => {
   // Errors
   const [appError, setAppError] = useState({status: true, msg: null});
 
-  const handleChangePage = () => {
-    if (mobile.length > 0 && mobile.length <= 10) {
-      navigation.navigate('Otp', {mobile});
-    }
-  };
+  // Loading State
+  const [isLoading, setIsLoading] = useState(false);
 
   const checkUserExist = async () => {
     try {
@@ -52,6 +51,25 @@ const Login = () => {
     }
   };
 
+  const handleLogin = async () => {
+    try {
+      if (!appError.status && mobile.length === 10) {
+        const data = await authService.login({mobileNumber: mobile});
+        console.log(data);
+        if (data.status) {
+          Toast.show({
+            text1: data.message,
+          });
+          navigation.navigate('Otp', {
+            mobile: mobile,
+          });
+        }
+      }
+    } catch (error) {
+      console.error('Login Error: ', error);
+    }
+  };
+
   useEffect(() => {
     if (mobile.length === 10) {
       if (!isValidIndianMobile(mobile)) {
@@ -59,7 +77,6 @@ const Login = () => {
         return;
       } else {
         checkUserExist();
-        console.info('yes');
       }
     }
   }, [mobile]);
@@ -102,6 +119,7 @@ const Login = () => {
                     value={mobile}
                     onChangeText={text => setMobile(text)}
                     placeholderTextColor={'#CCCCCC'}
+                    onSubmitEditing={handleLogin}
                   />
                 </View>
                 {appError.status && (
@@ -115,14 +133,19 @@ const Login = () => {
               <View style={{marginBottom: 50}} />
               <View style={styles.bottomBtn}>
                 <TouchableOpacity
-                  onPress={handleChangePage}
+                  disabled={appError.status || mobile.length < 10 || isLoading}
+                  onPress={handleLogin}
                   style={styles.nextBtn}>
-                  <AntDesign
-                    name="arrowright"
-                    color="#fff"
-                    size={28}
-                    style={{transform: [{rotate: '310deg'}]}}
-                  />
+                  {isLoading ? (
+                    <ActivityIndicator size={'large'} color={'#fff'} />
+                  ) : (
+                    <AntDesign
+                      name="arrowright"
+                      color="#fff"
+                      size={28}
+                      style={{transform: [{rotate: '310deg'}]}}
+                    />
+                  )}
                 </TouchableOpacity>
               </View>
             </View>
