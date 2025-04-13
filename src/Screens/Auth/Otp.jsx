@@ -16,6 +16,7 @@ import {fonts} from '../../utils/fonts';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {AuthCarousel} from '../../components';
 import {useRoute} from '@react-navigation/native';
+import {authService} from '../../Services/AuthService';
 
 const Otp = () => {
   const route = useRoute();
@@ -25,6 +26,18 @@ const Otp = () => {
   const [otp, setOtp] = useState(['', '', '', '', '']);
   const otpRef = useRef([]);
 
+  const handleOtpVerification = async ({otp}) => {
+    try {
+      const data = await authService.validateOtp({
+        mobileNumber: mobile,
+        otp: otp,
+      });
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChange = (value, index) => {
     const newOtp = [...otp];
     newOtp[index] = value;
@@ -32,6 +45,11 @@ const Otp = () => {
     setOtp(newOtp);
     if (index < 4 && newOtp[index] !== '') {
       otpRef.current[index + 1].focus();
+    }
+    const complete = newOtp.some(item => item !== '');
+    if (complete) {
+      const combineOtp = newOtp.join('');
+      handleOtpVerification({otp: combineOtp});
     }
   };
 
@@ -120,7 +138,11 @@ const Otp = () => {
               </Text>
               <View style={{marginBottom: 50}} />
               <View style={styles.bottomBtn}>
-                <TouchableOpacity style={styles.nextBtn}>
+                <TouchableOpacity
+                  style={styles.nextBtn}
+                  onPress={() => {
+                    handleOtpVerification({otp: otp.join('')});
+                  }}>
                   <AntDesign
                     name="arrowright"
                     color="#fff"
