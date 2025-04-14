@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   Alert,
   Image,
   Keyboard,
@@ -26,11 +27,7 @@ import {
   DropdownInput,
   SubjectSelection,
 } from '../../components';
-import {
-  CommonActions,
-  StackActions,
-  useNavigation,
-} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import BottomSheet, {
   BottomSheetBackdrop,
@@ -76,6 +73,9 @@ const Register = () => {
     msg: null,
   });
   const [userAlreasyExist, setUserAlreadyExist] = useState(false);
+
+  // Loading State
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     classApi({setClassOption: setClassOptions});
@@ -174,7 +174,7 @@ const Register = () => {
             mobileNumber: mobile.substring(4),
           });
           setUserAlreadyExist(isUserExist);
-          if (isUserExist === true) {
+          if (isUserExist) {
             setMobileError({status: true, msg: 'User Already Exist.'});
           } else {
             setMobileError({status: false, msg: ''});
@@ -286,6 +286,7 @@ const Register = () => {
     }
 
     try {
+      setIsLoading(true);
       const data = await authService.registerTeacher({
         name: name,
         phone: mobile,
@@ -301,11 +302,20 @@ const Register = () => {
           text1: data.message,
           type: 'success',
         });
-        navigation.navigate('Login');
+        setTimeout(()=>{
+          navigation.navigate('Login');
+        },1500)
+      } else {
+        Toast.show({
+          text1: data.message,
+          type: 'error',
+        });
       }
       console.log(data);
     } catch (error) {
       console.error(error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -562,13 +572,18 @@ const Register = () => {
                 <View style={styles.bottomBtn}>
                   <TouchableOpacity
                     style={styles.nextBtn}
-                    onPressOut={handleSubmit}>
-                    <AntDesign
-                      name="arrowright"
-                      color="#fff"
-                      size={28}
-                      style={{transform: [{rotate: '310deg'}]}}
-                    />
+                    onPressOut={handleSubmit}
+                    disabled={isLoading || mobileError.status}>
+                    {isLoading ? (
+                      <ActivityIndicator size={'large'} color={'#ffffff'} />
+                    ) : (
+                      <AntDesign
+                        name="arrowright"
+                        color="#fff"
+                        size={28}
+                        style={{transform: [{rotate: '310deg'}]}}
+                      />
+                    )}
                   </TouchableOpacity>
                 </View>
               </View>
