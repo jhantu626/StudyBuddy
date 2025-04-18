@@ -18,7 +18,7 @@ const App = () => {
   const AuthStack = () => {
     return (
       <Stack.Navigator
-        initialRouteName="Register"
+        initialRouteName="Splash"
         screenOptions={{
           headerShown: false,
           animation: 'slide_from_right',

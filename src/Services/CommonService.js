@@ -6,6 +6,7 @@ class CommonService {
   }
   async classes() {
     const uri = `${this.baseUrl}api/v1/class`;
+    console.log(uri)
     try {
       const response = await axios.get(uri);
       const data = response.data;

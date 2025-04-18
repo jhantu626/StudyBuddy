@@ -289,7 +289,7 @@ const Register = () => {
       setIsLoading(true);
       const data = await authService.registerTeacher({
         name: name,
-        phone: mobile,
+        phone: mobile.substring(4),
         gender: gender,
         boards: selectedBoard,
         classes: selectedClass,
@@ -302,9 +302,10 @@ const Register = () => {
           text1: data.message,
           type: 'success',
         });
-        setTimeout(()=>{
+        setTimeout(() => {
+          resetForm();
           navigation.navigate('Login');
-        },1500)
+        }, 1500);
       } else {
         Toast.show({
           text1: data.message,
@@ -317,6 +318,18 @@ const Register = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const resetForm = () => {
+    setName('');
+    setMobile('+91 ');
+    setGender('Male');
+    setSelectedClass([]);
+    setSelectedLanguage([]);
+    setSelectedBoard([]);
+    setSelectedSubject([]);
+    setIsAccept(false);
+    setProfileImage(null);
   };
 
   return (
