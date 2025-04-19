@@ -4,6 +4,7 @@ import {
   AuthHome,
   Home,
   Login,
+  Notes,
   Onboarding,
   Otp,
   Register,
@@ -11,9 +12,17 @@ import {
 } from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
 import AuthProvider, {useAuth} from './Contexts/AuthContext';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
+
+// icons
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import {colors} from './utils/colors';
 
 const App = () => {
   const Stack = createStackNavigator();
+  const Tab = createBottomTabNavigator();
 
   const AuthStack = () => {
     return (
@@ -35,11 +44,72 @@ const App = () => {
 
   const AppStack = () => {
     return (
-      <Stack.Navigator initialRouteName="Home" screenOptions={{
-        animation: 'slide_from_right',
-      }}>
-        <Stack.Screen name="Home" component={Home} />
-      </Stack.Navigator>
+      <Tab.Navigator
+        initialRouteName="Note"
+        backBehavior="history"
+        screenOptions={{
+          tabBarStyle: {
+            height: 60,
+            justifyContent: 'center',
+            alignItems: 'center',
+            justifyContent: 'center',
+            shadowColor: '#000',
+            shadowOffset: {width: 0, height: -4},
+            shadowOpacity: 0.2,
+            shadowRadius: 4,
+            elevation: 0,
+          },
+          animation: 'shift',
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: 'gray',
+          headerShown: false,
+        }}>
+        <Tab.Screen
+          name="Home"
+          component={Home}
+          options={{
+            tabBarIcon: ({color}) => (
+              <FontAwesome5 name="swatchbook" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Note"
+          component={Notes}
+          options={{
+            tabBarIcon: ({color}) => (
+              <FontAwesome5 name="file-download" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Exam"
+          component={Home}
+          options={{
+            tabBarIcon: ({color}) => (
+              <SimpleLineIcons name="book-open" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Student"
+          component={Home}
+          options={{
+            tabBarIcon: ({size, color}) => (
+              <FontAwesome5 name="user-graduate" size={24} color={color} />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Account"
+          component={Home}
+          options={{
+            tabBarIcon: ({size, color}) => (
+              <FontAwesome name="user-circle-o" size={24} color={color} />
+            ),
+          }}
+        />
+      </Tab.Navigator>
     );
   };
 

@@ -9,6 +9,31 @@ import AuthHome from './Auth/AuthHome';
 import Register from './Auth/Register';
 
 // App Stack
-import Home from './App/Home';
+// Home
+import Home from './App/Home/Home';
 
-export {SplashScreen, Onboarding, Login, Otp, AuthHome, Register, Home};
+// Notes
+import Notes from './App/Notes/Notes';
+
+// Exams
+import Exam from './App/Exam/Exam';
+
+// Students
+import Students from './App/Students/Students';
+
+// Account
+import Account from './App/Account/Account';
+
+export {
+  SplashScreen,
+  Onboarding,
+  Login,
+  Otp,
+  AuthHome,
+  Register,
+  Home,
+  Notes,
+  Exam,
+  Students,
+  Account,
+};
