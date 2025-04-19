@@ -1,11 +1,20 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useState} from 'react';
 import Layout from '../Layout/Layout';
+import MainHeader from '../../../components/Headers/MainHeader';
 
 const Notes = () => {
+  const values = ['Class X', 'Class XI', 'Class XII', 'Class IX'];
+  const [selectedValue, setSelectedValue] = useState(values[0]);
   return (
     <Layout>
-      <Text>Hello</Text>
+      <MainHeader
+        title="Notes"
+        isBackable={false}
+        values={values}
+        selectedValue={selectedValue}
+        setSelectedValue={setSelectedValue}
+      />
     </Layout>
   );
 };
