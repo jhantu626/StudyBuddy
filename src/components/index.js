@@ -14,6 +14,9 @@ import AuthSelection from './Cards/AuthSelection';
 import SubjectSelection from './Cards/SubjectSelection';
 import NotesCard from './Cards/NotesCard';
 
+// Bottom Sheets
+import AddNoteBottomSheet from './BottomSheets/AddNoteBottomSheet';
+
 export {
   PrimaryHeader,
   AuthCarousel,
@@ -22,5 +25,6 @@ export {
   BottomSheetInput,
   AuthSelection,
   SubjectSelection,
-  NotesCard
+  NotesCard,
+  AddNoteBottomSheet,
 };

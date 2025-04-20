@@ -12,7 +12,8 @@ const colors = {
   info: '#2980b9', // Info messages
   disabled: '#bdc3c7', // Disabled elements
   shadow: 'rgba(0, 0, 0, 0.1)', // Shadow color
-  authPrimary: '#FF7A00'
+  authPrimary: '#FF7A00',
+  floatingBtnColor: '#282356',
 };
 
 export {colors};
