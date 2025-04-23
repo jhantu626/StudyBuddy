@@ -17,6 +17,9 @@ import NotesCard from './Cards/NotesCard';
 // Bottom Sheets
 import AddNoteBottomSheet from './BottomSheets/AddNoteBottomSheet';
 
+// Forms
+import AddNotes from './Forms/AddNotes';
+
 export {
   PrimaryHeader,
   AuthCarousel,
@@ -27,4 +30,5 @@ export {
   SubjectSelection,
   NotesCard,
   AddNoteBottomSheet,
+  AddNotes,
 };

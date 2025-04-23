@@ -2,10 +2,9 @@ import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React, {useRef, useState} from 'react';
 import Layout from '../Layout/Layout';
 import MainHeader from '../../../components/Headers/MainHeader';
-import {AddNoteBottomSheet, NotesCard} from '../../../components';
+import {AddNoteBottomSheet, AddNotes, NotesCard} from '../../../components';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
-import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 
 const Notes = () => {
@@ -99,6 +98,7 @@ const Notes = () => {
         <AddNoteBottomSheet
           bottomSheetRef={bottomSheetRef}
           openCloseAnimationDuration={400}
+          childComponent={<AddNotes/>}
         />
       </GestureHandlerRootView>
     </Layout>

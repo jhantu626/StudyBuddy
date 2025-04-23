@@ -6,21 +6,20 @@ import Backdrop from './Backdrop';
 const AddNoteBottomSheet = ({
   bottomSheetRef,
   openCloseAnimationDuration = 300,
+  childComponent,
 }) => {
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={-1}
-      snapPoints={useMemo(() => ['60%'], [])}
+      index={1}
+      snapPoints={useMemo(() => ['70%'], [])}
       enablePanDownToClose
       enableOverDrag={false}
       backdropComponent={Backdrop}
       animationConfigs={{
         duration: openCloseAnimationDuration,
       }}>
-      <BottomSheetScrollView>
-        <Text>Helloworld</Text>
-      </BottomSheetScrollView>
+      <BottomSheetScrollView>{childComponent}</BottomSheetScrollView>
     </BottomSheet>
   );
 };

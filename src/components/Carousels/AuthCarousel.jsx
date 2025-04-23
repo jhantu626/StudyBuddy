@@ -28,12 +28,18 @@ const AuthCarousel = () => {
       <FlatList
         data={carouserData}
         keyExtractor={(item, index) => index.toString()}
-        renderItem={(item, index) => {
+        renderItem={({item, index}) => {
           return (
-            <View key={index} style={{width: screenWidth,paddingHorizontal: 20,alignItems: 'center',justifyContent: 'center'}}>
+            <View
+              style={{
+                width: screenWidth,
+                paddingHorizontal: 20,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
               <AuthCarouselCard
-                title={item.item.title}
-                image={item.item.image}
+                title={item.title}
+                image={item.image}
               />
             </View>
           );
@@ -51,7 +57,7 @@ const AuthCarousel = () => {
       <View style={styles.dotContainer}>
         {[0, 1, 2].map((item, index) => (
           <View
-          key={index}
+            key={index}
             style={[
               styles.dot,
               index === pageNumber && {

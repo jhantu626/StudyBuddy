@@ -6,12 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
-import {ScrollView} from 'react-native-gesture-handler';
+import React from 'react';
 import {fonts} from '../../utils/fonts';
 import {colors} from '../../utils/colors';
-import {StackActions, useNavigation} from '@react-navigation/native';
-import {authService} from '../../Services/AuthService';
+import {useNavigation} from '@react-navigation/native';
 
 const AuthHome = () => {
   const navigation = useNavigation();

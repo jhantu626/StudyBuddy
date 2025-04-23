@@ -1,15 +1,16 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
-import { useAuth } from '../../../Contexts/AuthContext';
+import {useAuth} from '../../../Contexts/AuthContext';
+import Layout from '../Layout/Layout';
 
 const Home = () => {
   const {logout} = useAuth();
   return (
-    <View>
+    <Layout>
       <TouchableOpacity onPress={logout}>
         <Text>Logout</Text>
       </TouchableOpacity>
-    </View>
+    </Layout>
   );
 };
 
