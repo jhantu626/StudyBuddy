@@ -151,9 +151,9 @@ const Login = () => {
             </View>
           </View>
         </View>
-        <View style={styles.carouselContainer}>
-          <AuthCarousel />
-        </View>
+        {/* <View style={styles.carouselContainer}> */}
+        {/* <AuthCarousel /> */}
+        {/* </View> */}
       </ScrollView>
     </AuthLayout>
   );

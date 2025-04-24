@@ -1,8 +1,10 @@
 import axios from 'axios';
+import { API_URL } from '@env';
+
 
 class CommonService {
   constructor() {
-    this.baseUrl = process.env.API_URL;
+    this.baseUrl = API_URL;
   }
   async classes() {
     const uri = `${this.baseUrl}api/v1/class`;

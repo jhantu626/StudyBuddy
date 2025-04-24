@@ -77,6 +77,8 @@ const Register = () => {
   // Loading State
   const [isLoading, setIsLoading] = useState(false);
 
+  const snapPoints = useMemo(() => ['80%'], []);
+
   useEffect(() => {
     classApi({setClassOption: setClassOptions});
     boardApi({setOption: setBoardOptions});
@@ -601,13 +603,13 @@ const Register = () => {
                 </View>
               </View>
             </View>
-            <View style={styles.carouselContainer}>
-              <AuthCarousel />
-            </View>
+            {/* <View style={styles.carouselContainer}> */}
+            {/* <AuthCarousel /> */}
+            {/* </View> */}
           </ScrollView>
         </TouchableWithoutFeedback>
         <BottomSheet
-          snapPoints={useMemo(() => ['80%'], [])}
+          snapPoints={snapPoints}
           index={-1}
           ref={bottomSheetRef}
           backdropComponent={renderBackdrop}
