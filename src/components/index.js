@@ -8,6 +8,7 @@ import AuthCarousel from './Carousels/AuthCarousel';
 import DefaultInput from './Inputs/DefaultInput';
 import DropdownInput from './Inputs/DropdownInput';
 import BottomSheetInput from './Inputs/BottomSheetInput';
+import UploadInput from './Inputs/UploadInput';
 
 // Cards
 import AuthSelection from './Cards/AuthSelection';
@@ -31,4 +32,5 @@ export {
   NotesCard,
   AddNoteBottomSheet,
   AddNotes,
+  UploadInput,
 };
