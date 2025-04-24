@@ -1,14 +1,24 @@
 import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import Layout from '../Layout/Layout';
 import MainHeader from '../../../components/Headers/MainHeader';
-import {AddNoteBottomSheet, AddNotes, NotesCard} from '../../../components';
+import {
+  AddNoteBottomSheet,
+  AddNotes,
+  AuthSelection,
+  NotesCard,
+} from '../../../components';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {notes} from '../../../utils/data';
+import {teacherService} from '../../../Services/TeacherService';
+import {useAuth} from '../../../Contexts/AuthContext';
+import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
+import Backdrop from '../../../components/BottomSheets/Backdrop';
 
 const Notes = () => {
+  const {authToken} = useAuth();
   const values = ['Class X', 'Class XI', 'Class XII', 'Class IX'];
   const [selectedValue, setSelectedValue] = useState(values[0]);
   const [isSubBottomSheetOpen, setIsSubBottomSheetOpen] = useState({
@@ -16,12 +26,76 @@ const Notes = () => {
     target: null,
   });
 
+  const [selectedClass, setSelectedClass] = useState([]);
+  const [selectedBoard, setSelectedBoard] = useState([]);
+  const [selectedSubject, setSelectedSubject] = useState([]);
+  const [noteDocument, setNoteDocument] = useState(null);
+
+  // Options for the bottom sheet
+  const [classOptions, setClassOptions] = useState([]);
+  const [boardOptions, setBoardOptions] = useState([]);
+  const [subjectOptions, setSubjectOptions] = useState([]);
+
   // For Bottomsheet
   const bottomSheetRef = useRef(null);
-  const handleOpen = () => {
+  const snapPoints = useMemo(() => ['70%'], []);
+  const subBottomSheetRef = useRef(null);
+  const handleOpen = async () => {
     bottomSheetRef.current.snapToIndex(1);
+    const classes = await teacherService.getAllClasses({authToken: authToken});
+    const subjects = await teacherService.getAllSubjects({
+      authToken: authToken,
+    });
+    const boards = await teacherService.getAllBoards({
+      authToken: authToken,
+    });
+    setClassOptions(classes);
+    setSubjectOptions(subjects);
+    setBoardOptions(boards);
+    console.log('Classes:', classes);
+    console.log('Subjects:', subjects);
+    console.log('Boards:', boards);
   };
 
+  const renderSubBottomSheet = useCallback(() => {
+    switch (isSubBottomSheetOpen.target) {
+      case 'class':
+        return (
+          <AuthSelection
+            key={'class-selection'}
+            options={classOptions}
+            selectedItems={selectedClass}
+            setSelectedItems={setSelectedClass}
+          />
+        );
+      case 'board':
+        return (
+          <AuthSelection
+            key={'board-selection'}
+            options={boardOptions}
+            selectedItems={selectedBoard}
+            setSelectedItems={setSelectedBoard}
+          />
+        );
+      case 'subject':
+        return (
+          <AuthSelection
+            key={'subject-selection'}
+            options={subjectOptions}
+            selectedItems={selectedSubject}
+            setSelectedItems={setSelectedSubject}
+          />
+        );
+      default:
+        return null;
+    }
+  }, [isSubBottomSheetOpen.target, classOptions, boardOptions, subjectOptions]);
+
+  useEffect(() => {
+    if (isSubBottomSheetOpen.status) {
+      subBottomSheetRef.current?.snapToIndex(1);
+    }
+  }, [isSubBottomSheetOpen]);
   return (
     <Layout>
       <GestureHandlerRootView>
@@ -54,9 +128,32 @@ const Notes = () => {
             <AddNotes
               isBottomSheetOpen={isSubBottomSheetOpen}
               setIsBottomSheetOpen={setIsSubBottomSheetOpen}
+              noteDocument={noteDocument}
+              setNoteDocument={setNoteDocument}
+              selectedBoard={selectedBoard}
+              setSelectedBoard={setSelectedBoard}
+              selectedClass={selectedClass}
+              setSelectedClass={setSelectedClass}
+              selectedSubject={selectedSubject}
+              setSelectedSubject={setSelectedSubject}
             />
           }
         />
+        <BottomSheet
+          ref={subBottomSheetRef}
+          index={-1}
+          snapPoints={snapPoints}
+          backdropComponent={Backdrop}
+          enablePanDownToClose={true}
+          onChange={index => {
+            if (index === -1) {
+              setIsSubBottomSheetOpen({status: false, target: null});
+            }
+          }}>
+          <BottomSheetScrollView>
+            {renderSubBottomSheet()}
+          </BottomSheetScrollView>
+        </BottomSheet>
       </GestureHandlerRootView>
     </Layout>
   );

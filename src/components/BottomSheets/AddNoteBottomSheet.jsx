@@ -11,7 +11,7 @@ const AddNoteBottomSheet = ({
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      index={-1}
+      index={1}
       snapPoints={useMemo(() => ['70%'], [])}
       enablePanDownToClose
       enableOverDrag={false}

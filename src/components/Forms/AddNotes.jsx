@@ -6,10 +6,20 @@ import DefaultInput from '../Inputs/DefaultInput';
 import UploadInput from '../Inputs/UploadInput';
 import {colors} from '../../utils/colors';
 
-const AddNotes = ({isBottomSheetOpen, setIsBottomSheetOpen}) => {
-  const [noteDocument, setNoteDocument] = useState(null);
+const AddNotes = ({
+  isBottomSheetOpen,
+  setIsBottomSheetOpen,
+  noteDocument,
+  setNoteDocument,
+  selectedClass,
+  setSelectedClass,
+  selectedBoard,
+  setSelectedBoard,
+  selectedSubject,
+  setSelectedSubject,
+}) => {
   useEffect(() => {
-    console.log('isBottomSheetOpen', isBottomSheetOpen);
+    console.log(isBottomSheetOpen);
   }, [isBottomSheetOpen]);
   return (
     <View style={styles.container}>
@@ -20,18 +30,27 @@ const AddNotes = ({isBottomSheetOpen, setIsBottomSheetOpen}) => {
           target="class"
           bottomSheetOpen={isBottomSheetOpen}
           setBottomSheetOpen={setIsBottomSheetOpen}
+          selctedItems={selectedClass}
+          setSelectedItems={setSelectedClass}
+          showProperty="name"
         />
         <BottomSheetInput
           placeHolder={'Select Subject'}
           target="subject"
           bottomSheetOpen={isBottomSheetOpen}
           setBottomSheetOpen={setIsBottomSheetOpen}
+          selctedItems={selectedSubject}
+          setSelectedItems={setSelectedSubject}
+          showProperty="name"
         />
         <BottomSheetInput
           placeHolder={'Select Board'}
           target="board"
           bottomSheetOpen={isBottomSheetOpen}
           setBottomSheetOpen={setIsBottomSheetOpen}
+          setSelectedItems={setSelectedBoard}
+          selctedItems={selectedBoard}
+          showProperty="code"
         />
         <DefaultInput labelText={'Enter Note Title'} />
         <DefaultInput labelText={'Description of Notes'} />

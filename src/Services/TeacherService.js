@@ -18,6 +18,58 @@ class TeacherService {
       return data;
     }
   }
+
+  // For all classes of a teacher
+  async getAllClasses({authToken}) {
+    const uri = `${this.baseUrl}api/v1/teacher/classes`;
+    console.log(uri);
+    try {
+      const response = await axios.get(uri, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      const data = response.data;
+      return data;
+    } catch (error) {
+      const data = await error.response.data;
+      return data;
+    }
+  }
+  
+  // For all subjects of a teacher
+  async getAllSubjects({authToken}) {
+    const uri = `${this.baseUrl}api/v1/teacher/subjects`;
+    try {
+      const response = await axios.get(uri, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      const data = response.data;
+      return data;
+    } catch (error) {
+      const data = await error.response.data;
+      return data;
+    }
+  }
+  
+  // For all boards of a teacher
+  async getAllBoards({authToken}) {
+    const uri = `${this.baseUrl}api/v1/teacher/boards`;
+    try {
+      const response = await axios.get(uri, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      const data = response.data;
+      return data;
+    } catch (error) {
+      const data = await error.response.data;
+      return data;
+    }
+  }
 }
 
 const teacherService = new TeacherService();
