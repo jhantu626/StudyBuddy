@@ -314,7 +314,6 @@ const Register = () => {
           type: 'error',
         });
       }
-      console.log(data);
     } catch (error) {
       console.error(error);
     } finally {

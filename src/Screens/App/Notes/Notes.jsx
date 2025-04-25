@@ -30,6 +30,8 @@ const Notes = () => {
   const [selectedBoard, setSelectedBoard] = useState([]);
   const [selectedSubject, setSelectedSubject] = useState([]);
   const [noteDocument, setNoteDocument] = useState(null);
+  const [noteTitle, setNoteTitle] = useState(null);
+  const [noteDescription, setNoteDescription] = useState(null);
 
   // Options for the bottom sheet
   const [classOptions, setClassOptions] = useState([]);
@@ -52,9 +54,6 @@ const Notes = () => {
     setClassOptions(classes);
     setSubjectOptions(subjects);
     setBoardOptions(boards);
-    console.log('Classes:', classes);
-    console.log('Subjects:', subjects);
-    console.log('Boards:', boards);
   };
 
   const renderSubBottomSheet = useCallback(() => {
@@ -136,6 +135,10 @@ const Notes = () => {
               setSelectedClass={setSelectedClass}
               selectedSubject={selectedSubject}
               setSelectedSubject={setSelectedSubject}
+              noteTitle={noteTitle}
+              setNoteTitle={setNoteTitle}
+              noteDescription={noteDescription}
+              setNoteDescription={setNoteDescription}
             />
           }
         />

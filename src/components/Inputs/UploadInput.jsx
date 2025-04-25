@@ -16,11 +16,9 @@ const UploadInput = ({
 }) => {
   const handleDocumentSelection = async () => {
     try {
-      console.log('DocumentPicker');
       const result = await pick({
         type: [types.pdf, types.docx, types.doc, types.ppt, types.pptx],
       });
-      console.log('DocumentPicker result', result);
       setDocumentValue(result[0]);
     } catch (error) {}
   };

@@ -39,7 +39,6 @@ class AuthService {
       boards: boards,
       languages: languages,
     };
-    console.log(uri);
     try {
       const formData = new FormData();
       formData.append('teacher', JSON.stringify(payload));
@@ -64,7 +63,6 @@ class AuthService {
 
   async login({mobileNumber}) {
     const uri = `${this.baseUrl}/auth/login?mobile=${mobileNumber}`;
-    console.log(uri);
     try {
       const response = await axios.post(uri);
       const data = await response.data;
@@ -77,7 +75,6 @@ class AuthService {
 
   async validateOtp({mobileNumber, otp}) {
     const uri = `${this.baseUrl}/auth/validate-otp?mobile=${mobileNumber}&otp=${otp}`;
-    console.log(uri);
     try {
       const response = await axios.get(uri);
       const data = await response.data;

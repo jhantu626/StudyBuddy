@@ -17,10 +17,11 @@ const AddNotes = ({
   setSelectedBoard,
   selectedSubject,
   setSelectedSubject,
+  noteTitle,
+  setNoteTitle,
+  noteDescription,
+  setNoteDescription,
 }) => {
-  useEffect(() => {
-    console.log(isBottomSheetOpen);
-  }, [isBottomSheetOpen]);
   return (
     <View style={styles.container}>
       <Text style={styles.titleLabel}>AddNotes</Text>
@@ -52,8 +53,16 @@ const AddNotes = ({
           selctedItems={selectedBoard}
           showProperty="code"
         />
-        <DefaultInput labelText={'Enter Note Title'} />
-        <DefaultInput labelText={'Description of Notes'} />
+        <DefaultInput
+          labelText={'Enter Note Title'}
+          value={noteTitle}
+          setValue={setNoteTitle}
+        />
+        <DefaultInput
+          labelText={'Description of Notes'}
+          value={noteDescription}
+          setValue={setNoteDescription}
+        />
         <UploadInput
           labelText={'Upload files (pdf, doc file)'}
           documentValue={noteDocument}

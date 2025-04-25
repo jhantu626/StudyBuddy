@@ -41,7 +41,6 @@ const Otp = () => {
         if (data.status) {
           login(data.token);
         } else {
-          console.log(data);
           Toast.show({
             text1: 'Invalid Otp',
             type: 'error',
@@ -56,7 +55,6 @@ const Otp = () => {
   const handleChange = (value, index) => {
     const newOtp = [...otp];
     newOtp[index] = value;
-    console.log(newOtp);
     setOtp(newOtp);
     if (index < 4 && newOtp[index] !== '') {
       otpRef.current[index + 1].focus();
@@ -93,7 +91,6 @@ const Otp = () => {
 
     const interval = setInterval(() => {
       setTiming(prev => {
-        console.log(prev - 1);
         return prev - 1;
       });
     }, 1000);
@@ -145,8 +142,7 @@ const Otp = () => {
                 <Text
                   style={{
                     color: colors.authPrimary,
-                  }}
-                  onPress={() => console.info('Resending')}>
+                  }}>
                   Resend
                 </Text>{' '}
                 code in {timing > 0 ? formatTime(timing) : 'Send'}

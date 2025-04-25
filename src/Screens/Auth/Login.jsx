@@ -55,7 +55,6 @@ const Login = () => {
     try {
       if (!appError.status && mobile.length === 10) {
         const data = await authService.login({mobileNumber: mobile});
-        console.log(data);
         if (data.status) {
           Toast.show({
             text1: data.message,

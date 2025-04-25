@@ -18,7 +18,6 @@ const AuthSelection = ({
   iconName,
   placeholder = 'Search...',
 }) => {
-  console.log('Options:', options);
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredOptions = useMemo(() => {
