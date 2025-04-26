@@ -9,6 +9,7 @@ import {
   Otp,
   Register,
   SplashScreen,
+  Students,
 } from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
 import AuthProvider, {useAuth} from './Contexts/AuthContext';
@@ -45,7 +46,7 @@ const App = () => {
   const AppStack = () => {
     return (
       <Tab.Navigator
-        initialRouteName="Note"
+        initialRouteName="Student"
         backBehavior="history"
         screenOptions={{
           tabBarStyle: {
@@ -93,7 +94,7 @@ const App = () => {
         />
         <Tab.Screen
           name="Student"
-          component={Home}
+          component={Students}
           options={{
             tabBarIcon: ({size, color}) => (
               <FontAwesome5 name="user-graduate" size={24} color={color} />

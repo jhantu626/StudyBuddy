@@ -23,6 +23,7 @@ import AddNotes from './Forms/AddNotes';
 
 // Selectors
 import HorizontalSelector from './Selectors/HorizontalSelector';
+import FilterSelecter from './Selectors/FilterSelecter';
 
 export {
   PrimaryHeader,
@@ -36,5 +37,6 @@ export {
   AddNoteBottomSheet,
   AddNotes,
   UploadInput,
-  HorizontalSelector
+  HorizontalSelector,
+  FilterSelecter,
 };
