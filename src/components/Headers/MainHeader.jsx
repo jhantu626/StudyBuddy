@@ -9,6 +9,7 @@ import React from 'react';
 import {colors} from '../../utils/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {fonts} from '../../utils/fonts';
+import HorizontalSelector from '../Selectors/HorizontalSelector';
 
 const MainHeader = ({
   title = '',
@@ -17,7 +18,6 @@ const MainHeader = ({
   selectedValue,
   setSelectedValue,
 }) => {
-  const changeSelectedValue = item => setSelectedValue(item);
   return (
     <View style={styles.container}>
       <View style={styles.topHeader}>
@@ -29,7 +29,7 @@ const MainHeader = ({
         <Text style={styles.title}>{title}</Text>
         <View style={{width: 10, height: 10}} />
       </View>
-      <ScrollView
+      {/* <ScrollView
         horizontal={true}
         contentContainerStyle={styles.scrollContainer}
         showsHorizontalScrollIndicator={false}>
@@ -54,7 +54,12 @@ const MainHeader = ({
             </Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </ScrollView> */}
+      <HorizontalSelector
+        values={values}
+        selectedValue={selectedValue}
+        setSelectedValue={setSelectedValue}
+      />
     </View>
   );
 };
@@ -80,28 +85,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontFamily: fonts.semiBold,
     color: '#ffffff',
-  },
-  scrollContainer: {
-    flexDirection: 'row',
-    flexGrow:1,
-    marginTop: 10,
-    gap: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  itemStyle: {
-    width: 80,
-    height: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#ffffff20',
-    borderRadius: 5,
-  },
-  textStyle: {
-    fontFamily: fonts.medium,
-    fontSize: 12,
-    color: '#fff',
-    elevation: 5
   },
 });
 

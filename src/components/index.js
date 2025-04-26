@@ -21,6 +21,9 @@ import AddNoteBottomSheet from './BottomSheets/AddNoteBottomSheet';
 // Forms
 import AddNotes from './Forms/AddNotes';
 
+// Selectors
+import HorizontalSelector from './Selectors/HorizontalSelector';
+
 export {
   PrimaryHeader,
   AuthCarousel,
@@ -33,4 +36,5 @@ export {
   AddNoteBottomSheet,
   AddNotes,
   UploadInput,
+  HorizontalSelector
 };
