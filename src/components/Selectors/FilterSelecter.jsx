@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
@@ -13,6 +14,7 @@ import {fonts} from '../../utils/fonts';
 const FilterSelecter = ({options, selectedFilter, setSelectedFilter}) => {
   return (
     <ScrollView
+    style={{width: '100%'}}
       contentContainerStyle={styles.container}
       showsHorizontalScrollIndicator={false}
       horizontal={true}>
@@ -63,7 +65,7 @@ const FilterSelecter = ({options, selectedFilter, setSelectedFilter}) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    // width: '100%',
     height: 50,
     alignItems: 'center',
     gap: 10,
@@ -85,6 +87,7 @@ const styles = StyleSheet.create({
     borderWidth: 1.1,
     borderColor: colors.border,
     paddingHorizontal: 15,
+
   },
   titleText: {
     fontSize: 12,

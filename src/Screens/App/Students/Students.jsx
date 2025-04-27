@@ -17,7 +17,15 @@ const filterOptions = [
   {
     name: 'Session',
     target: 'session',
+  },{
+    name: 'Batch Name',
+    target: 'batch',
   },
+  {
+    name: 'Session',
+    target: 'session',
+  },
+  
 ];
 
 const Students = () => {
