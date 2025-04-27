@@ -14,6 +14,7 @@ import UploadInput from './Inputs/UploadInput';
 import AuthSelection from './Cards/AuthSelection';
 import SubjectSelection from './Cards/SubjectSelection';
 import NotesCard from './Cards/NotesCard';
+import StudentCard from './Cards/StudentCard';
 
 // Bottom Sheets
 import AddNoteBottomSheet from './BottomSheets/AddNoteBottomSheet';
@@ -39,4 +40,5 @@ export {
   UploadInput,
   HorizontalSelector,
   FilterSelecter,
+  StudentCard,
 };

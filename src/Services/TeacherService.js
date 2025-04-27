@@ -3,6 +3,7 @@ import {API_URL} from '@env';
 
 class TeacherService {
   constructor() {
+    // this.baseUrl = process.env.API_URL;
     this.baseUrl = API_URL;
   }
 
@@ -34,7 +35,7 @@ class TeacherService {
       return data;
     }
   }
-  
+
   // For all subjects of a teacher
   async getAllSubjects({authToken}) {
     const uri = `${this.baseUrl}api/v1/teacher/subjects`;
@@ -51,7 +52,7 @@ class TeacherService {
       return data;
     }
   }
-  
+
   // For all boards of a teacher
   async getAllBoards({authToken}) {
     const uri = `${this.baseUrl}api/v1/teacher/boards`;

@@ -602,9 +602,9 @@ const Register = () => {
                 </View>
               </View>
             </View>
-            {/* <View style={styles.carouselContainer}> */}
+            <View style={styles.carouselContainer}>
             {/* <AuthCarousel /> */}
-            {/* </View> */}
+            </View>
           </ScrollView>
         </TouchableWithoutFeedback>
         <BottomSheet

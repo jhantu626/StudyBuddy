@@ -4,10 +4,12 @@ import { API_URL } from '@env';
 
 class CommonService {
   constructor() {
+    // this.baseUrl = process.env.API_URL;
     this.baseUrl = API_URL;
   }
   async classes() {
     const uri = `${this.baseUrl}api/v1/class`;
+    console.log('uri', uri);
     try {
       const response = await axios.get(uri);
       const data = response.data;

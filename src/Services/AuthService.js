@@ -3,11 +3,13 @@ import { API_URL } from '@env';
 
 class AuthService {
   constructor() {
+    // this.baseUrl = process.env.API_URL + 'api/v1';
     this.baseUrl = API_URL + 'api/v1';
   }
 
   async checkUserExistence({mobileNumber}) {
     const uri = `${this.baseUrl}/teacher/check-by-mobile?mobile=${mobileNumber}`;
+    console.log('uri', uri);
     try {
       const response = await axios.get(uri);
       const data = await response.data;
@@ -30,6 +32,7 @@ class AuthService {
     profilePicture,
   }) {
     const uri = `${this.baseUrl}/auth/signup`;
+    console.log('uri', uri);
     const payload = {
       name: name,
       phone: phone,

@@ -9,11 +9,13 @@ import React from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
-import {transformer} from '../../../metro.config';
 
 const FilterSelecter = ({options, selectedFilter, setSelectedFilter}) => {
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <ScrollView
+      contentContainerStyle={styles.container}
+      showsHorizontalScrollIndicator={false}
+      horizontal={true}>
       {options.map((option, index) => (
         <TouchableOpacity
           style={[
@@ -61,8 +63,8 @@ const FilterSelecter = ({options, selectedFilter, setSelectedFilter}) => {
 
 const styles = StyleSheet.create({
   container: {
+    width: '100%',
     height: 50,
-    flexDirection: 'row',
     alignItems: 'center',
     gap: 10,
     paddingHorizontal: 10,
