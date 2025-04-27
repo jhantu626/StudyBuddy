@@ -1,9 +1,17 @@
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useState} from 'react';
 import Layout from '../Layout/Layout';
 import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import MainHeader from '../../../components/Headers/MainHeader';
 import {FilterSelecter, StudentCard} from '../../../components';
+import {colors} from '../../../utils/colors';
+import {fonts} from '../../../utils/fonts';
 
 const filterOptions = [
   {
@@ -17,7 +25,8 @@ const filterOptions = [
   {
     name: 'Session',
     target: 'session',
-  },{
+  },
+  {
     name: 'Batch Name',
     target: 'batch',
   },
@@ -25,7 +34,6 @@ const filterOptions = [
     name: 'Session',
     target: 'session',
   },
-  
 ];
 
 const Students = () => {
@@ -64,6 +72,9 @@ const Students = () => {
             <StudentCard key={index + 'students'} />
           ))}
         </ScrollView>
+        <TouchableOpacity style={styles.floatingBtn}>
+          <Text style={styles.btnText}>New Registration</Text>
+        </TouchableOpacity>
       </GestureHandlerRootView>
     </Layout>
   );
@@ -77,6 +88,22 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     gap: 10,
     alignItems: 'center',
+  },
+  floatingBtn: {
+    position: 'absolute',
+    bottom: 10,
+    alignSelf: 'center',
+    height: 35,
+    paddingHorizontal: 15,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.floatingBtnColor,
+    borderRadius: 30,
+  },
+  btnText: {
+    fontSize: 12,
+    fontFamily: fonts.regular,
+    color: '#ffffff',
   },
 });
 
