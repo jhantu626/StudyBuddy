@@ -20,6 +20,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {colors} from './utils/colors';
+import StudentStack from './Screens/App/Students/StudenStack';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -94,7 +95,7 @@ const App = () => {
         />
         <Tab.Screen
           name="Student"
-          component={Students}
+          component={StudentStack}
           options={{
             tabBarIcon: ({size, color}) => (
               <FontAwesome5 name="user-graduate" size={24} color={color} />

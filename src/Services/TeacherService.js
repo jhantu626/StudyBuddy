@@ -9,6 +9,7 @@ class TeacherService {
 
   async teacherExistence({mobileNumber}) {
     const uri = `${this.baseUrl}api/v1/teacher/check-by-mobile?mobile=${mobileNumber}`;
+    console.log(uri)
     try {
       const response = await axios.get(uri);
       const data = response.data;

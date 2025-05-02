@@ -66,6 +66,7 @@ class AuthService {
 
   async login({mobileNumber}) {
     const uri = `${this.baseUrl}/auth/login?mobile=${mobileNumber}`;
+    console.info("Logging ",uri)
     try {
       const response = await axios.post(uri);
       const data = await response.data;

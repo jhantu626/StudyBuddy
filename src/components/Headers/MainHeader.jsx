@@ -17,9 +17,16 @@ const MainHeader = ({
   values = ['Class X', 'Class XI', 'Class XII', 'Class IX'],
   selectedValue,
   setSelectedValue,
+  isSelectableValues = true,
 }) => {
   return (
-    <View style={styles.container}>
+    <View
+      style={[
+        styles.container,
+        {
+          height: isSelectableValues ? 100 : 60,
+        },
+      ]}>
       <View style={styles.topHeader}>
         <TouchableOpacity style={styles.backBtn} disabled={!isBackable}>
           {isBackable && (
@@ -55,11 +62,13 @@ const MainHeader = ({
           </TouchableOpacity>
         ))}
       </ScrollView> */}
-      <HorizontalSelector
-        values={values}
-        selectedValue={selectedValue}
-        setSelectedValue={setSelectedValue}
-      />
+      {isSelectableValues && (
+        <HorizontalSelector
+          values={values}
+          selectedValue={selectedValue}
+          setSelectedValue={setSelectedValue}
+        />
+      )}
     </View>
   );
 };
@@ -67,7 +76,6 @@ const MainHeader = ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    height: 100,
     backgroundColor: colors.primary,
     paddingHorizontal: 10,
     paddingVertical: 15,

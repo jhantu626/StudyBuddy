@@ -12,19 +12,12 @@ import MainHeader from '../../../components/Headers/MainHeader';
 import {FilterSelecter, StudentCard} from '../../../components';
 import {colors} from '../../../utils/colors';
 import {fonts} from '../../../utils/fonts';
+import {useNavigation} from '@react-navigation/native';
 
 const filterOptions = [
   {
     name: 'Subject',
     target: 'subject',
-  },
-  {
-    name: 'Batch Name',
-    target: 'batch',
-  },
-  {
-    name: 'Session',
-    target: 'session',
   },
   {
     name: 'Batch Name',
@@ -47,6 +40,7 @@ const Students = () => {
   ];
   const [selectedBoard, setSelectedBoard] = useState(values[0]);
   const [selectedFilter, setSelectedFilter] = useState(filterOptions[0]);
+  const navigation = useNavigation();
   return (
     <Layout>
       <GestureHandlerRootView>
@@ -72,7 +66,11 @@ const Students = () => {
             <StudentCard key={index + 'students'} />
           ))}
         </ScrollView>
-        <TouchableOpacity style={styles.floatingBtn}>
+        <TouchableOpacity
+          style={styles.floatingBtn}
+          onPress={() => {
+            navigation.navigate('StudentRegistration');
+          }}>
           <Text style={styles.btnText}>New Registration</Text>
         </TouchableOpacity>
       </GestureHandlerRootView>
