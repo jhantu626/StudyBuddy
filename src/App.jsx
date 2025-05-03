@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {
   AuthHome,
+  Batch,
   Home,
   Login,
   Notes,
@@ -47,7 +48,7 @@ const App = () => {
   const AppStack = () => {
     return (
       <Tab.Navigator
-        initialRouteName="Student"
+        initialRouteName="Batch"
         backBehavior="history"
         screenOptions={{
           tabBarStyle: {
@@ -85,8 +86,8 @@ const App = () => {
           }}
         />
         <Tab.Screen
-          name="Exam"
-          component={Home}
+          name="Batch"
+          component={Batch}
           options={{
             tabBarIcon: ({color}) => (
               <SimpleLineIcons name="book-open" size={24} color={color} />

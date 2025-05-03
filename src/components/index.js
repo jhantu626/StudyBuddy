@@ -15,6 +15,7 @@ import AuthSelection from './Cards/AuthSelection';
 import SubjectSelection from './Cards/SubjectSelection';
 import NotesCard from './Cards/NotesCard';
 import StudentCard from './Cards/StudentCard';
+import BatchCard from './Cards/BatchCard';
 
 // Bottom Sheets
 import AddNoteBottomSheet from './BottomSheets/AddNoteBottomSheet';
@@ -41,4 +42,5 @@ export {
   HorizontalSelector,
   FilterSelecter,
   StudentCard,
+  BatchCard,
 };

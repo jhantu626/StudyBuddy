@@ -15,8 +15,8 @@ import Home from './App/Home/Home';
 // Notes
 import Notes from './App/Notes/Notes';
 
-// Exams
-import Exam from './App/Exam/Exam';
+// Batch
+import Batch from './App/Batch/Batch';
 
 // Students
 import Students from './App/Students/Students';
@@ -33,7 +33,7 @@ export {
   Register,
   Home,
   Notes,
-  Exam,
+  Batch,
   Students,
   Account,
 };

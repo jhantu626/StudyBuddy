@@ -1,0 +1,114 @@
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {colors} from '../../utils/colors';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import {fonts} from '../../utils/fonts';
+import BatchInputCard from './BatchInputCard';
+import BatchInputCardMultivalueMultivalue from './BatchInputCardMultivalue';
+
+const BatchCard = () => {
+  return (
+    <View style={styles.container}>
+      <View style={styles.topContainer}>
+        <Text style={styles.titleText}>Morning Batch</Text>
+        <View style={styles.btnCOntainer}>
+          <TouchableOpacity style={styles.deleteBtn}>
+            <AntDesign name="delete" color={'#fff'} size={10} />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.editBtn}>
+            <AntDesign name="edit" color={'#000'} size={10} />
+          </TouchableOpacity>
+        </View>
+      </View>
+      <View style={styles.bottomContainer}>
+        <View style={styles.inputs}>
+          <View style={styles.childInputBox}>
+            <BatchInputCard lable="Batch Session" value="2024 - 2025" />
+          </View>
+          <View style={styles.childInputBox}>
+            <BatchInputCard lable="Class" value="Class XI" />
+          </View>
+        </View>
+        <BatchInputCardMultivalueMultivalue lable="Subjects" />
+        <View style={styles.inputs}>
+          <View style={styles.childInputBox}>
+            <BatchInputCard lable="Batch Timing" value="7AM - 9AM" />
+          </View>
+          <View style={styles.childInputBox}>
+            <BatchInputCard lable="Student Fees(Monthly)" value="300" />
+          </View>
+        </View>
+        <BatchInputCard
+          lable="Batch Board"
+          value="West Bengal School Service Commission"
+        />
+        <BatchInputCardMultivalueMultivalue
+          lable="Subjects"
+          values={['Monday', 'Wednesday', 'Friday']}
+        />
+        <BatchInputCard lable="Monthly Exam Fees" value="20" />
+      </View>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#00000050',
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  topContainer: {
+    height: 40,
+    backgroundColor: colors.primary,
+    borderTopLeftRadius: 10,
+    borderTopRightRadius: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  btnCOntainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  deleteBtn: {
+    width: 20,
+    height: 20,
+    borderRadius: 20 / 2,
+    backgroundColor: 'red',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  editBtn: {
+    backgroundColor: '#fff',
+    width: 20,
+    height: 20,
+    borderRadius: 20 / 2,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  titleText: {
+    fontSize: 17,
+    fontFamily: fonts.semiBold,
+    color: '#fff',
+  },
+  bottomContainer: {
+    padding: 20,
+    gap: 10,
+  },
+  inputs: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  childInputBox: {
+    width: '48%',
+  },
+});
+
+export default BatchCard;

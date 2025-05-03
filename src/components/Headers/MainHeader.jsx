@@ -10,6 +10,7 @@ import {colors} from '../../utils/colors';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {fonts} from '../../utils/fonts';
 import HorizontalSelector from '../Selectors/HorizontalSelector';
+import {useNavigation} from '@react-navigation/native';
 
 const MainHeader = ({
   title = '',
@@ -19,6 +20,7 @@ const MainHeader = ({
   setSelectedValue,
   isSelectableValues = true,
 }) => {
+  const navigation = useNavigation();
   return (
     <View
       style={[
@@ -28,7 +30,14 @@ const MainHeader = ({
         },
       ]}>
       <View style={styles.topHeader}>
-        <TouchableOpacity style={styles.backBtn} disabled={!isBackable}>
+        <TouchableOpacity
+          style={styles.backBtn}
+          disabled={!isBackable}
+          onPress={() => {
+            if (navigation.canGoBack()) {
+              navigation.goBack();
+            }
+          }}>
           {isBackable && (
             <Ionicons name="arrow-back" size={20} color="#ffffff" />
           )}
