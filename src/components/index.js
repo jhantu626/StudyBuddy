@@ -9,6 +9,9 @@ import DefaultInput from './Inputs/DefaultInput';
 import DropdownInput from './Inputs/DropdownInput';
 import BottomSheetInput from './Inputs/BottomSheetInput';
 import UploadInput from './Inputs/UploadInput';
+import TimeInput from './Inputs/TimeInput';
+import MultiSelectDropdownInput from './Inputs/MultiSelectDropdownInput';
+import InrInput from './Inputs/InrInput';
 
 // Cards
 import AuthSelection from './Cards/AuthSelection';
@@ -43,4 +46,7 @@ export {
   FilterSelecter,
   StudentCard,
   BatchCard,
+  TimeInput,
+  MultiSelectDropdownInput,
+  InrInput,
 };

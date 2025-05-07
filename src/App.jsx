@@ -10,7 +10,6 @@ import {
   Otp,
   Register,
   SplashScreen,
-  Students,
 } from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
 import AuthProvider, {useAuth} from './Contexts/AuthContext';
@@ -22,6 +21,7 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {colors} from './utils/colors';
 import StudentStack from './Screens/App/Students/StudenStack';
+import BatchStack from './Screens/App/Batch/BatchStack';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -87,7 +87,7 @@ const App = () => {
         />
         <Tab.Screen
           name="Batch"
-          component={Batch}
+          component={BatchStack}
           options={{
             tabBarIcon: ({color}) => (
               <SimpleLineIcons name="book-open" size={24} color={color} />

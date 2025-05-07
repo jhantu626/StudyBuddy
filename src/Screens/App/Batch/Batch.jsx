@@ -1,18 +1,14 @@
-import {
-  ScrollView,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import React from 'react';
 import Layout from '../Layout/Layout';
 import MainHeader from '../../../components/Headers/MainHeader';
 import {BatchCard} from '../../../components';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
+import {useNavigation} from '@react-navigation/native';
 
 const Batch = () => {
+  const navigation = useNavigation();
   return (
     <Layout>
       <MainHeader
@@ -28,8 +24,12 @@ const Batch = () => {
         <BatchCard />
         <BatchCard />
       </ScrollView>
-      <TouchableOpacity style={styles.floatingBtn}>
-        <Text style={styles.btnText}>New Batch</Text>
+      <TouchableOpacity
+        style={styles.floatingBtn}
+        onPress={() => {
+          navigation.navigate('CreateBatch');
+        }}>
+        <Text style={styles.btnText}>Create Batch</Text>
       </TouchableOpacity>
     </Layout>
   );

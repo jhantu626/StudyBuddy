@@ -4,7 +4,7 @@ import StudentRegistration from './StudentRegistration';
 
 const Stack = createStackNavigator();
 const StudentStack = () => (
-  <Stack.Navigator initialRouteName="StudentRegistration" screenOptions={{
+  <Stack.Navigator initialRouteName="Student" screenOptions={{
     headerShown: false
   }}>
     <Stack.Screen name="Student" component={Students} />

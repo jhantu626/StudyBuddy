@@ -1,7 +1,14 @@
-import { Animated, StyleSheet, TouchableOpacity, View, Text, ScrollView } from 'react-native';
-import React, { useEffect, useRef, useState } from 'react';
-import { colors } from '../../utils/colors';
-import { fonts } from '../../utils/fonts';
+import {
+  Animated,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  Text,
+  ScrollView,
+} from 'react-native';
+import React, {useEffect, useRef, useState} from 'react';
+import {colors} from '../../utils/colors';
+import {fonts} from '../../utils/fonts';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const DropdownInput = ({
@@ -61,10 +68,9 @@ const DropdownInput = ({
     zIndex: 10,
   };
 
-  // CHANGED: Simplified height calculation and added max height for scrollable dropdown
-  const optionHeight = 44; // Fixed height for each option
-  const maxDropdownHeight = 400; // Added: Maximum height for the dropdown
-  const calculatedHeight = options.length * optionHeight; // Added: Calculate total height
+  const optionHeight = 44;
+  const maxDropdownHeight = 400;
+  const calculatedHeight = options.length * optionHeight;
   const dropdownHeight = dropdownAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0, Math.min(calculatedHeight, maxDropdownHeight)], // CHANGED: Cap height at maxDropdownHeight
@@ -85,7 +91,7 @@ const DropdownInput = ({
   return (
     <View style={styles.dropdownContainer}>
       <TouchableOpacity
-        style={[styles.container, isBg && { backgroundColor: '#D6F6FA' }]}
+        style={[styles.container, isBg && {backgroundColor: '#D6F6FA'}]}
         onPress={() => {
           setIsOpen(!isOpen);
           setIsFocused(true);
@@ -105,13 +111,13 @@ const DropdownInput = ({
       <Animated.View
         style={[
           styles.optionsContainer,
-          isBg && { backgroundColor: '#D6F6FA' },
+          isBg && {backgroundColor: '#D6F6FA'},
           {
             height: dropdownHeight,
             opacity: dropdownOpacity,
             // ADDED: Shadow properties for iOS and Android
             shadowColor: '#000',
-            shadowOffset: { width: 0, height: 2 },
+            shadowOffset: {width: 0, height: 2},
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
@@ -120,14 +126,13 @@ const DropdownInput = ({
         {/* ADDED: ScrollView to make options scrollable */}
         <ScrollView
           showsVerticalScrollIndicator={false}
-          contentContainerStyle={{ paddingBottom: 0 }}
-        >
+          contentContainerStyle={{paddingBottom: 0}}>
           {options.map((option, index) => (
             <TouchableOpacity
               key={index}
               style={[
                 styles.optionItem,
-                value === option && { backgroundColor: '#D6F6FA' },
+                value === option && {backgroundColor: '#D6F6FA'},
                 index === 0 && {
                   borderTopLeftRadius: 10,
                   borderTopRightRadius: 10,
