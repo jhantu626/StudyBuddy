@@ -5,12 +5,12 @@ import {
   View,
   Text,
   ScrollView,
+  Dimensions,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {colors} from '../../utils/colors';
 import {fonts} from '../../utils/fonts';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import AntDesign from 'react-native-vector-icons/AntDesign';
 
 const MultiSelectDropdownInput = ({
   selectedValues = [],
@@ -18,9 +18,12 @@ const MultiSelectDropdownInput = ({
   labelText,
   options = [],
   isBg = false,
+  dropdownPosition = 'bottom', // Position control (top/bottom)
+  maxDropdownHeight = 400, // Height control
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownAnim = useRef(new Animated.Value(0)).current;
+  const windowHeight = Dimensions.get('window').height;
 
   useEffect(() => {
     Animated.timing(dropdownAnim, {
@@ -31,16 +34,26 @@ const MultiSelectDropdownInput = ({
   }, [isOpen]);
 
   const optionHeight = 44;
-  const maxDropdownHeight = 400;
   const calculatedHeight = options.length * optionHeight;
   const dropdownHeight = dropdownAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, Math.min(calculatedHeight, maxDropdownHeight)],
+    outputRange: [0, Math.min(calculatedHeight, maxDropdownHeight, windowHeight * 0.5)],
   });
 
   const dropdownOpacity = dropdownAnim.interpolate({
     inputRange: [0, 1],
     outputRange: [0, 1],
+  });
+
+  // Calculate final top position for 'top' dropdown
+  const finalTopPosition = -Math.min(calculatedHeight, maxDropdownHeight, windowHeight * 0.5) - 10;
+  // Starting position (below the input field)
+  const startTopPosition = 55; // Same as the bottom position offset
+
+  // Animate top position based on dropdownPosition
+  const dropdownTop = dropdownAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: dropdownPosition === 'top' ? [startTopPosition, finalTopPosition] : [55, 55],
   });
 
   const toggleSelect = option => {
@@ -89,6 +102,7 @@ const MultiSelectDropdownInput = ({
           {
             height: dropdownHeight,
             opacity: dropdownOpacity,
+            top: dropdownTop, // Use animated top value
             shadowColor: '#000',
             shadowOffset: {width: 0, height: 2},
             shadowOpacity: 0.25,
@@ -168,7 +182,6 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     position: 'absolute',
-    top: 55,
     left: 0,
     right: 0,
     backgroundColor: '#fff',

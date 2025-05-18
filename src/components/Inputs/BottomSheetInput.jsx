@@ -55,7 +55,11 @@ const BottomSheetInput = ({
         <Text style={styles.placeHolder}>{placeHolder}</Text>
       )}
       <Icon
-        name={bottomSheetOpen?.status ? 'arrow-drop-up' : 'arrow-drop-down'}
+        name={
+          bottomSheetOpen?.status && bottomSheetOpen.target === target
+            ? 'arrow-drop-up'
+            : 'arrow-drop-down'
+        }
         size={24}
         color={borderColor ? borderColor : colors.primary}
       />

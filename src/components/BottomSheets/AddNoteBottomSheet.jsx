@@ -1,6 +1,5 @@
 import React, {useMemo, useRef} from 'react';
 import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
-import {Text} from 'react-native';
 import Backdrop from './Backdrop';
 
 const AddNoteBottomSheet = ({
@@ -18,7 +17,8 @@ const AddNoteBottomSheet = ({
       backdropComponent={Backdrop}
       animationConfigs={{
         duration: openCloseAnimationDuration,
-      }}>
+      }}
+      >
       <BottomSheetScrollView>{childComponent}</BottomSheetScrollView>
     </BottomSheet>
   );

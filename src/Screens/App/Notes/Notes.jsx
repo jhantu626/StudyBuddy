@@ -14,8 +14,10 @@ import {GestureHandlerRootView} from 'react-native-gesture-handler';
 import {notes} from '../../../utils/data';
 import {teacherService} from '../../../Services/TeacherService';
 import {useAuth} from '../../../Contexts/AuthContext';
-import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
-import Backdrop from '../../../components/BottomSheets/Backdrop';
+import BottomSheet, {
+  BottomSheetBackdrop,
+  BottomSheetScrollView,
+} from '@gorhom/bottom-sheet';
 
 const Notes = () => {
   const {authToken} = useAuth();
@@ -55,6 +57,14 @@ const Notes = () => {
     setSubjectOptions(subjects);
     setBoardOptions(boards);
   };
+
+  const renderBackdrop = ()=>(
+      <BottomSheetBackdrop
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.5}
+      />
+    );
 
   const renderSubBottomSheet = useCallback(() => {
     switch (isSubBottomSheetOpen.target) {
@@ -146,7 +156,7 @@ const Notes = () => {
           ref={subBottomSheetRef}
           index={-1}
           snapPoints={snapPoints}
-          backdropComponent={Backdrop}
+          backdropComponent={renderBackdrop}
           enablePanDownToClose={true}
           onChange={index => {
             if (index === -1) {

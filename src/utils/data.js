@@ -82,4 +82,6 @@ const years = [
   '2035',
 ];
 
-export {notes, months, years};
+const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+export {notes, months, years, days};
