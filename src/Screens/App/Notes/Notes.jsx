@@ -58,13 +58,17 @@ const Notes = () => {
     setBoardOptions(boards);
   };
 
-  const renderBackdrop = ()=>(
+  const renderBackdrop = useCallback(
+    props => (
       <BottomSheetBackdrop
+        {...props}
         disappearsOnIndex={-1}
         appearsOnIndex={0}
         opacity={0.5}
       />
-    );
+    ),
+    []
+  );
 
   const renderSubBottomSheet = useCallback(() => {
     switch (isSubBottomSheetOpen.target) {

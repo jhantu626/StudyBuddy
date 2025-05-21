@@ -1,12 +1,23 @@
-import React, {useMemo, useRef} from 'react';
-import BottomSheet, {BottomSheetScrollView} from '@gorhom/bottom-sheet';
-import Backdrop from './Backdrop';
+import React, {useCallback, useMemo, useRef} from 'react';
+import BottomSheet, {BottomSheetBackdrop, BottomSheetScrollView} from '@gorhom/bottom-sheet';
+// import Backdrop from './Backdrop';
 
 const AddNoteBottomSheet = ({
   bottomSheetRef,
   openCloseAnimationDuration = 300,
   childComponent,
 }) => {
+  const renderBackdrop = useCallback(
+    props => (
+      <BottomSheetBackdrop
+        {...props}
+        disappearsOnIndex={-1}
+        appearsOnIndex={0}
+        opacity={0.5}
+      />
+    ),
+    []
+  );
   return (
     <BottomSheet
       ref={bottomSheetRef}
@@ -14,7 +25,7 @@ const AddNoteBottomSheet = ({
       snapPoints={useMemo(() => ['70%'], [])}
       enablePanDownToClose
       enableOverDrag={false}
-      backdropComponent={Backdrop}
+      backdropComponent={renderBackdrop}
       animationConfigs={{
         duration: openCloseAnimationDuration,
       }}
