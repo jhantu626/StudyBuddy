@@ -38,7 +38,7 @@ const subjectsApi = async ({setOption}) => {
 // Check Teacher By Mobile
 const checkTeacherByMobile = async ({mobileNumber}) => {
   try {
-    console.log(mobileNumber)
+    console.log(mobileNumber);
     const data = await teacherService.teacherExistence({
       mobileNumber: mobileNumber,
     });

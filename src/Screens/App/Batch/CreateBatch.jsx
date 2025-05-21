@@ -5,10 +5,11 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import Layout from '../Layout/Layout';
 import MainHeader from '../../../components/Headers/MainHeader';
 import {
+  AuthSelection,
   BottomSheetInput,
   DefaultInput,
   DropdownInput,
@@ -20,13 +21,21 @@ import {days, months, years} from '../../../utils/data';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
 import CommonBottomSheet from '../../../components/BottomSheets/CommonBottomSheet';
+import {teacherService} from '../../../Services/TeacherService';
+import {useAuth} from '../../../Contexts/AuthContext';
 
 const CreateBatch = () => {
+  const {authToken} = useAuth();
   // Data
   const [bottomSheetOpen, setBottomSheetOpen] = useState({
     status: false,
     target: null,
   });
+  const [languageOptions, setLanguageOptions] = useState([]);
+  const [classOptions, setClassOptions] = useState([]);
+  const [boardOptions, setBoardOptions] = useState([]);
+  const [subjectOptions, setSubjectOptions] = useState([]);
+
   // State Variables
   const [batchName, setBatchName] = useState('');
   const [batchStartYear, setBatchStartYear] = useState(2025);
@@ -53,12 +62,130 @@ const CreateBatch = () => {
   // BottomSheet Referance State
   const bottomSheetRef = useRef(null);
 
+  const findMonthByValue = value =>
+    Object.keys(months).find(key => months[key] === value);
+
   useEffect(() => {
-    console.log('BottomSheet Opened:', bottomSheetOpen);
     if (bottomSheetOpen.status) {
       bottomSheetRef.current?.snapToIndex(0);
     }
   }, [bottomSheetOpen]);
+
+  const getOptions = async () => {
+    try {
+      const classOption = await teacherService.getAllClasses({
+        authToken: authToken,
+      });
+      const subjectOption = await teacherService.getAllSubjects({
+        authToken: authToken,
+      });
+      const boardOption = await teacherService.getAllBoards({
+        authToken: authToken,
+      });
+      const languageOption = await teacherService.getAllLanguages({
+        authToken: authToken,
+      });
+
+      setClassOptions(prev => classOption);
+      setSubjectOptions(prev => subjectOption);
+      setBoardOptions(prev => boardOption);
+      setLanguageOptions(prev => languageOption);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Default UseEffect
+  useEffect(() => {
+    const currentDate = new Date();
+    currentDate.setMonth(8);
+    setBatchStartYear(currentDate.getFullYear());
+    setBatchStartMonth(findMonthByValue(currentDate.getMonth() + 1));
+    const calculationMonth = 12 - (currentDate.getMonth() + 1);
+    console.log('calculationMonth', calculationMonth);
+    if (calculationMonth < 3) {
+      setBatchEndYear(currentDate.getFullYear() + 1);
+      setBatchEndMonth(prev =>
+        findMonthByValue(
+          calculationMonth === 2 ? 1 : calculationMonth === 1 ? 2 : 3,
+        ),
+      );
+    } else {
+      setBatchEndYear(currentDate.getFullYear());
+      setBatchEndMonth(findMonthByValue(currentDate.getMonth() + 4));
+    }
+    getOptions();
+  }, []);
+
+  const handleCreate = async () => {
+    console.log(
+      'batchName',
+      batchName,
+      'batchStartYear',
+      batchStartYear,
+      'batchStartMonth',
+      batchStartMonth,
+      'batchEndYear',
+      batchEndYear,
+      'batchEndMonth',
+      batchEndMonth,
+      'selectedClasses',
+      selectedClasses,
+      'selectedSubjects',
+      selectedSubjects,
+      'selectedBoards',
+      selectedBoards,
+      'startTime',
+      startTime,
+      'endTime',
+      endTime,
+      'selectedDays',
+      selectedDays,
+      'monthlyFees',
+      monthlyFees,
+      'monthlyExamFees',
+      monthlyExamFees,
+    );
+  };
+
+  const renderBottomSheetContent = useCallback(() => {
+    switch (bottomSheetOpen.target) {
+      case 'Class':
+        return (
+          <AuthSelection
+            options={classOptions}
+            selectedItems={selectedClasses}
+            setSelectedItems={setSelectedClasses}
+          />
+        );
+      case 'Subject':
+        return (
+          <AuthSelection
+            options={subjectOptions}
+            selectedItems={selectedSubjects}
+            setSelectedItems={setSelectedSubjects}
+          />
+        );
+      case 'Board':
+        return (
+          <AuthSelection
+            options={boardOptions}
+            selectedItems={selectedBoards}
+            setSelectedItems={setSelectedBoards}
+          />
+        );
+      default:
+        return null;
+    }
+  }, [
+    bottomSheetOpen.target,
+    selectedBoards,
+    selectedClasses,
+    selectedSubjects,
+    classOptions,
+    boardOptions,
+    subjectOptions,
+  ]);
 
   return (
     <Layout>
@@ -73,6 +200,7 @@ const CreateBatch = () => {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}>
           <DefaultInput
+            maxLength={30}
             labelText={'Batch Name'}
             value={batchName}
             setValue={setBatchName}
@@ -136,6 +264,7 @@ const CreateBatch = () => {
             selctedItems={selectedBoards}
             setSelectedItems={setSelectedBoards}
             placeHolder={'Select Boards'}
+            showProperty="code"
           />
           <Text
             style={{
@@ -182,7 +311,7 @@ const CreateBatch = () => {
             value={monthlyExamFees}
             keyboardType="numeric"
           />
-          <TouchableOpacity style={styles.btnContainer}>
+          <TouchableOpacity style={styles.btnContainer} onPress={handleCreate}>
             <Text style={styles.btnText}>CREATE</Text>
           </TouchableOpacity>
         </ScrollView>
@@ -191,11 +320,7 @@ const CreateBatch = () => {
         <CommonBottomSheet
           ref={bottomSheetRef}
           snapPoints={['70%']}
-          Component={
-            <View>
-              {bottomSheetOpen.target && <Text>{bottomSheetOpen.target}</Text>}
-            </View>
-          }
+          Component={renderBottomSheetContent()}
         />
       </View>
     </Layout>
