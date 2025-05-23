@@ -1,10 +1,10 @@
 import axios from 'axios';
-import { API_URL } from '@env';
+// import { API_URL } from '@env';
 
 class AuthService {
   constructor() {
-    // this.baseUrl = process.env.API_URL + 'api/v1';
-    this.baseUrl = API_URL + 'api/v1';
+    this.baseUrl = process.env.API_URL + 'api/v1';
+    // this.baseUrl = API_URL + 'api/v1';
   }
 
   async checkUserExistence({mobileNumber}) {
@@ -66,7 +66,7 @@ class AuthService {
 
   async login({mobileNumber}) {
     const uri = `${this.baseUrl}/auth/login?mobile=${mobileNumber}`;
-    console.info("Logging ",uri)
+    console.info('Logging ', uri);
     try {
       const response = await axios.post(uri);
       const data = await response.data;

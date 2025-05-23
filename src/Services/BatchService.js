@@ -1,9 +1,9 @@
-import { API_URL } from '@env';
+// import { API_URL } from '@env';
 
 class BatchService {
   constructor() {
-    // this.baseUrl = process.env.API_URL + 'api/v1';
-    this.baseUrl = API_URL+"api/v1";
+    this.baseUrl = process.env.API_URL + 'api/v1';
+    // this.baseUrl = API_URL+"api/v1";
   }
 
   // Create a batch
@@ -35,8 +35,8 @@ class BatchService {
       days: days,
       monthlyFees: monthlyFees,
       monthlyExamFees: monthlyExamFees,
-      board: board,
-      language: language,
+      board: board[0],
+      language: language[0],
       subjects: subjects,
       classes: classes,
     };

@@ -47,6 +47,7 @@ const CreateBatch = () => {
   const [selectedClasses, setSelectedClasses] = useState([]);
   const [selectedSubjects, setSelectedSubjects] = useState([]);
   const [selectedBoards, setSelectedBoards] = useState([]);
+  const [selectedLanguage, setSelectedLanguage] = useState([]);
   const [selectedDays, setSelectedDays] = useState([]);
   const [monthlyFees, setMonthlyFees] = useState('');
   const [monthlyExamFees, setMonthlyExamFees] = useState('');
@@ -172,6 +173,16 @@ const CreateBatch = () => {
             options={boardOptions}
             selectedItems={selectedBoards}
             setSelectedItems={setSelectedBoards}
+            isMultiSelect={false}
+          />
+        );
+      case 'Language':
+        return (
+          <AuthSelection
+            options={languageOptions}
+            selectedItems={selectedLanguage}
+            setSelectedItems={setSelectedLanguage}
+            isMultiSelect={false}
           />
         );
       default:
@@ -182,9 +193,11 @@ const CreateBatch = () => {
     selectedBoards,
     selectedClasses,
     selectedSubjects,
+    selectedLanguage,
     classOptions,
     boardOptions,
     subjectOptions,
+    languageOptions,
   ]);
 
   return (
@@ -266,6 +279,14 @@ const CreateBatch = () => {
             placeHolder={'Select Boards'}
             showProperty="code"
           />
+          <BottomSheetInput
+            target="Language"
+            bottomSheetOpen={bottomSheetOpen}
+            setBottomSheetOpen={setBottomSheetOpen}
+            selctedItems={selectedLanguage}
+            setSelectedItems={setSelectedLanguage}
+            placeHolder={'Select Language'}
+          />
           <Text
             style={{
               fontFamily: fonts.semiBold,
@@ -321,6 +342,7 @@ const CreateBatch = () => {
           ref={bottomSheetRef}
           snapPoints={['70%']}
           Component={renderBottomSheetContent()}
+          duration={100}
         />
       </View>
     </Layout>

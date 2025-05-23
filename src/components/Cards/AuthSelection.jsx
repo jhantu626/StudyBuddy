@@ -13,8 +13,9 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const AuthSelection = ({
   options = [],
-  selectedItems,
+  selectedItems = [],
   setSelectedItems,
+  isMultiSelect = true,
   iconName,
   placeholder = 'Search...',
 }) => {
@@ -27,12 +28,16 @@ const AuthSelection = ({
 
   const toggleSelection = useCallback(
     item => {
-      setSelectedItems(prev => {
-        const isSelected = prev.some(selected => selected.id === item.id);
-        return isSelected
-          ? prev.filter(selected => selected.id !== item.id)
-          : [...prev, item];
-      });
+      if (isMultiSelect) {
+        setSelectedItems(prev => {
+          const isSelected = prev.some(selected => selected.id === item.id);
+          return isSelected
+            ? prev.filter(selected => selected.id !== item.id)
+            : [...prev, item];
+        });
+      } else {
+        setSelectedItems([item]);
+      }
     },
     [setSelectedItems],
   );
