@@ -1,14 +1,44 @@
-import {ScrollView, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import React from 'react';
+import {
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+} from 'react-native';
+import React, {useCallback, useEffect, useLayoutEffect} from 'react';
 import Layout from '../Layout/Layout';
 import MainHeader from '../../../components/Headers/MainHeader';
 import {BatchCard} from '../../../components';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
-import {useNavigation} from '@react-navigation/native';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
+import {useAuth} from '../../../Contexts/AuthContext';
+import {batchService} from '../../../Services/BatchService';
 
 const Batch = () => {
+  const {authToken} = useAuth();
   const navigation = useNavigation();
+
+  const [batches, setBatches] = React.useState([]);
+  const [loading, setLoading] = React.useState(true);
+
+  const fetchBatches = async () => {
+    try {
+      const data = await batchService.getAllBatches({authToken});
+      setBatches(data);
+    } catch (error) {
+      console.error('Error fetching batches:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchBatches();
+    }, []),
+  );
+
   return (
     <Layout>
       <MainHeader
@@ -16,14 +46,25 @@ const Batch = () => {
         isBackable={true}
         isSelectableValues={false}
       />
-      <ScrollView
+      {/* <ScrollView
         style={{flex: 1}}
         contentContainerStyle={styles.container}
         showsVerticalScrollIndicator={false}>
-        <BatchCard />
-        <BatchCard />
-        <BatchCard />
-      </ScrollView>
+          <BatchCard/>          
+          <BatchCard/>          
+          <BatchCard/>          
+      </ScrollView> */}
+      <FlatList
+        contentContainerStyle={styles.container}
+        showsVerticalScrollIndicator={false}
+        style={{flexGrow: 1}}
+        refreshing={loading}
+        data={batches}
+        keyExtractor={(item, index) => `batch-${index}`}
+        renderItem={({item, index}) => (
+          <BatchCard batch={item} key={`batch-card-${index}`} />
+        )}
+      />
       <TouchableOpacity
         style={styles.floatingBtn}
         onPress={() => {

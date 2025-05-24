@@ -7,7 +7,7 @@ const Stack = createStackNavigator();
 const BatchStack = () => {
   return (
     <Stack.Navigator
-      initialRouteName="CreateBatch"
+      initialRouteName="Batch"
       screenOptions={{
         headerShown: false,
       }}>

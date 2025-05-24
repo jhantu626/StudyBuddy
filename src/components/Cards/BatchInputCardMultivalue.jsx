@@ -4,15 +4,19 @@ import {fonts} from '../../utils/fonts';
 
 const BatchInputCardMultivalueMultivalue = ({
   lable = 'Batch Session',
-  values = ['Physics', 'Chamestry', 'Math'],
+  values = [
+    {id: 1, name: 'Physics'},
+    {id: 2, name: 'Chemistry'},
+  ],
+  showProperty = 'name',
 }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.lableText}>{lable}</Text>
       <View style={styles.contentCOntainer}>
         {values.map((item, index) => (
-          <View key={index + item} style={styles.item}>
-            <Text style={styles.itemText}>{item}</Text>
+          <View key={index + item?.id} style={styles.item}>
+            <Text style={styles.itemText}>{item[showProperty]}</Text>
           </View>
         ))}
       </View>
@@ -38,7 +42,7 @@ const styles = StyleSheet.create({
   contentCOntainer: {
     flexDirection: 'row',
     gap: 10,
-    flexWrap: 'wrap'
+    flexWrap: 'wrap',
   },
   item: {
     backgroundColor: '#5A586D',

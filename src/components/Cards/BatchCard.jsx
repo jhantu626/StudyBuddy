@@ -1,16 +1,18 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {colors} from '../../utils/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import {fonts} from '../../utils/fonts';
 import BatchInputCard from './BatchInputCard';
 import BatchInputCardMultivalueMultivalue from './BatchInputCardMultivalue';
+import {convertTo12Hour} from '../../utils/helper';
+import {months, monthsByKey} from '../../utils/data';
 
-const BatchCard = () => {
+const BatchCard = ({batch}) => {
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
-        <Text style={styles.titleText}>Morning Batch</Text>
+        <Text style={styles.titleText}>{batch?.name}</Text>
         <View style={styles.btnCOntainer}>
           <TouchableOpacity style={styles.deleteBtn}>
             <AntDesign name="delete" color={'#fff'} size={10} />
@@ -23,30 +25,57 @@ const BatchCard = () => {
       <View style={styles.bottomContainer}>
         <View style={styles.inputs}>
           <View style={styles.childInputBox}>
-            <BatchInputCard lable="Batch Session" value="2024 - 2025" />
+            <BatchInputCard
+              lable="Batch Session"
+              value={
+                batch?.startYear === batch?.endYear
+                  ? `${monthsByKey[batch?.startMonth]} - ${monthsByKey[batch?.endMonth]}`
+                  : `${batch?.startYear} - ${batch?.endYear}`
+              }
+            />
           </View>
           <View style={styles.childInputBox}>
-            <BatchInputCard lable="Class" value="Class XI" />
+            <BatchInputCard lable="Language" value={batch?.language?.name} />
           </View>
         </View>
-        <BatchInputCardMultivalueMultivalue lable="Subjects" />
+        <BatchInputCardMultivalueMultivalue
+          lable="Classes"
+          values={batch?.classes}
+        />
+        <BatchInputCardMultivalueMultivalue
+          lable="Subjects"
+          values={batch?.subjects}
+        />
         <View style={styles.inputs}>
           <View style={styles.childInputBox}>
-            <BatchInputCard lable="Batch Timing" value="7AM - 9AM" />
+            <BatchInputCard
+              lable="Batch Timing"
+              value={
+                convertTo12Hour(batch?.startTime) +
+                ' - ' +
+                convertTo12Hour(batch?.endTime)
+              }
+            />
           </View>
           <View style={styles.childInputBox}>
-            <BatchInputCard lable="Student Fees(Monthly)" value="300" />
+            <BatchInputCard
+              lable="Student Fees(Monthly)"
+              value={batch?.monthlyFees}
+            />
           </View>
         </View>
         <BatchInputCard
           lable="Batch Board"
-          value="West Bengal School Service Commission"
+          value={batch?.board?.name || 'N/A'}
         />
         <BatchInputCardMultivalueMultivalue
-          lable="Subjects"
-          values={['Monday', 'Wednesday', 'Friday']}
+          lable="Day's"
+          values={batch?.days.map((day, index) => ({id: index, name: day}))}
         />
-        <BatchInputCard lable="Monthly Exam Fees" value="20" />
+        <BatchInputCard
+          lable="Monthly Exam Fees"
+          value={batch?.monthlyExamFees || 'N/A'}
+        />
       </View>
     </View>
   );

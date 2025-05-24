@@ -71,18 +71,14 @@ function convertTo24HourFormat(time12h) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
+function convertTo12Hour(time24) {
+  const [hourStr, minute] = time24.split(':');
+  let hour = parseInt(hourStr, 10);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
 
-function convertTo12HourFormat(time24h) {
-  let [hours, minutes, seconds] = time24h.split(':');
-  hours = parseInt(hours, 10);
-
-  const modifier = hours >= 12 ? 'PM' : 'AM';
-
-  // Convert to 12-hour format
-  hours = hours % 12;
-  if (hours === 0) hours = 12;
-
-  return `${hours}:${minutes}:${seconds} ${modifier}`;
+  hour = hour % 12;
+  if (hour === 0) hour = 12;
+  return `${hour}:${minute} ${ampm}`;
 }
 
 export {
@@ -90,5 +86,5 @@ export {
   validateName,
   isValidBatchName,
   convertTo24HourFormat,
-  convertTo12HourFormat,
+  convertTo12Hour,
 };

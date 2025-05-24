@@ -1,6 +1,6 @@
 // import { API_URL } from '@env';
 
-import axios from "axios";
+import axios from 'axios';
 
 class BatchService {
   constructor() {
@@ -43,19 +43,35 @@ class BatchService {
       classes: classes,
     };
     console.log('payload', payload);
-    const uri=`${this.baseUrl}/batch`
+    const uri = `${this.baseUrl}/batch`;
     try {
-      const response = await axios.post(uri,payload,{
+      const response = await axios.post(uri, payload, {
         headers: {
-          Authorization: `Bearer ${authToken}`
-        }
-      })
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
       const data = await response.data;
       return data;
     } catch (error) {
-        const data = await error.response.data;
-        console.log('error', error);
-        return data;
+      const data = await error.response.data;
+      console.log('error', error);
+      return data;
+    }
+  }
+
+  // Get all batches
+  async getAllBatches({authToken}) {
+    const uri = `${this.baseUrl}/batch`;
+    try {
+      const response = await axios.get(uri, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      console.log('error', error);
     }
   }
 }

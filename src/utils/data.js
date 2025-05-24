@@ -65,6 +65,20 @@ const months = {
   Nov: 11,
   Dec: 12,
 };
+const monthsByKey = {
+  1: 'Jan',
+  2: 'Feb',
+  3: 'Mar',
+  4: 'Apr',
+  5: 'May',
+  6: 'Jun',
+  7: 'Jul',
+  8: 'Aug',
+  9: 'Sep',
+  10: 'Oct',
+  11: 'Nov',
+  12: 'Dec',
+};
 
 const years = [
   '2023',
@@ -82,6 +96,14 @@ const years = [
   '2035',
 ];
 
-const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+const days = [
+  'Monday',
+  'Tuesday',
+  'Wednesday',
+  'Thursday',
+  'Friday',
+  'Saturday',
+  'Sunday',
+];
 
-export {notes, months, years, days};
+export {notes, months, years, days,monthsByKey};
