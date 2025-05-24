@@ -19,6 +19,7 @@ const toastConfig = {
         alignItems: 'center',
         paddingHorizontal: 15,
         justifyContent: 'center',
+        zIndex: 9999, 
       }}>
       <Icon name="check-circle" size={28} color="white" /> {/* Success icon */}
       <Text style={{color: 'white', marginLeft: 10, fontFamily: fonts.medium}}>
@@ -41,6 +42,7 @@ const toastConfig = {
         alignItems: 'center',
         paddingHorizontal: 15,
         justifyContent: 'center',
+        zIndex: 9999,
       }}>
       <Icon name="times-circle" size={28} color="white" /> {/* Error icon */}
       <Text style={{color: 'white', marginLeft: 10, fontFamily: fonts.medium}}>
@@ -63,6 +65,7 @@ const toastConfig = {
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 15,
+        zIndex: 9999,
       }}>
       <Icon name="info-circle" size={28} color="white" /> {/* Info icon */}
       <Text style={{color: 'white', marginLeft: 10, fontFamily: fonts.medium}}>

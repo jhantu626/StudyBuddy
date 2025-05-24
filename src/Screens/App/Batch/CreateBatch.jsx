@@ -1,4 +1,5 @@
 import {
+  ActivityIndicator,
   ScrollView,
   StyleSheet,
   Text,
@@ -23,6 +24,10 @@ import {colors} from '../../../utils/colors';
 import CommonBottomSheet from '../../../components/BottomSheets/CommonBottomSheet';
 import {teacherService} from '../../../Services/TeacherService';
 import {useAuth} from '../../../Contexts/AuthContext';
+import {convertTo24HourFormat, isValidBatchName} from '../../../utils/helper';
+import {batchService} from '../../../Services/BatchService';
+import Toast from 'react-native-toast-message';
+import {toastConfig} from '../../../utils/ToastConfig';
 
 const CreateBatch = () => {
   const {authToken} = useAuth();
@@ -51,6 +56,14 @@ const CreateBatch = () => {
   const [selectedDays, setSelectedDays] = useState([]);
   const [monthlyFees, setMonthlyFees] = useState('');
   const [monthlyExamFees, setMonthlyExamFees] = useState('');
+  // Error State
+  const [error, setError] = useState({
+    status: false,
+    message: '',
+  });
+  // Loading State
+  const [loading, setLoading] = useState(false);
+
   const YearMonth = ({year, month}) => {
     return (
       <View style={styles.yearMonthContainer}>
@@ -59,7 +72,6 @@ const CreateBatch = () => {
       </View>
     );
   };
-
   // BottomSheet Referance State
   const bottomSheetRef = useRef(null);
 
@@ -99,7 +111,6 @@ const CreateBatch = () => {
   // Default UseEffect
   useEffect(() => {
     const currentDate = new Date();
-    currentDate.setMonth(8);
     setBatchStartYear(currentDate.getFullYear());
     setBatchStartMonth(findMonthByValue(currentDate.getMonth() + 1));
     const calculationMonth = 12 - (currentDate.getMonth() + 1);
@@ -119,35 +130,143 @@ const CreateBatch = () => {
   }, []);
 
   const handleCreate = async () => {
-    console.log(
-      'batchName',
-      batchName,
-      'batchStartYear',
-      batchStartYear,
-      'batchStartMonth',
-      batchStartMonth,
-      'batchEndYear',
-      batchEndYear,
-      'batchEndMonth',
-      batchEndMonth,
-      'selectedClasses',
-      selectedClasses,
-      'selectedSubjects',
-      selectedSubjects,
-      'selectedBoards',
-      selectedBoards,
-      'startTime',
-      startTime,
-      'endTime',
-      endTime,
-      'selectedDays',
-      selectedDays,
-      'monthlyFees',
-      monthlyFees,
-      'monthlyExamFees',
-      monthlyExamFees,
-    );
+    if (!batchName || !isValidBatchName(batchName)) {
+      setError({
+        status: true,
+        message: 'Please enter a valid batch name.',
+      });
+      return;
+    } else if (
+      batchStartYear + months[batchStartMonth] >
+      batchEndYear + months[batchEndMonth]
+    ) {
+      setError({
+        status: true,
+        message: 'Start date cannot be after end date.',
+      });
+      return;
+    } else if (selectedClasses.length === 0) {
+      setError({
+        status: true,
+        message: 'Please select at least one class.',
+      });
+      return;
+    } else if (selectedSubjects.length === 0) {
+      setError({
+        status: true,
+        message: 'Please select at least one subject.',
+      });
+      return;
+    } else if (selectedBoards.length === 0) {
+      setError({
+        status: true,
+        message: 'Please select board.',
+      });
+      return;
+    } else if (selectedLanguage.length === 0) {
+      setError({
+        status: true,
+        message: 'Please select language.',
+      });
+      return;
+    } else if (!startTime || !endTime) {
+      setError({
+        status: true,
+        message: 'Please select start and end time.',
+      });
+      return;
+    } else if (startTime >= endTime) {
+      setError({
+        status: true,
+        message: 'Start time cannot be after end time.',
+      });
+      return;
+    } else if (selectedDays.length === 0) {
+      setError({
+        status: true,
+        message: 'Please select at least one batch day.',
+      });
+      return;
+    } else if (!monthlyFees || isNaN(monthlyFees)) {
+      setError({
+        status: true,
+        message: 'Please enter a valid monthly fees.',
+      });
+      return;
+    } else if (!monthlyExamFees || isNaN(monthlyExamFees)) {
+      setError({
+        status: true,
+        message: 'Please enter a valid monthly exam fees.',
+      });
+      return;
+    } else {
+      console.log('Else part');
+      setError({
+        status: false,
+        message: '',
+      });
+    }
+
+    console.log(convertTo24HourFormat(startTime));
+
+    try {
+      setLoading(true);
+      const data = await batchService.createBatch({
+        authToken: authToken,
+        batchName: batchName,
+        startYear: batchStartYear,
+        endYear: batchEndYear,
+        startMonth: months[batchStartMonth],
+        endMonth: months[batchEndMonth],
+        startTime: convertTo24HourFormat(startTime),
+        endTime: convertTo24HourFormat(endTime),
+        days: selectedDays,
+        monthlyFees: monthlyFees,
+        monthlyExamFees: monthlyExamFees,
+        board: selectedBoards[0],
+        language: selectedLanguage[0],
+        subjects: selectedSubjects,
+        classes: selectedClasses,
+      });
+      console.log('response data ', data);
+      if (data?.status) {
+        resetForm();
+        Toast.show({
+          text1: data?.message,
+          type: 'success',
+          visibilityTime: 3000,
+        });
+      } else {
+        Toast.show({
+          text1: data.message,
+          type: 'error',
+          visibilityTime: 3000,
+        });
+      }
+    } catch (error) {
+      console.error('Error creating batch:', error);
+    } finally {
+      setLoading(false);
+    }
   };
+
+  const resetForm = () => {
+  setBatchName('');
+  setBatchStartYear(2025);
+  setBatchEndYear(2025);
+  setBatchStartMonth('Jan');
+  setBatchEndMonth('Jan');
+  setStartTime(null);
+  setEndTime(null);
+  setSelectedClasses([]);
+  setSelectedSubjects([]);
+  setSelectedBoards([]);
+  setSelectedLanguage([]);
+  setSelectedDays([]);
+  setMonthlyFees('');
+  setMonthlyExamFees('');
+};
+
 
   const renderBottomSheetContent = useCallback(() => {
     switch (bottomSheetOpen.target) {
@@ -209,6 +328,7 @@ const CreateBatch = () => {
       />
       <View style={styles.container}>
         <ScrollView
+          nestedScrollEnabled={true}
           style={{flex: 1}}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={styles.contentContainer}>
@@ -332,8 +452,25 @@ const CreateBatch = () => {
             value={monthlyExamFees}
             keyboardType="numeric"
           />
-          <TouchableOpacity style={styles.btnContainer} onPress={handleCreate}>
-            <Text style={styles.btnText}>CREATE</Text>
+          {error.status && (
+            <Text
+              style={{
+                fontFamily: fonts.medium,
+                color: 'red',
+                textAlign: 'center',
+              }}>
+              {error.message}
+            </Text>
+          )}
+          <TouchableOpacity
+            disabled={loading}
+            style={styles.btnContainer}
+            onPress={handleCreate}>
+            {loading ? (
+              <ActivityIndicator size="small" color="#fff" />
+            ) : (
+              <Text style={styles.btnText}>CREATE</Text>
+            )}
           </TouchableOpacity>
         </ScrollView>
 

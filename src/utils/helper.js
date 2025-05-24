@@ -45,4 +45,50 @@ function validateName(name) {
   return {status: false};
 }
 
-export {isValidIndianMobile, validateName};
+function isValidBatchName(name) {
+  const validPattern = /^[a-zA-Z0-9\s\(\)\-]+$/;
+  return validPattern.test(name);
+}
+
+function convertTo24HourFormat(time12h) {
+  // Replace any unusual whitespace characters (like U+202F or U+00A0) with a regular space
+  time12h = time12h.replace(/[\u202F\u00A0]/g, ' ').trim();
+
+  const [time, modifier] = time12h.split(' ');
+  let [hours, minutes, seconds] = time.split(':');
+
+  hours = parseInt(hours, 10);
+
+  if (modifier.toUpperCase() === 'AM') {
+    if (hours === 12) hours = 0;
+  } else if (modifier.toUpperCase() === 'PM') {
+    if (hours !== 12) hours += 12;
+  }
+
+  // Pad with leading zeros
+  hours = String(hours).padStart(2, '0');
+
+  return `${hours}:${minutes}:${seconds}`;
+}
+
+
+function convertTo12HourFormat(time24h) {
+  let [hours, minutes, seconds] = time24h.split(':');
+  hours = parseInt(hours, 10);
+
+  const modifier = hours >= 12 ? 'PM' : 'AM';
+
+  // Convert to 12-hour format
+  hours = hours % 12;
+  if (hours === 0) hours = 12;
+
+  return `${hours}:${minutes}:${seconds} ${modifier}`;
+}
+
+export {
+  isValidIndianMobile,
+  validateName,
+  isValidBatchName,
+  convertTo24HourFormat,
+  convertTo12HourFormat,
+};

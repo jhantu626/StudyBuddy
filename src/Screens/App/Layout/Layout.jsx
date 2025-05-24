@@ -9,6 +9,8 @@ import {
 import React from 'react';
 import {colors} from '../../../utils/colors';
 import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import Toast from 'react-native-toast-message';
+import { toastConfig } from '../../../utils/ToastConfig';
 
 const Layout = ({children}) => {
   const inset = useSafeAreaInsets();
@@ -20,6 +22,7 @@ const Layout = ({children}) => {
       }}>
       <StatusBar backgroundColor="#07A6BC" barStyle="dark-content" />
       {children}
+      <Toast config={toastConfig} />
     </SafeAreaView>
   );
 };

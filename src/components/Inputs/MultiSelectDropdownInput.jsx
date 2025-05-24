@@ -37,7 +37,10 @@ const MultiSelectDropdownInput = ({
   const calculatedHeight = options.length * optionHeight;
   const dropdownHeight = dropdownAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, Math.min(calculatedHeight, maxDropdownHeight, windowHeight * 0.5)],
+    outputRange: [
+      0,
+      Math.min(calculatedHeight, maxDropdownHeight, windowHeight * 0.5),
+    ],
   });
 
   const dropdownOpacity = dropdownAnim.interpolate({
@@ -46,14 +49,18 @@ const MultiSelectDropdownInput = ({
   });
 
   // Calculate final top position for 'top' dropdown
-  const finalTopPosition = -Math.min(calculatedHeight, maxDropdownHeight, windowHeight * 0.5) - 10;
+  const finalTopPosition =
+    -Math.min(calculatedHeight, maxDropdownHeight, windowHeight * 0.5) - 10;
   // Starting position (below the input field)
   const startTopPosition = 55; // Same as the bottom position offset
 
   // Animate top position based on dropdownPosition
   const dropdownTop = dropdownAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: dropdownPosition === 'top' ? [startTopPosition, finalTopPosition] : [55, 55],
+    outputRange:
+      dropdownPosition === 'top'
+        ? [startTopPosition, finalTopPosition]
+        : [55, 55],
   });
 
   const toggleSelect = option => {
@@ -96,6 +103,8 @@ const MultiSelectDropdownInput = ({
       </TouchableOpacity>
 
       <Animated.View
+        pointer
+        pointerEvents="box-none"
         style={[
           styles.optionsContainer,
           isBg && {backgroundColor: '#D6F6FA'},
@@ -110,7 +119,9 @@ const MultiSelectDropdownInput = ({
             elevation: 5,
           },
         ]}>
-        <ScrollView showsVerticalScrollIndicator={false}>
+        <ScrollView
+          showsVerticalScrollIndicator={false}
+          nestedScrollEnabled={true}>
           {options.map((option, index) => {
             const isSelected = selectedValues.includes(option);
             return (
@@ -180,6 +191,17 @@ const styles = StyleSheet.create({
     fontSize: 13,
     color: '#000',
   },
+  // optionsContainer: {
+  //   position: 'absolute',
+  //   left: 0,
+  //   right: 0,
+  //   backgroundColor: '#fff',
+  //   borderWidth: 1,
+  //   borderColor: colors.primary,
+  //   borderRadius: 10,
+  //   zIndex: 100,
+  //   overflow: 'hidden',
+  // }
   optionsContainer: {
     position: 'absolute',
     left: 0,
@@ -190,6 +212,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     zIndex: 100,
     overflow: 'hidden',
+    // Add these:
+    elevation: 5, // for Android
+    shadowColor: '#000', // for iOS
+    shadowOffset: {width: 0, height: 2},
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
   },
   optionItem: {
     paddingVertical: 12,
