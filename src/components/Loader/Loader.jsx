@@ -1,14 +1,16 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Animated, Easing } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, StyleSheet, Animated } from 'react-native';
+
+const BAR_COUNT = 12;
 
 const Loader = () => {
-  // Create animated values for each bar
-  const opacityValues = Array(12).fill().map(() => new Animated.Value(0));
+  const opacityValues = useRef(
+    Array.from({ length: BAR_COUNT }, () => new Animated.Value(0.25))
+  ).current;
 
   useEffect(() => {
-    // Animation sequence for each bar
-    const animations = opacityValues.map((value, index) => 
-      Animated.loop(
+    const animations = opacityValues.map((value, index) => {
+      return Animated.loop(
         Animated.sequence([
           Animated.delay(index * 100),
           Animated.timing(value, {
@@ -22,38 +24,39 @@ const Loader = () => {
             useNativeDriver: true,
           }),
         ])
-      )
-    );
+      );
+    });
 
-    // Start all animations
     animations.forEach(animation => animation.start());
 
-    // Cleanup
-    return () => animations.forEach(animation => animation.stop());
-  }, []);
-
-  // Function to generate transform styles for each bar
-  const getTransform = (degrees) => [
-    { rotate: `${degrees}deg` },
-    { translateX: 0 },
-    { translateY: -20 }, // Adjusted for React Native (no percentage in translateY)
-  ];
+    return () => {
+      animations.forEach(animation => animation.stop());
+    };
+  }, [opacityValues]);
 
   return (
     <View style={styles.container}>
       <View style={styles.loader}>
-        {opacityValues.map((opacityValue, index) => (
-          <Animated.View
-            key={index}
-            style={[
-              styles.bar,
-              { 
-                opacity: opacityValue,
-                transform: getTransform(index * 30),
-              },
-            ]}
-          />
-        ))}
+        {opacityValues.map((opacity, index) => {
+          const rotate = `${index * (360 / BAR_COUNT)}deg`;
+          const transform = [
+            { rotate },
+            { translateY: -13 },
+          ];
+
+          return (
+            <Animated.View
+              key={index}
+              style={[
+                styles.bar,
+                {
+                  opacity,
+                  transform,
+                },
+              ]}
+            />
+          );
+        })}
       </View>
     </View>
   );
@@ -66,24 +69,24 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   loader: {
-    width: 54,
-    height: 54,
-    borderRadius: 10,
+    width: 36,
+    height: 36,
+    borderRadius: 8,
     position: 'relative',
   },
   bar: {
-    width: 4, // 8% of 54 ≈ 4.32
-    height: 13, // 24% of 54 ≈ 12.96
+    width: 3,
+    height: 9,
     backgroundColor: 'rgb(128, 128, 128)',
     position: 'absolute',
     left: '50%',
     top: '30%',
-    marginLeft: -2, // Half of width to center
+    marginLeft: -1.5,
     borderRadius: 50,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.2,
-    shadowRadius: 3,
+    shadowRadius: 2,
   },
 });
 

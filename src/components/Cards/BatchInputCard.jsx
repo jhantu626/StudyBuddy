@@ -13,7 +13,7 @@ const BatchInputCard = ({lable = 'Batch Session', value = '2025 - 2026'}) => {
 
 const styles = StyleSheet.create({
   container: {
-    height: 50,
+    minHeight: 50,
     backgroundColor: '#F5F5F5',
     borderWidth: 0.5,
     borderColor: '#D2D3D4',
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     color: '#414042',
   },
   vauleText: {
-    fontSize: 13,
+    fontSize: 11,
     fontFamily: fonts.medium,
     color: '#000',
   },

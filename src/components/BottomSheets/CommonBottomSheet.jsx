@@ -35,10 +35,18 @@ const CommonBottomSheet = ({
       animationConfigs={{
         duration: duration,
       }}>
-      <BottomSheetScrollView>{Component}</BottomSheetScrollView>
+      <BottomSheetScrollView
+        contentContainerStyle={styles.contentContainer}
+        showsVerticalScrollIndicator={false}>
+        {Component}
+      </BottomSheetScrollView>
     </BottomSheet>
   );
 };
-export default CommonBottomSheet;
+export default memo(CommonBottomSheet);
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  contentContainer: {
+    flexGrow: 1,
+  },
+});

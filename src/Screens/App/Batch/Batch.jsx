@@ -23,6 +23,8 @@ const Batch = () => {
   const [loading, setLoading] = React.useState(true);
 
   const fetchBatches = async () => {
+    setLoading(true);
+    console.log('Fetching batches with authToken:', authToken);
     try {
       const data = await batchService.getAllBatches({authToken});
       setBatches(data);
@@ -57,6 +59,8 @@ const Batch = () => {
       </ScrollView> */}
       {loading ? (
         <Loader />
+      ) : batches.length === 0 ? (
+        <Text style={styles.emptyText}>No batches found.</Text>
       ) : (
         <FlatList
           contentContainerStyle={styles.container}
@@ -107,6 +111,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontFamily: fonts.regular,
     color: '#ffffff',
+  },
+  emptyText: {
+    textAlign: 'center',
+    marginTop: 40,
+    fontSize: 16,
+    fontFamily: fonts.regular,
+    color: colors.placeholderText || '#888',
   },
 });
 
