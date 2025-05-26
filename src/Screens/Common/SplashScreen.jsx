@@ -13,7 +13,7 @@ const SplashScreen = () => {
     }).start();
     setTimeout(() => {
       navigation.dispatch(StackActions.replace('Onboarding'));
-    }, 2000);
+    }, 1000);
   });
 
   return (

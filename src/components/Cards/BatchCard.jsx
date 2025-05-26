@@ -7,14 +7,61 @@ import BatchInputCard from './BatchInputCard';
 import BatchInputCardMultivalueMultivalue from './BatchInputCardMultivalue';
 import {convertTo12Hour} from '../../utils/helper';
 import {months, monthsByKey} from '../../utils/data';
+import {batchService} from '../../Services/BatchService';
+import Toast from 'react-native-toast-message';
 
-const BatchCard = ({batch}) => {
+const BatchCard = ({batch, authToken, reloadBatches}) => {
+  const handleDelete = async ({id}) => {
+    try {
+      console.log('Deleting batch with id:', id);
+      const data = await batchService.deactivateBatch({
+        authToken: authToken,
+        batchId: id,
+      });
+      console.log(data);
+
+      if (data?.status) {
+        Toast.show({
+          type: 'success',
+          text1: 'Batch Deleted Successfully',
+        });
+        reloadBatches();
+      } else {
+        Toast.show({
+          type: 'error',
+          text1: data?.message || 'Failed to delete batch',
+        });
+      }
+    } catch (error) {}
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
         <Text style={styles.titleText}>{batch?.name}</Text>
         <View style={styles.btnCOntainer}>
-          <TouchableOpacity style={styles.deleteBtn}>
+          <TouchableOpacity
+            style={styles.deleteBtn}
+            onPress={() => {
+              Alert.alert(
+                'Delete Batch',
+                'Are you sure you want to delete this batch?',
+                [
+                  {
+                    text: 'Cancel',
+                    style: 'cancel',
+                  },
+                  {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: () => {
+                      handleDelete({id: batch?.id});
+                    },
+                  },
+                ],
+                {cancelable: true},
+              );
+            }}>
             <AntDesign name="delete" color={'#fff'} size={10} />
           </TouchableOpacity>
           <TouchableOpacity style={styles.editBtn}>
@@ -29,7 +76,9 @@ const BatchCard = ({batch}) => {
               lable="Batch Session"
               value={
                 batch?.startYear === batch?.endYear
-                  ? `${monthsByKey[batch?.startMonth]} - ${monthsByKey[batch?.endMonth]}`
+                  ? `${monthsByKey[batch?.startMonth]} - ${
+                      monthsByKey[batch?.endMonth]
+                    }`
                   : `${batch?.startYear} - ${batch?.endYear}`
               }
             />

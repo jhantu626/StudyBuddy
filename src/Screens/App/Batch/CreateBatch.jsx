@@ -130,87 +130,84 @@ const CreateBatch = () => {
   }, []);
 
   const handleCreate = async () => {
-    if (!batchName || !isValidBatchName(batchName)) {
-      setError({
-        status: true,
-        message: 'Please enter a valid batch name.',
-      });
-      return;
-    } else if (
-      batchStartYear + months[batchStartMonth] >
-      batchEndYear + months[batchEndMonth]
-    ) {
-      setError({
-        status: true,
-        message: 'Start date cannot be after end date.',
-      });
-      return;
-    } else if (selectedClasses.length === 0) {
-      setError({
-        status: true,
-        message: 'Please select at least one class.',
-      });
-      return;
-    } else if (selectedSubjects.length === 0) {
-      setError({
-        status: true,
-        message: 'Please select at least one subject.',
-      });
-      return;
-    } else if (selectedBoards.length === 0) {
-      setError({
-        status: true,
-        message: 'Please select board.',
-      });
-      return;
-    } else if (selectedLanguage.length === 0) {
-      setError({
-        status: true,
-        message: 'Please select language.',
-      });
-      return;
-    } else if (!startTime || !endTime) {
-      setError({
-        status: true,
-        message: 'Please select start and end time.',
-      });
-      return;
-    } else if (startTime >= endTime) {
-      setError({
-        status: true,
-        message: 'Start time cannot be after end time.',
-      });
-      return;
-    } else if (selectedDays.length === 0) {
-      setError({
-        status: true,
-        message: 'Please select at least one batch day.',
-      });
-      return;
-    } else if (!monthlyFees || isNaN(monthlyFees)) {
-      setError({
-        status: true,
-        message: 'Please enter a valid monthly fees.',
-      });
-      return;
-    } else if (!monthlyExamFees || isNaN(monthlyExamFees)) {
-      setError({
-        status: true,
-        message: 'Please enter a valid monthly exam fees.',
-      });
-      return;
-    } else {
-      console.log('Else part');
-      setError({
-        status: false,
-        message: '',
-      });
-    }
-
-    console.log(convertTo24HourFormat(startTime));
-
     try {
       setLoading(true);
+      if (!batchName || !isValidBatchName(batchName)) {
+        setError({
+          status: true,
+          message: 'Please enter a valid batch name.',
+        });
+        return;
+      } else if (
+        batchStartYear + months[batchStartMonth] >
+        batchEndYear + months[batchEndMonth]
+      ) {
+        setError({
+          status: true,
+          message: 'Start date cannot be after end date.',
+        });
+        return;
+      } else if (selectedClasses.length === 0) {
+        setError({
+          status: true,
+          message: 'Please select at least one class.',
+        });
+        return;
+      } else if (selectedSubjects.length === 0) {
+        setError({
+          status: true,
+          message: 'Please select at least one subject.',
+        });
+        return;
+      } else if (selectedBoards.length === 0) {
+        setError({
+          status: true,
+          message: 'Please select board.',
+        });
+        return;
+      } else if (selectedLanguage.length === 0) {
+        setError({
+          status: true,
+          message: 'Please select language.',
+        });
+        return;
+      } else if (!startTime || !endTime) {
+        setError({
+          status: true,
+          message: 'Please select start and end time.',
+        });
+        return;
+      } else if (startTime >= endTime) {
+        setError({
+          status: true,
+          message: 'Start time cannot be after end time.',
+        });
+        return;
+      } else if (selectedDays.length === 0) {
+        setError({
+          status: true,
+          message: 'Please select at least one batch day.',
+        });
+        return;
+      } else if (!monthlyFees || isNaN(monthlyFees)) {
+        setError({
+          status: true,
+          message: 'Please enter a valid monthly fees.',
+        });
+        return;
+      } else if (!monthlyExamFees || isNaN(monthlyExamFees)) {
+        setError({
+          status: true,
+          message: 'Please enter a valid monthly exam fees.',
+        });
+        return;
+      } else {
+        console.log('Else part');
+        setError({
+          status: false,
+          message: '',
+        });
+      }
       const data = await batchService.createBatch({
         authToken: authToken,
         batchName: batchName,
@@ -251,22 +248,21 @@ const CreateBatch = () => {
   };
 
   const resetForm = () => {
-  setBatchName('');
-  setBatchStartYear(2025);
-  setBatchEndYear(2025);
-  setBatchStartMonth('Jan');
-  setBatchEndMonth('Jan');
-  setStartTime(null);
-  setEndTime(null);
-  setSelectedClasses([]);
-  setSelectedSubjects([]);
-  setSelectedBoards([]);
-  setSelectedLanguage([]);
-  setSelectedDays([]);
-  setMonthlyFees('');
-  setMonthlyExamFees('');
-};
-
+    setBatchName('');
+    setBatchStartYear(2025);
+    setBatchEndYear(2025);
+    setBatchStartMonth('Jan');
+    setBatchEndMonth('Jan');
+    setStartTime(null);
+    setEndTime(null);
+    setSelectedClasses([]);
+    setSelectedSubjects([]);
+    setSelectedBoards([]);
+    setSelectedLanguage([]);
+    setSelectedDays([]);
+    setMonthlyFees('');
+    setMonthlyExamFees('');
+  };
 
   const renderBottomSheetContent = useCallback(() => {
     switch (bottomSheetOpen.target) {
@@ -479,7 +475,7 @@ const CreateBatch = () => {
           ref={bottomSheetRef}
           snapPoints={['70%']}
           Component={renderBottomSheetContent()}
-          duration={100}
+          duration={300}
         />
       </View>
     </Layout>

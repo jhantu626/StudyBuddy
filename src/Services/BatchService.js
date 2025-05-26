@@ -1,11 +1,11 @@
-// import { API_URL } from '@env';
+import { API_URL } from '@env';
 
 import axios from 'axios';
 
 class BatchService {
   constructor() {
-    this.baseUrl = process.env.API_URL + 'api/v1';
-    // this.baseUrl = API_URL+"api/v1";
+    // this.baseUrl = process.env.API_URL + 'api/v1';
+    this.baseUrl = API_URL+"api/v1";
   }
 
   // Create a batch
@@ -72,6 +72,23 @@ class BatchService {
       return data;
     } catch (error) {
       console.log('error', error);
+    }
+  }
+
+  // Deactivate a batch
+  async deactivateBatch({authToken, batchId}) {
+    const uri = `${this.baseUrl}/batch/${batchId}`;
+    try {
+      const response = await axios.delete(uri, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      const data = await error.response.data;
+      return data;
     }
   }
 }

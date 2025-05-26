@@ -3,6 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {
   AuthHome,
   Batch,
+  CreateBatch,
   Home,
   Login,
   Notes,
@@ -21,7 +22,6 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {colors} from './utils/colors';
 import StudentStack from './Screens/App/Students/StudenStack';
-import BatchStack from './Screens/App/Batch/BatchStack';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -45,10 +45,25 @@ const App = () => {
     );
   };
 
+  const BatchStack = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName="Batch"
+        screenOptions={{
+          headerShown: false,
+          animation: 'slide_from_right'
+        }}
+        >
+        <Stack.Screen name="Batch" component={Batch} />
+        <Stack.Screen name="CreateBatch" component={CreateBatch} />
+      </Stack.Navigator>
+    );
+  };
+
   const AppStack = () => {
     return (
       <Tab.Navigator
-        initialRouteName="Batch"
+        initialRouteName="Home"
         backBehavior="history"
         screenOptions={{
           tabBarStyle: {

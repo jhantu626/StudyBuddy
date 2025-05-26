@@ -8,7 +8,7 @@ import {
 import React, {useCallback, useEffect, useLayoutEffect} from 'react';
 import Layout from '../Layout/Layout';
 import MainHeader from '../../../components/Headers/MainHeader';
-import {BatchCard} from '../../../components';
+import {BatchCard, Loader} from '../../../components';
 import {fonts} from '../../../utils/fonts';
 import {colors} from '../../../utils/colors';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
@@ -26,6 +26,7 @@ const Batch = () => {
     try {
       const data = await batchService.getAllBatches({authToken});
       setBatches(data);
+      console.log('Fetched batches:', data);
     } catch (error) {
       console.error('Error fetching batches:', error);
     } finally {
@@ -54,17 +55,26 @@ const Batch = () => {
           <BatchCard/>          
           <BatchCard/>          
       </ScrollView> */}
-      <FlatList
-        contentContainerStyle={styles.container}
-        showsVerticalScrollIndicator={false}
-        style={{flexGrow: 1}}
-        refreshing={loading}
-        data={batches}
-        keyExtractor={(item, index) => `batch-${index}`}
-        renderItem={({item, index}) => (
-          <BatchCard batch={item} key={`batch-card-${index}`} />
-        )}
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <FlatList
+          contentContainerStyle={styles.container}
+          showsVerticalScrollIndicator={false}
+          style={{flexGrow: 1}}
+          refreshing={loading}
+          data={batches}
+          keyExtractor={(item, index) => `batch-${index}`}
+          renderItem={({item, index}) => (
+            <BatchCard
+              batch={item}
+              key={`batch-card-${index}`}
+              authToken={authToken}
+              reloadBatches={fetchBatches}
+            />
+          )}
+        />
+      )}
       <TouchableOpacity
         style={styles.floatingBtn}
         onPress={() => {

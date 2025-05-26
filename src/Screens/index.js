@@ -17,6 +17,7 @@ import Notes from './App/Notes/Notes';
 
 // Batch
 import Batch from './App/Batch/Batch';
+import CreateBatch from './App/Batch/CreateBatch';
 
 // Students
 import Students from './App/Students/Students';
@@ -36,4 +37,5 @@ export {
   Batch,
   Students,
   Account,
+  CreateBatch,
 };

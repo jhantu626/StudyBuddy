@@ -30,6 +30,9 @@ import AddNotes from './Forms/AddNotes';
 import HorizontalSelector from './Selectors/HorizontalSelector';
 import FilterSelecter from './Selectors/FilterSelecter';
 
+// Loader
+import Loader from './Loader/Loader';
+
 export {
   PrimaryHeader,
   AuthCarousel,
@@ -49,4 +52,5 @@ export {
   TimeInput,
   MultiSelectDropdownInput,
   InrInput,
+  Loader,
 };
