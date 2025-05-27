@@ -1,4 +1,11 @@
-import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Alert,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  UIManager,
+  View,
+} from 'react-native';
 import React from 'react';
 import {colors} from '../../utils/colors';
 import AntDesign from 'react-native-vector-icons/AntDesign';
@@ -9,14 +16,19 @@ import {convertTo12Hour} from '../../utils/helper';
 import {months, monthsByKey} from '../../utils/data';
 import {batchService} from '../../Services/BatchService';
 import Toast from 'react-native-toast-message';
+import CustomAlert from './CustomAlert';
 
 const BatchCard = ({batch, authToken, reloadBatches}) => {
-  const handleDelete = async ({id}) => {
+  const [isAlertVisible, setIsAlertVisible] = React.useState({
+    status: false,
+    position: {x: 0, y: 0},
+  });
+  const handleDelete = async () => {
     try {
-      console.log('Deleting batch with id:', id);
+      console.log('Deleting batch with id:', batch.id);
       const data = await batchService.deactivateBatch({
         authToken: authToken,
-        batchId: id,
+        batchId: batch.id,
       });
       console.log(data);
 
@@ -42,25 +54,15 @@ const BatchCard = ({batch, authToken, reloadBatches}) => {
         <View style={styles.btnCOntainer}>
           <TouchableOpacity
             style={styles.deleteBtn}
-            onPress={() => {
-              Alert.alert(
-                'Delete Batch',
-                'Are you sure you want to delete this batch?',
-                [
-                  {
-                    text: 'Cancel',
-                    style: 'cancel',
-                  },
-                  {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: () => {
-                      handleDelete({id: batch?.id});
-                    },
-                  },
-                ],
-                {cancelable: true},
-              );
+            onPress={event => {
+              console.log('Delete button pressed for batch:', batch?.id);
+              setIsAlertVisible({
+                status: true,
+                position: {
+                  x: event.nativeEvent.pageX,
+                  y: event.nativeEvent.pageY,
+                },
+              });
             }}>
             <AntDesign name="delete" color={'#fff'} size={10} />
           </TouchableOpacity>
@@ -126,6 +128,19 @@ const BatchCard = ({batch, authToken, reloadBatches}) => {
           value={batch?.monthlyExamFees || 'N/A'}
         />
       </View>
+      <CustomAlert
+        closeOnOutsideClick={true}
+        visible={isAlertVisible.status}
+        startPosition={isAlertVisible.position}
+        onCancel={() => {
+          setIsAlertVisible({
+            status: false,
+          });
+        }}
+        onDelete={handleDelete}
+        text1={'Delete Batch'}
+        text2={'Are you sure you want to delete this batch?'}
+      />
     </View>
   );
 };
