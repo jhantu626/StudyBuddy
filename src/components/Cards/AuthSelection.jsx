@@ -43,10 +43,15 @@ const AuthSelection = ({
   );
 
   const isSelected = useCallback(
-    item => selectedItems.some(selected => selected.id === item.id),
+    item => {
+      if (!Array.isArray(selectedItems)) {
+        console.warn('selectedItems is not an array:', selectedItems);
+        return false; // or handle as needed
+      }
+      return selectedItems.some(selected => selected.id === item.id);
+    },
     [selectedItems],
   );
-
   const renderIcon = useCallback(
     item => {
       const color = isSelected(item) ? colors.primary : colors.text;

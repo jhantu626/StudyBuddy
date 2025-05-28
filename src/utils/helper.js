@@ -51,11 +51,12 @@ function isValidBatchName(name) {
 }
 
 function convertTo24HourFormat(time12h) {
-  // Replace any unusual whitespace characters (like U+202F or U+00A0) with a regular space
+  // Replace unusual whitespace with a regular space and trim
   time12h = time12h.replace(/[\u202F\u00A0]/g, ' ').trim();
 
   const [time, modifier] = time12h.split(' ');
-  let [hours, minutes, seconds] = time.split(':');
+
+  let [hours, minutes, seconds = "00"] = time.split(':');  // default seconds to "00" if missing
 
   hours = parseInt(hours, 10);
 
@@ -67,9 +68,12 @@ function convertTo24HourFormat(time12h) {
 
   // Pad with leading zeros
   hours = String(hours).padStart(2, '0');
+  minutes = String(minutes).padStart(2, '0');
+  seconds = String(seconds).padStart(2, '0');
 
   return `${hours}:${minutes}:${seconds}`;
 }
+
 
 function convertTo12Hour(time24) {
   const [hourStr, minute] = time24.split(':');

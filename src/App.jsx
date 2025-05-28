@@ -63,7 +63,7 @@ const App = () => {
   const AppStack = () => {
     return (
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="Batch"
         backBehavior="history"
         screenOptions={{
           tabBarStyle: {

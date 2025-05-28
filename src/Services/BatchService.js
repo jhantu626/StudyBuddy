@@ -59,6 +59,56 @@ class BatchService {
     }
   }
 
+  async updateBatch({
+    authToken,
+    id,
+    batchName,
+    startYear,
+    endYear,
+    startMonth,
+    endMonth,
+    startTime,
+    endTime,
+    days,
+    monthlyFees,
+    monthlyExamFees,
+    board,
+    language,
+    subjects,
+    classes,
+  }) {
+    const uri=`${this.baseUrl}/batch`
+    const payload = {
+      id: id,
+      name: batchName,
+      startYear: startYear,
+      endYear: endYear,
+      startMonth: startMonth,
+      endMonth: endMonth,
+      startTime: startTime,
+      endTime: endTime,
+      days: days,
+      monthlyFees: monthlyFees,
+      monthlyExamFees: monthlyExamFees,
+      board: board,
+      language: language,
+      subjects: subjects,
+      classes: classes,
+    };
+    try {
+      const response=await axios.patch(uri,payload,{
+        headers: {
+          Authorization: `Bearer ${authToken}`
+        }
+      })
+      const data=await response.data;
+      return data;
+    } catch (error) {
+      const data=await error.response.data;
+      return data;
+    }
+  }
+
   // Get all batches
   async getAllBatches({authToken}) {
     const uri = `${this.baseUrl}/batch`;

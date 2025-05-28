@@ -24,13 +24,21 @@ import {colors} from '../../../utils/colors';
 import CommonBottomSheet from '../../../components/BottomSheets/CommonBottomSheet';
 import {teacherService} from '../../../Services/TeacherService';
 import {useAuth} from '../../../Contexts/AuthContext';
-import {convertTo24HourFormat, isValidBatchName} from '../../../utils/helper';
+import {
+  convertTo12Hour,
+  convertTo24HourFormat,
+  isValidBatchName,
+} from '../../../utils/helper';
 import {batchService} from '../../../Services/BatchService';
 import Toast from 'react-native-toast-message';
 import {toastConfig} from '../../../utils/ToastConfig';
+import {useNavigation, useRoute} from '@react-navigation/native';
 
 const CreateBatch = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
   const {authToken} = useAuth();
+  const mode = route.params?.batchData?.mode || 'CREATE';
   // Data
   const [bottomSheetOpen, setBottomSheetOpen] = useState({
     status: false,
@@ -42,20 +50,60 @@ const CreateBatch = () => {
   const [subjectOptions, setSubjectOptions] = useState([]);
 
   // State Variables
-  const [batchName, setBatchName] = useState('');
-  const [batchStartYear, setBatchStartYear] = useState(2025);
-  const [batchEndYear, setBatchEndYear] = useState(2025);
-  const [batchStartMonth, setBatchStartMonth] = useState('Jan');
-  const [batchEndMonth, setBatchEndMonth] = useState('Jan');
-  const [startTime, setStartTime] = useState(null);
-  const [endTime, setEndTime] = useState(null);
-  const [selectedClasses, setSelectedClasses] = useState([]);
-  const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [selectedBoards, setSelectedBoards] = useState([]);
-  const [selectedLanguage, setSelectedLanguage] = useState([]);
-  const [selectedDays, setSelectedDays] = useState([]);
-  const [monthlyFees, setMonthlyFees] = useState('');
-  const [monthlyExamFees, setMonthlyExamFees] = useState('');
+  const [batchName, setBatchName] = useState(
+    route?.params?.batchData?.name || '',
+  );
+  const [batchStartYear, setBatchStartYear] = useState(
+    route?.params?.batchData?.startYear || 2025,
+  );
+  const [batchEndYear, setBatchEndYear] = useState(
+    route?.params?.batchData?.endYear || 2025,
+  );
+  const [batchStartMonth, setBatchStartMonth] = useState(
+    route?.params?.batchData?.startMonth || 'Jan',
+  );
+  const [batchEndMonth, setBatchEndMonth] = useState(
+    route?.params?.batchData?.endMonth || 'Jan',
+  );
+  const [startTime, setStartTime] = useState(
+    (route?.params?.batchData?.startTime &&
+      convertTo12Hour(route?.params?.batchData?.startTime)) ||
+      null,
+  );
+  const [endTime, setEndTime] = useState(
+    (route?.params?.batchData?.startTime &&
+      convertTo12Hour(route?.params?.batchData?.endTime)) ||
+      null,
+  );
+  const [selectedClasses, setSelectedClasses] = useState(
+    route?.params?.batchData?.classes || [],
+  );
+  const [selectedSubjects, setSelectedSubjects] = useState(
+    route?.params?.batchData?.subjects || [],
+  );
+  const [selectedBoards, setSelectedBoards] = useState(
+    (route?.params?.batchData?.board && [route?.params?.batchData?.board]) ||
+      [],
+  );
+  const [selectedLanguage, setSelectedLanguage] = useState(
+    (route?.params?.batchData?.language && [
+      route?.params?.batchData?.language,
+    ]) ||
+      [],
+  );
+  const [selectedDays, setSelectedDays] = useState(
+    route?.params?.batchData?.days || [],
+  );
+  const [monthlyFees, setMonthlyFees] = useState(
+    (route?.params?.batchData?.monthlyFees &&
+      route?.params?.batchData?.monthlyFees.toString()) ||
+      '',
+  );
+  const [monthlyExamFees, setMonthlyExamFees] = useState(
+    (route?.params?.batchData?.monthlyExamFees &&
+      route?.params?.batchData?.monthlyExamFees.toString()) ||
+      '',
+  );
   // Error State
   const [error, setError] = useState({
     status: false,
@@ -110,6 +158,7 @@ const CreateBatch = () => {
 
   // Default UseEffect
   useEffect(() => {
+    console.log('route data ', JSON.stringify(route?.params?.batchData));
     const currentDate = new Date();
     setBatchStartYear(currentDate.getFullYear());
     setBatchStartMonth(findMonthByValue(currentDate.getMonth() + 1));
@@ -202,37 +251,63 @@ const CreateBatch = () => {
         });
         return;
       } else {
-        console.log('Else part');
         setError({
           status: false,
           message: '',
         });
       }
-      const data = await batchService.createBatch({
-        authToken: authToken,
-        batchName: batchName,
-        startYear: batchStartYear,
-        endYear: batchEndYear,
-        startMonth: months[batchStartMonth],
-        endMonth: months[batchEndMonth],
-        startTime: convertTo24HourFormat(startTime),
-        endTime: convertTo24HourFormat(endTime),
-        days: selectedDays,
-        monthlyFees: monthlyFees,
-        monthlyExamFees: monthlyExamFees,
-        board: selectedBoards[0],
-        language: selectedLanguage[0],
-        subjects: selectedSubjects,
-        classes: selectedClasses,
-      });
-      console.log('response data ', data);
-      if (data?.status) {
+      let data = {};
+      if (mode === 'EDIT') {
+        data = await batchService.updateBatch({
+          authToken: authToken,
+          id: route?.params?.batchData?.id,
+          batchName: batchName,
+          startYear: batchStartYear,
+          endYear: batchEndYear,
+          startMonth: months[batchStartMonth],
+          endMonth: months[batchEndMonth],
+          startTime: convertTo24HourFormat(startTime),
+          endTime: convertTo24HourFormat(endTime),
+          days: selectedDays,
+          monthlyFees: monthlyFees,
+          monthlyExamFees: monthlyExamFees,
+          board: selectedBoards[0],
+          language: selectedLanguage[0],
+          subjects: selectedSubjects,
+          classes: selectedClasses,
+        });
+        console.log(data);
+      } else {
+        data = await batchService.createBatch({
+          authToken: authToken,
+          batchName: batchName,
+          startYear: batchStartYear,
+          endYear: batchEndYear,
+          startMonth: months[batchStartMonth],
+          endMonth: months[batchEndMonth],
+          startTime: convertTo24HourFormat(startTime),
+          endTime: convertTo24HourFormat(endTime),
+          days: selectedDays,
+          monthlyFees: monthlyFees,
+          monthlyExamFees: monthlyExamFees,
+          board: selectedBoards[0],
+          language: selectedLanguage[0],
+          subjects: selectedSubjects,
+          classes: selectedClasses,
+        });
         resetForm();
+      }
+      if (data?.status) {
         Toast.show({
           text1: data?.message,
           type: 'success',
           visibilityTime: 3000,
         });
+        setTimeout(() => {
+          if (navigation.canGoBack()) {
+            navigation.goBack();
+          }
+        }, 1000);
       } else {
         Toast.show({
           text1: data.message,
@@ -319,7 +394,7 @@ const CreateBatch = () => {
     <Layout>
       <MainHeader
         isBackable={true}
-        title="Create Batch"
+        title={`${mode === 'EDIT' ? 'Edit' : 'Create'} Batch`}
         isSelectableValues={false}
       />
       <View style={styles.container}>
@@ -465,7 +540,9 @@ const CreateBatch = () => {
             {loading ? (
               <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text style={styles.btnText}>CREATE</Text>
+              <Text style={styles.btnText}>
+                {mode === 'EDIT' ? 'UPDATE' : 'CREATE'}
+              </Text>
             )}
           </TouchableOpacity>
         </ScrollView>

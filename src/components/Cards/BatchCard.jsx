@@ -17,8 +17,10 @@ import {months, monthsByKey} from '../../utils/data';
 import {batchService} from '../../Services/BatchService';
 import Toast from 'react-native-toast-message';
 import CustomAlert from './CustomAlert';
+import {useNavigation} from '@react-navigation/native';
 
 const BatchCard = ({batch, authToken, reloadBatches}) => {
+  const navigation = useNavigation();
   const [isAlertVisible, setIsAlertVisible] = React.useState({
     status: false,
     position: {x: 0, y: 0},
@@ -47,6 +49,15 @@ const BatchCard = ({batch, authToken, reloadBatches}) => {
     } catch (error) {}
   };
 
+  const handleEdit = () => {
+    navigation.navigate('CreateBatch',{
+      batchData: {
+        mode: 'EDIT',
+        ...batch
+      }
+    });
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.topContainer}>
@@ -66,7 +77,7 @@ const BatchCard = ({batch, authToken, reloadBatches}) => {
             }}>
             <AntDesign name="delete" color={'#fff'} size={10} />
           </TouchableOpacity>
-          <TouchableOpacity style={styles.editBtn}>
+          <TouchableOpacity style={styles.editBtn} onPress={handleEdit}>
             <AntDesign name="edit" color={'#000'} size={10} />
           </TouchableOpacity>
         </View>

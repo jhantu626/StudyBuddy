@@ -85,7 +85,7 @@ const MultiSelectDropdownInput = ({
           {selectedValues.length > 0 ? (
             <View style={styles.valuesContainer}>
               {selectedValues.map((item, index) => (
-                <View key={index} style={styles.selectedTag}>
+                <View key={index+"multiselect-item"} style={styles.selectedTag}>
                   <Text style={styles.selectedText}>{item}</Text>
                 </View>
               ))}
