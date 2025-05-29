@@ -53,7 +53,7 @@ const DefaultInput = ({
         },
         bgColor !== null && {borderColor: bgColor + 50},
       ]}>
-      <Animated.Text style={labelStyle}>{labelText}</Animated.Text>
+      <Animated.Text style={[labelStyle,bgColor !== null && {color: bgColor}]}>{labelText}</Animated.Text>
       <TextInput
         value={value}
         onChangeText={text => {

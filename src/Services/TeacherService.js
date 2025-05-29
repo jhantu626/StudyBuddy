@@ -1,10 +1,10 @@
 import axios from 'axios';
-import {API_URL} from '@env';
+// import {API_URL} from '@env';
 
 class TeacherService {
   constructor() {
-    // this.baseUrl = process.env.API_URL;
-    this.baseUrl = API_URL;
+    this.baseUrl = process.env.API_URL;
+    // this.baseUrl = API_URL;
   }
 
   async teacherExistence({mobileNumber}) {
@@ -74,6 +74,22 @@ class TeacherService {
   // For all languages belongs to teacher
   async getAllLanguages({authToken}) {
     const uri = `${this.baseUrl}api/v1/teacher/languages`;
+    try {
+      const response = await axios.get(uri, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      const data = await response.data;
+      return data;
+    } catch (error) {
+      const data = await error.response.data;
+      return data;
+    }
+  }
+
+  async getAllBatches({authToken}) {
+    const uri = `${this.baseUrl}api/v1/teacher/batches`;
     try {
       const response = await axios.get(uri, {
         headers: {

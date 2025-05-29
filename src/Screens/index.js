@@ -21,6 +21,7 @@ import CreateBatch from './App/Batch/CreateBatch';
 
 // Students
 import Students from './App/Students/Students';
+import StudentRegistration from './App/Students/StudentRegistration';
 
 // Account
 import Account from './App/Account/Account';
@@ -38,4 +39,5 @@ export {
   Students,
   Account,
   CreateBatch,
+  StudentRegistration
 };

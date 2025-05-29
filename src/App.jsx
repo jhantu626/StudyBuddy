@@ -11,6 +11,8 @@ import {
   Otp,
   Register,
   SplashScreen,
+  StudentRegistration,
+  Students,
 } from './Screens';
 import {createStackNavigator} from '@react-navigation/stack';
 import AuthProvider, {useAuth} from './Contexts/AuthContext';
@@ -21,7 +23,6 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import {colors} from './utils/colors';
-import StudentStack from './Screens/App/Students/StudenStack';
 
 const App = () => {
   const Stack = createStackNavigator();
@@ -45,17 +46,34 @@ const App = () => {
     );
   };
 
+  // Batch Stack
   const BatchStack = () => {
     return (
       <Stack.Navigator
         initialRouteName="Batch"
         screenOptions={{
           headerShown: false,
-          animation: 'slide_from_right'
-        }}
-        >
+          animation: 'slide_from_right',
+        }}>
         <Stack.Screen name="Batch" component={Batch} />
         <Stack.Screen name="CreateBatch" component={CreateBatch} />
+      </Stack.Navigator>
+    );
+  };
+
+  // Student Stack
+  const StudentStack = () => {
+    return (
+      <Stack.Navigator
+        initialRouteName="StudentRegistration"
+        screenOptions={{
+          headerShown: false,
+        }}>
+        <Stack.Screen name="Student" component={Students} />
+        <Stack.Screen
+          name="StudentRegistration"
+          component={StudentRegistration}
+        />
       </Stack.Navigator>
     );
   };
@@ -63,7 +81,7 @@ const App = () => {
   const AppStack = () => {
     return (
       <Tab.Navigator
-        initialRouteName="Batch"
+        initialRouteName="Student"
         backBehavior="history"
         screenOptions={{
           tabBarStyle: {

@@ -17,6 +17,7 @@ import {
   InrInput,
   MultiSelectDropdownInput,
   TimeInput,
+  YearMonth,
 } from '../../../components';
 import {days, months, years} from '../../../utils/data';
 import {fonts} from '../../../utils/fonts';
@@ -112,14 +113,14 @@ const CreateBatch = () => {
   // Loading State
   const [loading, setLoading] = useState(false);
 
-  const YearMonth = ({year, month}) => {
-    return (
-      <View style={styles.yearMonthContainer}>
-        <View style={styles.yearMonthBox}>{year}</View>
-        <View style={styles.yearMonthBox}>{month}</View>
-      </View>
-    );
-  };
+  // const YearMonth = ({year, month}) => {
+  //   return (
+  //     <View style={styles.yearMonthContainer}>
+  //       <View style={styles.yearMonthBox}>{year}</View>
+  //       <View style={styles.yearMonthBox}>{month}</View>
+  //     </View>
+  //   );
+  // };
   // BottomSheet Referance State
   const bottomSheetRef = useRef(null);
 

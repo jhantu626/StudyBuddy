@@ -1,11 +1,11 @@
-// import { API_URL } from '@env';
+import { API_URL } from '@env';
 
 import axios from 'axios';
 
 class BatchService {
   constructor() {
-    this.baseUrl = process.env.API_URL + 'api/v1';
-    // this.baseUrl = API_URL+"api/v1";
+    // this.baseUrl = process.env.API_URL + 'api/v1';
+    this.baseUrl = API_URL+"api/v1";
   }
 
   // Create a batch

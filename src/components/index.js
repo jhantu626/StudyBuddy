@@ -12,6 +12,7 @@ import UploadInput from './Inputs/UploadInput';
 import TimeInput from './Inputs/TimeInput';
 import MultiSelectDropdownInput from './Inputs/MultiSelectDropdownInput';
 import InrInput from './Inputs/InrInput';
+import YearMonth from './Inputs/YearMonth';
 
 // Cards
 import AuthSelection from './Cards/AuthSelection';
@@ -53,4 +54,5 @@ export {
   MultiSelectDropdownInput,
   InrInput,
   Loader,
+  YearMonth
 };
