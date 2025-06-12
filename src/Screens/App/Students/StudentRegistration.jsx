@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -23,6 +24,12 @@ import CommonBottomSheet from '../../../components/BottomSheets/CommonBottomShee
 import {useAuth} from '../../../Contexts/AuthContext';
 import {teacherService} from '../../../Services/TeacherService';
 import {batchService} from '../../../Services/BatchService';
+import {
+  getMonthOptionsStudentRegistration,
+  isValidIndianMobile,
+  validateName,
+} from '../../../utils/helper';
+import {studentService} from '../../../Services/StudentService';
 
 const StudentRegistration = () => {
   const {authToken} = useAuth();
@@ -30,6 +37,7 @@ const StudentRegistration = () => {
   const [batchOptions, setBatchOptions] = useState([]);
   const [classOptions, setClassOptions] = useState([]);
   const [joiningYearOptions, setJoiningYearOptions] = useState([]);
+  const [joiningMonthOptions, setJoiningMonthOptions] = useState([]);
 
   // State Variables
   const [guardianName, setGuardianName] = useState('');
@@ -63,6 +71,7 @@ const StudentRegistration = () => {
     classError: null,
     batchError: null,
   });
+  const [isStudentExist, setIsStudentExist] = useState(false);
 
   // Ref
   const bottomSheetRef = useRef(null);
@@ -74,7 +83,6 @@ const StudentRegistration = () => {
   const fetchDetails = async () => {
     try {
       const data = await batchService.getAllBatches({authToken: authToken});
-      console.log('Teacher Batches ', data);
       setBatchOptions(data);
     } catch (error) {
       console.error(error);
@@ -88,7 +96,6 @@ const StudentRegistration = () => {
 
   // For Bottom Sheet
   useEffect(() => {
-    console.log('Bottom sheet', bottomSheetOpen);
     if (bottomSheetOpen.status) {
       bottomSheetRef.current.snapToIndex(0);
     }
@@ -105,15 +112,27 @@ const StudentRegistration = () => {
         i <= selectedBatch[0]?.endYear;
         i++
       ) {
-        console.log(i)
         arr.push(i);
       }
-      console.log(arr)
       setJoiningYearOptions(arr);
-      setJoiningYear(selectedBatch[0]?.startYear);
-      console.log('Selected Batch changed:', JSON.stringify(selectedBatch[0]));
+      setJoiningYear(prev => selectedBatch[0]?.startYear);
+      console.log('Selected Batch changed:', selectedBatch[0]);
+      // for(int i=selectedBatch[0].joingIn)
     }
   }, [selectedBatch]);
+
+  // For Year Change
+  useEffect(() => {
+    const monthOptions = getMonthOptionsStudentRegistration(
+      joiningYear,
+      selectedBatch[0]?.startYear,
+      selectedBatch[0]?.endYear,
+      selectedBatch[0]?.startMonth,
+      selectedBatch[0]?.endMonth,
+    );
+    setJoiningMonthOptions(monthOptions);
+    setJoiningMonth('');
+  }, [joiningYearOptions, joiningYear]);
 
   const renderBottomSheetContent = useCallback(() => {
     switch (bottomSheetOpen.target) {
@@ -140,7 +159,112 @@ const StudentRegistration = () => {
     }
   }, [bottomSheetOpen.target, selectedBatch, selectedClass]);
 
+  useEffect(() => {
+    if (!isValidIndianMobile(mobile) && mobile.length > 0) {
+      setError(prev => ({...prev, mobileError: 'Invalid Mobile Number'}));
+    } else {
+      setError(prev => ({...prev, mobileError: null}));
+      if (mobile.length === 10) {
+        console.log('yes calling');
+        checkStudentExist();
+      }
+    }
+  }, [mobile]);
+
+  // get student is exist or not
+  const checkStudentExist = async () => {
+    try {
+      const data = await studentService.isStudentExist({
+        mobile: mobile,
+        authToken: authToken,
+      });
+      // setIsStudentExist(data);
+      console.log('student exist ', data);
+      setIsStudentExist(data?.status);
+      if(data?.status){
+        const studentData=await studentService.getStudentByMobileNumber({mobile:mobile,authToken:authToken})
+        console.log("studentData ",studentData)
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  // Validate Form
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validate Student Name
+    const studentNameValidation = validateName(studentName);
+    if (studentNameValidation.status) {
+      newErrors.studentNameError = studentNameValidation.msg;
+    }
+
+    // Validate Guardian Name
+    const guardianNameValidation = validateName(guardianName);
+    if (guardianNameValidation.status) {
+      newErrors.guardianNameError = guardianNameValidation.msg;
+    }
+
+    // Validate Student Mobile
+    if (!isValidIndianMobile(mobile)) {
+      newErrors.mobileError = 'Invalid student mobile number.';
+    }
+
+    // Validate Guardian Mobile
+    if (!isValidIndianMobile(guardianMobile)) {
+      newErrors.guardianMobileError = 'Invalid guardian mobile number.';
+    }
+
+    // Validate Pincode
+    if (!/^\d{6}$/.test(pincode)) {
+      newErrors.pincodeError = 'Invalid pincode. Must be 6 digits.';
+    }
+
+    // Validate District
+    if (!district.trim()) {
+      newErrors.districtError = 'District is required.';
+    }
+
+    // Validate Address
+    if (!address.trim()) {
+      newErrors.addressError = 'Address is required.';
+    }
+
+    // Validate Class
+    if (!selectedClass || selectedClass.length === 0) {
+      newErrors.classError = 'Please select at least one class.';
+    }
+
+    // Validate Batch
+    if (!selectedBatch || selectedBatch.length === 0) {
+      newErrors.batchError = 'Please select at least one batch.';
+    }
+
+    setError(newErrors);
+
+    return Object.keys(newErrors).length === 0; // true means form is valid
+  };
+
   const handleSubmit = () => {
+    if (validateForm()) {
+      console.log({
+        guardianName,
+        guardianMobile,
+        pincode,
+        district,
+        state,
+        address,
+        mobile,
+        studentName,
+        gender,
+        selectedClass,
+        selectedBatch,
+        joiningYear,
+        joiningMonth,
+      });
+    }
+
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(prev => false);
@@ -152,6 +276,7 @@ const StudentRegistration = () => {
       <GestureHandlerRootView>
         <MainHeader title="Student Registration" isSelectableValues={false} />
         <ScrollView
+          nestedScrollEnabled={true}
           style={{
             flex: 1,
             paddingHorizontal: 10,
@@ -163,6 +288,8 @@ const StudentRegistration = () => {
               value={mobile}
               setValue={setMobile}
               bgColor={error.mobileError && colors.error}
+              keyboardType="phone-pad"
+              maxLength={10}
             />
             {error.mobileError && (
               <Text style={styles.errorText}>{error.mobileError}</Text>
@@ -172,6 +299,7 @@ const StudentRegistration = () => {
               value={studentName}
               setValue={setStudentName}
               bgColor={error.studentNameError && colors.error}
+              disabled={isStudentExist}
             />
             {error.studentNameError && (
               <Text style={styles.errorText}>{error.studentNameError}</Text>
@@ -187,6 +315,7 @@ const StudentRegistration = () => {
               value={guardianName}
               setValue={setGuardianName}
               bgColor={error.guardianNameError && colors.error}
+              disabled={isStudentExist}
             />
             {error.guardianNameError && (
               <Text style={styles.errorText}>{error.guardianNameError}</Text>
@@ -238,6 +367,7 @@ const StudentRegistration = () => {
                   labelText={'Joining Month'}
                   value={joiningMonth}
                   setValue={setJoiningMonth}
+                  options={joiningMonthOptions}
                 />
               }
             />

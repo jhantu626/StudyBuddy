@@ -17,6 +17,8 @@ const DropdownInput = ({
   labelText,
   options = [],
   isBg = false,
+  height = 50, // Default height if not provided
+  maxDropdownHeight = 200, // Default max dropdown height
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
@@ -52,7 +54,7 @@ const DropdownInput = ({
     left: 15,
     top: labelAnim.interpolate({
       inputRange: [0, 1],
-      outputRange: [15, -8],
+      outputRange: [height / 2 - 10, -8], // Adjusted based on height prop
     }),
     fontSize: labelAnim.interpolate({
       inputRange: [0, 1],
@@ -69,12 +71,10 @@ const DropdownInput = ({
   };
 
   const optionHeight = 44;
-  const maxDropdownHeight = 400;
   const calculatedHeight = options.length * optionHeight;
   const dropdownHeight = dropdownAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, Math.min(calculatedHeight, maxDropdownHeight)], // CHANGED: Cap height at maxDropdownHeight
-    // ORIGINAL: outputRange: [0, options.length > 0 ? (options.length - 1) * optionHeight + lastOptionHeight : 0],
+    outputRange: [0, Math.min(calculatedHeight, maxDropdownHeight)],
   });
 
   const dropdownOpacity = dropdownAnim.interpolate({
@@ -91,7 +91,11 @@ const DropdownInput = ({
   return (
     <View style={styles.dropdownContainer}>
       <TouchableOpacity
-        style={[styles.container, isBg && {backgroundColor: '#D6F6FA'}]}
+        style={[
+          styles.container,
+          isBg && {backgroundColor: '#D6F6FA'},
+          {height: height}, // Use the height prop
+        ]}
         onPress={() => {
           setIsOpen(!isOpen);
           setIsFocused(true);
@@ -115,16 +119,16 @@ const DropdownInput = ({
           {
             height: dropdownHeight,
             opacity: dropdownOpacity,
-            // ADDED: Shadow properties for iOS and Android
             shadowColor: '#000',
             shadowOffset: {width: 0, height: 2},
             shadowOpacity: 0.25,
             shadowRadius: 3.84,
             elevation: 5,
+            top: height + 5, // Position below the input with proper spacing
           },
         ]}>
-        {/* ADDED: ScrollView to make options scrollable */}
         <ScrollView
+          nestedScrollEnabled={true}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{paddingBottom: 0}}>
           {options.map((option, index) => (
@@ -160,7 +164,6 @@ const styles = StyleSheet.create({
   },
   container: {
     width: '100%',
-    height: 50,
     borderWidth: 1,
     borderColor: colors.primary,
     borderRadius: 10,
@@ -180,7 +183,6 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     position: 'absolute',
-    top: 55,
     left: 0,
     right: 0,
     backgroundColor: '#fff',
@@ -188,7 +190,6 @@ const styles = StyleSheet.create({
     borderColor: colors.primary,
     borderRadius: 10,
     zIndex: 100,
-    // ORIGINAL: elevation: 5, // Moved to Animated.View style
     overflow: 'hidden',
   },
   optionItem: {
@@ -196,7 +197,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     borderBottomWidth: 1,
     borderBottomColor: '#f0f0f0',
-    height: 44, // Fixed height for all options
+    height: 44,
   },
   optionText: {
     fontFamily: fonts.medium,

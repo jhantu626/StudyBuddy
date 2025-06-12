@@ -1,3 +1,5 @@
+import {monthArr} from './data';
+
 const isValidIndianMobile = number => {
   // Remove country code or spaces
   const cleanedNumber = number.replace(/^\+91|^91|\s+/g, '');
@@ -56,7 +58,7 @@ function convertTo24HourFormat(time12h) {
 
   const [time, modifier] = time12h.split(' ');
 
-  let [hours, minutes, seconds = "00"] = time.split(':');  // default seconds to "00" if missing
+  let [hours, minutes, seconds = '00'] = time.split(':'); // default seconds to "00" if missing
 
   hours = parseInt(hours, 10);
 
@@ -74,7 +76,6 @@ function convertTo24HourFormat(time12h) {
   return `${hours}:${minutes}:${seconds}`;
 }
 
-
 function convertTo12Hour(time24) {
   const [hourStr, minute] = time24.split(':');
   let hour = parseInt(hourStr, 10);
@@ -85,10 +86,34 @@ function convertTo12Hour(time24) {
   return `${hour}:${minute} ${ampm}`;
 }
 
+function getMonthOptionsStudentRegistration(
+  selectedYear,
+  startYear,
+  endYear,
+  startMonth,
+  endMonth,
+) {
+  if (startYear === endYear) {
+    if (selectedYear === startYear) {
+      return monthArr.slice(startMonth - 1, endMonth);
+    } else {
+      return monthArr;
+    }
+  }
+  if (selectedYear === startYear) {
+    return monthArr.slice(startMonth - 1);
+  } else if (selectedYear === endYear) {
+    return monthArr.slice(0, endMonth);
+  } else {
+    return monthArr;
+  }
+}
+
 export {
   isValidIndianMobile,
   validateName,
   isValidBatchName,
   convertTo24HourFormat,
   convertTo12Hour,
+  getMonthOptionsStudentRegistration,
 };

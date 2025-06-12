@@ -12,6 +12,7 @@ const DefaultInput = ({
   maxLength = 35,
   keyboardType = 'ascii-capable',
   bgColor = null,
+  disabled = false,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const labelAnim = useRef(new Animated.Value(value ? 1 : 0)).current;
@@ -68,6 +69,7 @@ const DefaultInput = ({
         onBlur={() => setIsFocused(false)}
         keyboardType={keyboardType}
         maxLength={maxLength}
+        editable={!disabled}
       />
     </View>
   );
