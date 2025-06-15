@@ -18,6 +18,7 @@ const AuthSelection = ({
   isMultiSelect = true,
   iconName,
   placeholder = 'Search...',
+  isChangable = true,
 }) => {
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -28,6 +29,7 @@ const AuthSelection = ({
 
   const toggleSelection = useCallback(
     item => {
+      if (!isChangable) return;
       if (isMultiSelect) {
         setSelectedItems(prev => {
           const isSelected = prev.some(selected => selected.id === item.id);

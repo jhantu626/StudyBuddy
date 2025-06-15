@@ -4,6 +4,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -30,6 +31,7 @@ import {
   validateName,
 } from '../../../utils/helper';
 import {studentService} from '../../../Services/StudentService';
+import {MonthNumByMonth} from '../../../utils/data';
 
 const StudentRegistration = () => {
   const {authToken} = useAuth();
@@ -40,6 +42,7 @@ const StudentRegistration = () => {
   const [joiningMonthOptions, setJoiningMonthOptions] = useState([]);
 
   // State Variables
+  const [studentId, setStudentId] = useState('');
   const [guardianName, setGuardianName] = useState('');
   const [guardianMobile, setGuardianMobile] = useState('');
   const [pincode, setPincode] = useState('');
@@ -84,6 +87,7 @@ const StudentRegistration = () => {
     try {
       const data = await batchService.getAllBatches({authToken: authToken});
       setBatchOptions(data);
+      console.log('batch data', data);
     } catch (error) {
       console.error(error);
     }
@@ -105,7 +109,9 @@ const StudentRegistration = () => {
   useEffect(() => {
     if (selectedBatch.length > 0) {
       setClassOptions(selectedBatch[0]?.classes);
-      setSelectedClass([]);
+      if (!isStudentExist) {
+        setSelectedClass([]);
+      }
       let arr = [];
       for (
         let i = selectedBatch[0]?.startYear;
@@ -144,14 +150,21 @@ const StudentRegistration = () => {
             options={classOptions}
             selectedItems={selectedClass}
             setSelectedItems={setSelectedClass}
+            isChangable={!isStudentExist}
           />
         );
       case 'batch':
         return (
           <AuthSelection
             isMultiSelect={false}
-            placeholder="Select Subject"
-            options={batchOptions}
+            placeholder="Select Batch"
+            options={
+              isStudentExist
+                ? batchOptions.filter(item =>
+                    item.classes.some(cl => cl.id === selectedClass[0]?.id),
+                  )
+                : batchOptions
+            }
             selectedItems={selectedBatch}
             setSelectedItems={setSelectedBatch}
           />
@@ -165,7 +178,6 @@ const StudentRegistration = () => {
     } else {
       setError(prev => ({...prev, mobileError: null}));
       if (mobile.length === 10) {
-        console.log('yes calling');
         checkStudentExist();
       }
     }
@@ -174,6 +186,7 @@ const StudentRegistration = () => {
   // get student is exist or not
   const checkStudentExist = async () => {
     try {
+      console.log('inside the check Student Exist');
       const data = await studentService.isStudentExist({
         mobile: mobile,
         authToken: authToken,
@@ -181,9 +194,33 @@ const StudentRegistration = () => {
       // setIsStudentExist(data);
       console.log('student exist ', data);
       setIsStudentExist(data?.status);
-      if(data?.status){
-        const studentData=await studentService.getStudentByMobileNumber({mobile:mobile,authToken:authToken})
-        console.log("studentData ",studentData)
+      if (data?.status) {
+        const studentData = await studentService.getStudentByMobileNumber({
+          mobile: mobile,
+          authToken: authToken,
+        });
+        setStudentName(studentData?.name);
+        setGuardianName(studentData?.guardianName);
+        setGuardianMobile(studentData?.guardianPhone);
+        setGender(studentData?.gender);
+        setSelectedClass(prev => [studentData.joiningClass]);
+        setPincode(studentData?.pinCode);
+        setDistrict(studentData?.district);
+        setState(studentData?.state);
+        setAddress(studentData?.address);
+        setStudentId(studentData?.id);
+
+        console.log('studentData ', JSON.stringify(studentData));
+      } else {
+        setStudentName('');
+        setGuardianName('');
+        setGuardianMobile('');
+        setGender('');
+        setSelectedClass([]);
+        setPincode('');
+        setDistrict('');
+        setState('');
+        setAddress('');
       }
     } catch (error) {
       console.error(error);
@@ -242,33 +279,78 @@ const StudentRegistration = () => {
     }
 
     setError(newErrors);
+  
+    if(!joiningMonth){
+      ToastAndroid.show("Please select month", ToastAndroid.SHORT);
+      return false;
+    }
+
+    if(!joiningYear){
+      ToastAndroid.show("Please select year", ToastAndroid.SHORT);
+      return false;
+    }
 
     return Object.keys(newErrors).length === 0; // true means form is valid
   };
 
-  const handleSubmit = () => {
-    if (validateForm()) {
-      console.log({
-        guardianName,
-        guardianMobile,
-        pincode,
-        district,
-        state,
-        address,
-        mobile,
-        studentName,
-        gender,
-        selectedClass,
-        selectedBatch,
-        joiningYear,
-        joiningMonth,
-      });
+  const handleSubmit = async () => {
+    if(isStudentExist && validateForm()){
+      console.log("yes ok")
+      ToastAndroid.show("Student already exist", ToastAndroid.SHORT);
+      return;
     }
+    if (validateForm()) {
+      setIsLoading(true);
+      try {
+        console.log('JOingin month ', MonthNumByMonth[joiningMonth]);
+        const data = await studentService.createStudentWithoutProfilePic({
+          address: address,
+          batchId: selectedBatch[0]?.id,
+          district: district,
+          guardianName: guardianName,
+          guardianPhone: guardianMobile,
+          gender: gender,
+          joiningClass: selectedClass[0],
+          joiningMonth: MonthNumByMonth[joiningMonth],
+          joiningYear: joiningYear,
+          mobile: mobile,
+          name: studentName,
+          pinCode: pincode,
+          state: state,
+          authToken: authToken,
+        });
+        console.log('data', data);
+        if (data?.status) {
+          ToastAndroid.show(
+            'Student Registered Successfully',
+            ToastAndroid.LONG,
+          );
+          resetForm();
+        } else {
+          ToastAndroid.show('Something went wrong', ToastAndroid.LONG);
+        }
+      } catch (error) {
+        console.error('Error sutdent registration ', error);
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
 
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(prev => false);
-    }, 3000);
+  const resetForm = () => {
+    setGuardianName('');
+    setGuardianMobile('');
+    setPincode('');
+    setDistrict('');
+    setState('');
+    setAddress('');
+    setMobile('');
+    setStudentName('');
+    setGender('Male');
+    setSelectedClass([]);
+    setSelectedBatch([]);
+    setJoiningYear('');
+    setJoiningMonth('');
   };
 
   return (
@@ -325,6 +407,7 @@ const StudentRegistration = () => {
               value={guardianMobile}
               setValue={setGuardianMobile}
               bgColor={error.guardianMobileError && colors.error}
+              disabled={isStudentExist}
             />
             {error.guardianMobileError && (
               <Text style={styles.errorText}>{error.guardianMobileError}</Text>
@@ -377,6 +460,7 @@ const StudentRegistration = () => {
               setValue={setPincode}
               maxLength={6}
               bgColor={error.pincodeError && colors.error}
+              disabled={isStudentExist}
             />
             {error.pincodeError && (
               <Text style={styles.errorText}>{error.pincodeError}</Text>
@@ -386,6 +470,7 @@ const StudentRegistration = () => {
               value={district}
               setValue={setDistrict}
               bgColor={error.districtError && colors.error}
+              disabled={isStudentExist}
             />
             {error.districtError && (
               <Text style={styles.errorText}>{error.districtError}</Text>
@@ -395,6 +480,7 @@ const StudentRegistration = () => {
               value={state}
               setValue={setState}
               bgColor={error.stateError && colors.error}
+              disabled={isStudentExist}
             />
             {error.stateError && (
               <Text style={styles.errorText}>{error.stateError}</Text>
@@ -404,6 +490,7 @@ const StudentRegistration = () => {
               value={address}
               setValue={setAddress}
               bgColor={error.addressError && colors.error}
+              disabled={isStudentExist}
             />
             {error.addressError && (
               <Text style={styles.errorText}>{error.addressError}</Text>

@@ -96,6 +96,21 @@ const monthArr = [
   'DECEMBER',
 ];
 
+const MonthNumByMonth = {
+  JANUARY: 1,
+  FEBRUARY: 2,
+  MARCH: 3,
+  APRIL: 4,
+  MAY: 5,
+  JUNE: 6,
+  JULY: 7,
+  AUGUST: 8,
+  SEPTEMBER: 9,
+  OCTOBER: 10,
+  NOVEMBER: 11,
+  DECEMBER: 12,
+};
+
 const monthsByKey = {
   1: 'Jan',
   2: 'Feb',
@@ -137,4 +152,4 @@ const days = [
   'Sunday',
 ];
 
-export {notes, months, years, days, monthsByKey, monthsUpper, monthArr};
+export {notes, months, years, days, monthsByKey, monthsUpper, monthArr,MonthNumByMonth};

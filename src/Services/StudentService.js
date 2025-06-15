@@ -1,8 +1,12 @@
 import axios from 'axios';
+import { API_URL } from '../utils/config';
+// import {API_URL} from '@env';
 
 class StudentService {
   constructor() {
-    this.baseUrl = process.env.API_URL;
+    // this.baseUrl = process.env.API_URL;
+    // this.baseUrl = API_URL;
+    this.baseUrl = API_URL;
   }
 
   // Check Student By Mobile Number
@@ -55,7 +59,7 @@ class StudentService {
     address,
     pinCode,
     state,
-    district
+    district,
   }) {
     const uri = `${this.baseUrl}api/v1/student/registration-no-profile-pic?batchId=${batchId}&joiningYear=${joiningYear}&joiningMonth=${joiningMonth}`;
     const payload = {
@@ -64,7 +68,6 @@ class StudentService {
       guardianName: guardianName,
       guardianPhone: guardianPhone,
       gender: gender,
-      joiningMonth: joiningMonth,
       joiningClass: joiningClass,
       address: address,
       state: state,
@@ -72,13 +75,15 @@ class StudentService {
       pinCode: pinCode,
     };
     try {
-        const response=axios.post(uri,payload,{
-            headers: {
-                Authorization: `Bearer ${authToken}`
-            }
-        })
-        const data=(await response).data;
-        return data;
+      console.log("uri ", uri);
+      console.log("payload", payload);
+      const response = axios.post(uri, payload, {
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        },
+      });
+      const data = (await response).data;
+      return data;
     } catch (error) {
       const data = await error.response.data;
       return data;

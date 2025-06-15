@@ -1,9 +1,11 @@
 import axios from 'axios';
-import { API_URL } from '@env';
+import { API_URL } from '../utils/config';
+// import { API_URL } from '@env';
 
 class AuthService {
   constructor() {
     // this.baseUrl = process.env.API_URL + 'api/v1';
+    // this.baseUrl = API_URL + 'api/v1';
     this.baseUrl = API_URL + 'api/v1';
   }
 
