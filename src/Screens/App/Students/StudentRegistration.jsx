@@ -88,7 +88,6 @@ const StudentRegistration = () => {
     try {
       const data = await batchService.getAllBatches({authToken: authToken});
       setBatchOptions(data);
-      console.log('batch data', data);
     } catch (error) {
       console.error(error);
     }
@@ -123,7 +122,6 @@ const StudentRegistration = () => {
       }
       setJoiningYearOptions(arr);
       setJoiningYear(prev => selectedBatch[0]?.startYear);
-      console.log('Selected Batch changed:', selectedBatch[0]);
       // for(int i=selectedBatch[0].joingIn)
     }
   }, [selectedBatch]);
@@ -187,13 +185,11 @@ const StudentRegistration = () => {
   // get student is exist or not
   const checkStudentExist = async () => {
     try {
-      console.log('inside the check Student Exist');
       const data = await studentService.isStudentExist({
         mobile: mobile,
         authToken: authToken,
       });
       // setIsStudentExist(data);
-      console.log('student exist ', data);
       setIsStudentExist(data?.status);
       if (data?.status) {
         const studentData = await studentService.getStudentByMobileNumber({
@@ -212,7 +208,6 @@ const StudentRegistration = () => {
         setStudentId(studentData?.id);
         setSelectedBatch([]);
 
-        console.log('studentData ', JSON.stringify(studentData));
       } else {
         setStudentName('');
         setGuardianName('');
@@ -304,8 +299,6 @@ const StudentRegistration = () => {
         joiningMonth: MonthNumByMonth[joiningMonth],
         joiningYear: joiningYear,
       });
-
-      console.log('data', data);
       if (data?.status) {
         ToastAndroid.show(data?.message, ToastAndroid.LONG);
         resetForm();
@@ -317,7 +310,6 @@ const StudentRegistration = () => {
     if (validateForm()) {
       setIsLoading(true);
       try {
-        console.log('JOingin month ', MonthNumByMonth[joiningMonth]);
         const data = await studentService.createStudentWithoutProfilePic({
           address: address,
           batchId: selectedBatch[0]?.id,
@@ -334,7 +326,6 @@ const StudentRegistration = () => {
           state: state,
           authToken: authToken,
         });
-        console.log('data', data);
         if (data?.status) {
           ToastAndroid.show(
             'Student Registered Successfully',

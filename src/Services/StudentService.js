@@ -21,7 +21,6 @@ class StudentService {
       const data = await response.data;
       return data;
     } catch (error) {
-      console.error('yes error ', error);
       const data = await error.response.data;
       return data;
     }
@@ -75,8 +74,6 @@ class StudentService {
       pinCode: pinCode,
     };
     try {
-      console.log('uri ', uri);
-      console.log('payload', payload);
       const response = axios.post(uri, payload, {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -100,7 +97,6 @@ class StudentService {
   }) {
     const uri = `${this.baseUrl}api/v1/student/assign-batch?studentId=${studentId}&batchId=${batchId}&joiningYear=${joiningYear}&joiningMonth=${joiningMonth}`;
     try {
-      console.log("uri", uri);
       const response=await axios.patch(uri,{},{
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -108,10 +104,8 @@ class StudentService {
       })
 
       const data=await response.data;
-      console.log('data ', data);
       return data;
     } catch (error) {
-      console.log('error ', error);
       const data=await error.response.data;
       return data;
     }
