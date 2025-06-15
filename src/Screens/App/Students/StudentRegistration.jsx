@@ -32,6 +32,7 @@ import {
 } from '../../../utils/helper';
 import {studentService} from '../../../Services/StudentService';
 import {MonthNumByMonth} from '../../../utils/data';
+import Toast from 'react-native-toast-message';
 
 const StudentRegistration = () => {
   const {authToken} = useAuth();
@@ -209,6 +210,7 @@ const StudentRegistration = () => {
         setState(studentData?.state);
         setAddress(studentData?.address);
         setStudentId(studentData?.id);
+        setSelectedBatch([]);
 
         console.log('studentData ', JSON.stringify(studentData));
       } else {
@@ -279,14 +281,14 @@ const StudentRegistration = () => {
     }
 
     setError(newErrors);
-  
-    if(!joiningMonth){
-      ToastAndroid.show("Please select month", ToastAndroid.SHORT);
+
+    if (!joiningMonth) {
+      ToastAndroid.show('Please select month', ToastAndroid.SHORT);
       return false;
     }
 
-    if(!joiningYear){
-      ToastAndroid.show("Please select year", ToastAndroid.SHORT);
+    if (!joiningYear) {
+      ToastAndroid.show('Please select year', ToastAndroid.SHORT);
       return false;
     }
 
@@ -294,9 +296,22 @@ const StudentRegistration = () => {
   };
 
   const handleSubmit = async () => {
-    if(isStudentExist && validateForm()){
-      console.log("yes ok")
-      ToastAndroid.show("Student already exist", ToastAndroid.SHORT);
+    if (isStudentExist && validateForm()) {
+      const data = await studentService.assignStudents({
+        authToken: authToken,
+        batchId: selectedBatch[0]?.id,
+        studentId: studentId,
+        joiningMonth: MonthNumByMonth[joiningMonth],
+        joiningYear: joiningYear,
+      });
+
+      console.log('data', data);
+      if (data?.status) {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+        resetForm();
+      } else {
+        ToastAndroid.show(data?.message, ToastAndroid.LONG);
+      }
       return;
     }
     if (validateForm()) {

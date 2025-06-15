@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { API_URL } from '../utils/config';
+import {API_URL} from '../utils/config';
 // import {API_URL} from '@env';
 
 class StudentService {
@@ -75,8 +75,8 @@ class StudentService {
       pinCode: pinCode,
     };
     try {
-      console.log("uri ", uri);
-      console.log("payload", payload);
+      console.log('uri ', uri);
+      console.log('payload', payload);
       const response = axios.post(uri, payload, {
         headers: {
           Authorization: `Bearer ${authToken}`,
@@ -86,6 +86,33 @@ class StudentService {
       return data;
     } catch (error) {
       const data = await error.response.data;
+      return data;
+    }
+  }
+
+  // Assign Students
+  async assignStudents({
+    authToken,
+    studentId,
+    batchId,
+    joiningYear,
+    joiningMonth,
+  }) {
+    const uri = `${this.baseUrl}api/v1/student/assign-batch?studentId=${studentId}&batchId=${batchId}&joiningYear=${joiningYear}&joiningMonth=${joiningMonth}`;
+    try {
+      console.log("uri", uri);
+      const response=await axios.patch(uri,{},{
+        headers: {
+          Authorization: `Bearer ${authToken}`,
+        }
+      })
+
+      const data=await response.data;
+      console.log('data ', data);
+      return data;
+    } catch (error) {
+      console.log('error ', error);
+      const data=await error.response.data;
       return data;
     }
   }
